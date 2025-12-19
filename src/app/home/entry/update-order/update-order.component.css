@@ -1298,3 +1298,79 @@ body {
         font-size: 16px;
     }
 }
+
+/* CSS cho 5 ô input bổ sung trong phần Accounting */
+.additional-fields {
+    margin-top: 30px;
+    padding: 25px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-radius: 12px;
+    border: 2px solid #bbf7d0;
+}
+
+.additional-fields-header {
+    margin-bottom: 20px;
+}
+
+.additional-fields-header h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #166534;
+    margin: 0;
+}
+
+.fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.field-group .form-input {
+    padding: 12px 14px;
+    border: 2px solid #d1fae5;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.field-group .form-input:focus {
+    outline: none;
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.field-group .form-input::placeholder {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .fields-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .additional-fields {
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
+    .field-group .form-input {
+        padding: 14px 12px;
+    }
+}

@@ -10,7 +10,7 @@
 
         <div class="form-container">
             <!-- PHẦN ENTRY - NGƯỜI NHẬP LIỆU -->
-            <div class="role-section entry-role">
+            <div class="role-section entry-role" >
                 <div class="role-header">
                     <div class="role-icon">📝</div>
                     <div>
@@ -19,7 +19,7 @@
                     </div>
                 </div>
 
-                <div class="form-grid">                    
+                <div class="form-grid">
                     <!-- Ngày tạo đơn hàng  -->
                     <div class="form-group">
                         <label>Ngày tạo đơn hàng</label>
@@ -136,7 +136,7 @@
                                 <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
                                     <li *ngFor="let l of listLocationDTO" class="dropdown-item"
                                         (click)="onSelectLocation(l.locationId,'ToLocationID')">
-                                        {{l.locationName}} 
+                                        {{l.locationName}}
                                     </li>
                                 </ul>
                             </div>
@@ -147,7 +147,7 @@
             </div>
 
             <!-- PHẦN OPERATIONS - NGƯỜI ĐIỀU HÀNH -->
-            <div class="role-section operations-role">
+            <div class="role-section operations-role" *ngIf="roleName != 'Entry'">
                 <div class="role-header">
                     <div class="role-icon">🚛</div>
                     <div>
@@ -223,7 +223,7 @@
             </div>
 
             <!-- PHẦN QUẢN LÝ HÌNH ẢNH - BẰNG CHỨNG ĐƠN HÀNG -->
-            <div class="role-section image-role">
+            <div class="role-section image-role" >
                 <div class="role-header">
                     <div class="role-icon">📷</div>
                     <div>
@@ -247,7 +247,7 @@
                         <div class="upload-icon">📁</div>
                         <div class="upload-text">Nhấp để tải lên hình ảnh</div>
                         <div class="upload-subtext">Hỗ trợ JPG, PNG, GIF (tối đa 2MB) - Chọn từng ảnh một</div>
-                        <input  #fileInput type="file" accept="image/*" style="display: none"
+                        <input #fileInput type="file" accept="image/*" style="display: none"
                             (change)="onFileSelected($event)">
                     </div>
 
@@ -315,7 +315,7 @@
             </div>
 
             <!-- PHẦN ACCOUNTING - NGƯỜI KẾ TOÁN -->
-            <div class="role-section accounting-role" *ngIf="currentOrderDTO.Status >= 4">
+            <div class="role-section accounting-role" *ngIf="currentOrderDTO.Status >= 4 && roleName != 'Entry' && roleName != 'Operator' " >
                 <div class="role-header">
                     <div class="role-icon">💰</div>
                     <div>
@@ -329,7 +329,6 @@
                         <thead>
                             <tr>
                                 <th>Danh mục chi phí</th>
-                                <th>Giá tiền gốc</th>
                                 <th>Giá hiện tại</th>
                                 <th>Có hóa đơn?</th>
                                 <th>Số hóa đơn</th>
@@ -345,17 +344,11 @@
                                 <td>
                                     <input type="text" [value]="line.itemName" readonly class="filled-field">
                                 </td>
-
-                                <!-- Giá tiền gốc -->
-                                <td>
-                                    <input type="text" [value]="line.fixedPrice | number:'1.0-0':'en-US'" readonly
-                                        class="filled-field">
-                                </td>
-
                                 <!-- Giá hiện tại -->
                                 <td>
                                     <input type="number" placeholder="Nhập giá hiện tại..." [(ngModel)]="line.itemCost"
                                         name="itemCost{{idx}}"
+                                        (ngModelChange)="updateTotalCost()"
                                         [class]="line.itemCost && line.itemCost != 0 ? 'filled-field' : 'empty-field'">
                                 </td>
 
@@ -387,14 +380,45 @@
                     </table>
                 </div>
 
-
-                <div>
-                    <input type="number">
-                    <input type="number">
-                    <input type="number">
-                    <input type="number">
-                    <input type="text">
+                <div class="additional-fields">
+                    <div class="additional-fields-header">
+                        <h4>Thông tin tài chính bổ sung</h4>
+                    </div>
+                    <div class="fields-grid">
+                        <div class="field-group">
+                            <label>Tiền lương</label>
+                            <input type="text" class="form-input" placeholder="Nhập tiền lương..." 
+                                 name="EmployeeFee" 
+                                [value]="currentOrderDTO.EmployeeFee | number:'1.0-0':'en-US'" >
+                        </div>
+                        <div class="field-group">
+                            <label>Chi phí</label>
+                            <input type="text" class="form-input" placeholder="Nhập chi phí..." 
+                                 name="totalCost" 
+                                [value]="currentOrderDTO.totalCost | number:'1.0-0':'en-US'" >
+                        </div>
+                        <div class="field-group">
+                            <label>Tạm ứng</label>
+                            <input type="number" class="form-input" placeholder="Nhập tạm ứng..."
+                                [(ngModel)]="currentOrderDTO.PrePayFee" name="PrePayFee">
+                        </div>
+                        <div class="field-group">
+                            <label>Thanh toán còn lại</label>
+                            <input type="text" class="form-input" 
+                                [value]="((currentOrderDTO.EmployeeFee + currentOrderDTO.totalCost) - currentOrderDTO.PrePayFee) | number:'1.0-0':'en-US'" 
+                                readonly>
+                        </div>
+                        <div class="field-group">
+                            <label>Ghi chú</label>
+                            <textarea class="form-input" placeholder="Nhập ghi chú..."
+                                    [(ngModel)]="currentOrderDTO.Notes" 
+                                    name="notes"
+                                    rows="4">
+                            </textarea>
+                        </div>                    
+                    </div>
                 </div>
+ 
             </div>
 
             <!-- PHẦN TRACKING TRẠNG THÁI ĐỢN HÀNG -->
@@ -497,8 +521,9 @@
                     (click)="updateStatusAwaitingApproval()">Duyệt tới trạng thái Chờ phê duyệt</button>
                 <button type="button" *ngIf="roleName == 'Approver' && currentOrderDTO.Status == 5" class="btn-save"
                     (click)="updateStatusSuccess()">Duyệt tới trạng thái Hoàn thành</button>
-                <button type="button" *ngIf="currentOrderDTO.Status < 6 || roleName == 'Admin'" class="btn-save" (click)="saveOrder()">Cập nhật đơn hàng</button>
-                <button type="button"  class="btn-save" (click)="ExportOrderDetail('csv')">Xuất Excel</button>
+                <button type="button" *ngIf="currentOrderDTO.Status < 6 || roleName == 'Admin'" class="btn-save"
+                    (click)="saveOrder()">Cập nhật đơn hàng</button>
+                <button type="button" class="btn-save" (click)="ExportOrderDetail('csv')">Xuất Excel</button>
 
             </div>
         </div>

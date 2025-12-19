@@ -7,9 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { NumberFormatPipe } from '../../../NumberFormatPipe';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { DateUtils } from '../../../utils/DateUtils';
 import { environment } from '../../../../environments/environment.development';
 import { ImageService } from '../../../../services/image-service';
+import { NumberUtilService } from '../../../../services/number-util-service';
 
 export interface OrderLineDTO {
   OrderLineId: number
@@ -57,6 +57,10 @@ export interface OrderDTO {
   Status: number,
   CreatedDate: string
   OrderLineList: OrderLineDTO[]
+  Notes :string,
+  PrePayFee :number,
+  EmployeeFee :number,
+  totalCost : number
 }
 
 export enum OrderStatus {
@@ -118,7 +122,11 @@ export class UpdateOrderComponent {
     ToLocationName: '',
     OrderLineList: [],
     Status: 0,
-    CreatedDate: ''
+    CreatedDate: '',
+    PrePayFee : 0,
+    EmployeeFee : 0,
+    Notes : '',
+    totalCost : 0
   };
 
   currentOrderLine: OrderLineDTO = {
@@ -142,7 +150,8 @@ export class UpdateOrderComponent {
     private toastr: ToastrService,
     private route: ActivatedRoute,
     private _location: Location, 
-    private i_service : ImageService
+    private i_service : ImageService,
+    private numberUtil_service : NumberUtilService
   ) { }
 
   ngOnInit() {
@@ -189,7 +198,11 @@ export class UpdateOrderComponent {
             if (a.hasInvoice && !b.hasInvoice) return -1;
             if (!a.hasInvoice && b.hasInvoice) return 1;
             return a.itemID - b.itemID;
-          })
+          }),
+          Notes : data.data.notes,
+          PrePayFee : data.data.prePayFee,
+          totalCost : data.data.totalCost,
+          EmployeeFee : data.data.employeeFee,
         };
         this.orderImages = data.data.orderImageList || []
       }
@@ -197,6 +210,29 @@ export class UpdateOrderComponent {
       else console.log(data.statusCode);
     });
   }
+
+  updateTotalCost(){
+    if (this.currentOrderDTO.OrderLineList.length != 0) {
+      this.currentOrderDTO.totalCost = this.currentOrderDTO.OrderLineList.reduce((total: number, item: any) => {
+        return total + (Number(item.itemCost) || 0);
+      }, 0);
+    }
+  }
+
+  onCostInput(event: any, trans: any): void {
+    const inputValue = event.target.value;
+    const parsedValue = this.numberUtil_service.parseCostFromInput(inputValue);
+    trans = parsedValue;
+  }
+
+  onCostBlur(event: any, trans: any): void {
+    if (trans.cost && trans.cost > 0) {
+      // Format lại với dấu phẩy
+      event.target.value = trans.cost.toLocaleString('en-US');
+    }
+  }
+
+
 
   // =============== IMAGE MANAGEMENT METHODS ===============
   onFileSelected(event: any): void {
