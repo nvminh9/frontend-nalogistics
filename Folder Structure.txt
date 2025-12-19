@@ -1,0 +1,17 @@
+
+
+
+
+
+/src
+  /app
+    /auth  : login.component.ts ; register.component.ts ; forgot-password.component.ts ==> chung
+    /features
+      /admin
+        /dashboard
+        /order-management
+        /user-management
+        /reports
+      /entry
+        /create-order
+        /my-orders

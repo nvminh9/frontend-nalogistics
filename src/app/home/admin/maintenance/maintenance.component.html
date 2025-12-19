@@ -1,0 +1,294 @@
+<div class="customer-container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-title">
+                <div class="page-icon">🔧</div>
+                <h1>Danh mục Bảo dưỡng</h1>
+            </div>
+            <button class="btn-add" (click)="openAddModal()">
+                <span>➕</span>
+                <span>Thêm mới</span>
+            </button>
+        </div>
+
+        <!-- Filter -->
+        <div class="simple-filter">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="🔍 Tìm kiếm theo ID, người thực hiện" (input)="searchObject($event)">
+            </div>
+            <div class="filter-group">
+                <label>Từ ngày</label>
+                <input type="date" class="filter-input" [(ngModel)]="fromDateStr" (change)="FilterDate()">
+            </div>
+            <div class="filter-group">
+                <label>Đến ngày</label>
+                <input type="date" class="filter-input" [(ngModel)]="toDateStr" (change)="FilterDate()">
+            </div>
+            <div class="filter-group">
+                <label>Sắp xếp</label>
+                <select class="sort-select" (change)="sortData($event)">
+                    <option value="id-old">Ngày tạo (cũ nhất)</option>
+                    <option value="id-new">Ngày tạo (mới nhất)</option>
+                    <option value="name-az">Giá tăng dần </option>
+                    <option value="name-za">Giá giảm dần </option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Hiển thị</label>
+                <select class="sort-select" (change)="showEntries($event)">
+                    <option value="30">30 mục</option>
+                    <option value="35">35 mục</option>
+                    <option value="40">40 mục</option>
+                    <option value="50">50 mục</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Số xe</th>
+                        <th>Hạng mục bảo dưỡng</th>
+                        <th>Người thực hiện</th>
+                        <th>Ngày thực hiện</th>
+                        <th>Chi phí</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="listmaintenance.length > 0">
+                    <tr *ngFor="let l of listmaintenance">
+                        <td>{{l.maintenanceID}}</td>
+                        <td>{{l.truckNo}}</td>
+                        <td>{{l.maintenanceTypeName}}</td>
+                        <td>{{l.implementedBy}}</td>
+                        <td>{{l.scheduledDate | stringDateFormatPipe:'dd/MM/yyyy'}}</td>
+                        <td>{{ l.cost | number:'1.0-0' }}đ</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-action btn-edit" (click)="openDetailModal(l.maintenanceID)">Chi tiết</button>
+                                <button class="btn-action btn-delete" (click)="Delete(l.maintenanceID)">Xóa</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Hiển thị <strong>{{lengthItem}} đơn bảo dưỡng </strong> trong trang <strong></strong>
+            </div>
+            <div class="pagination-controls">
+                <button class="pagination-btn" [disabled]="pageNumber === 1" (click)="changePage(pageNumber - 1)">Trước</button>
+                <button class="pagination-btn" [class.active]="pageNumber === 1" (click)="changePage(1)">1</button>
+                <button class="pagination-btn" [class.active]="pageNumber === 2" (click)="changePage(2)">2</button>
+                <button class="pagination-btn" [class.active]="pageNumber === 3" (click)="changePage(3)">3</button>
+                <button class="pagination-btn" [class.active]="pageNumber === 4" (click)="changePage(4)">4</button>
+                <button class="pagination-btn" [class.active]="pageNumber === 5" (click)="changePage(5)">5</button>
+                <span style="padding: 0 8px; color: #999;">...</span>
+                <button class="pagination-btn" [class.active]="pageNumber === 16" (click)="changePage(16)">10</button>
+                <button class="pagination-btn" [disabled]="pageNumber === 16" (click)="changePage(pageNumber + 1)">Sau</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add/Edit -->
+    <div class="modal-overlay" [class.show]="isAddModalOpen" (click)="onOverlayClick($event, 'add')">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">{{modalTitle}}</h2>
+                <button class="modal-close" (click)="closeAddModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="save()">
+                    <div class="form-group">
+                        <label class="form-label">
+                            Ngày bảo dưỡng <span class="required">*</span>
+                        </label>
+                        <input type="date" class="form-input" [(ngModel)]="MaintenanceForm.ScheduledDate" name="ScheduledDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Số xe <span class="required">*</span></label>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select-trigger" [class.active]="showTruckDropdown" (click)="toggleDropdown('truck')">
+                                <span class="custom-select-value">{{getSelectedTruckNo() || 'Chọn số xe'}}</span>
+                                <span class="custom-select-arrow">▼</span>
+                            </div>
+                            <div class="custom-select-dropdown" [class.show]="showTruckDropdown">
+                                <div class="custom-select-search">
+                                    <input type="text" placeholder="🔍 Tìm kiếm số xe..." [(ngModel)]="truckSearchTerm" [ngModelOptions]="{standalone: true}" (input)="filterTrucks()">
+                                </div>
+                                <div class="custom-select-options">
+                                    <div class="custom-select-option" 
+                                         *ngFor="let truck of filteredTrucks"
+                                         [class.selected]="MaintenanceForm.TruckID === truck.truckID"
+                                         (click)="selectTruck(truck)">
+                                        {{truck.truckNo}}
+                                    </div>
+                                    <div class="custom-select-option no-results" *ngIf="filteredTrucks.length === 0">
+                                        🔍 Không tìm thấy kết quả
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Hạng mục bảo dưỡng <span class="required">*</span></label>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select-trigger" [class.active]="showMaintenanceTypeDropdown" (click)="toggleDropdown('maintenanceType')">
+                                <span class="custom-select-value">{{getSelectedMaintenanceTypeName() || 'Chọn hạng mục'}}</span>
+                                <span class="custom-select-arrow">▼</span>
+                            </div>
+                            <div class="custom-select-dropdown" [class.show]="showMaintenanceTypeDropdown">
+                                <div class="custom-select-search">
+                                    <input type="text" placeholder="🔍 Tìm kiếm hạng mục..." [(ngModel)]="maintenanceTypeSearchTerm" [ngModelOptions]="{standalone: true}" (input)="filterMaintenanceTypes()">
+                                </div>
+                                <div class="custom-select-options">
+                                    <div class="custom-select-option" 
+                                         *ngFor="let type of filteredMaintenanceTypes"
+                                         [class.selected]="MaintenanceForm.MaintenanceTypeID === type.maintenanceTypeID"
+                                         (click)="selectMaintenanceType(type)">
+                                        {{type.nameType}}
+                                    </div>
+                                    <div class="custom-select-option no-results" *ngIf="filteredMaintenanceTypes.length === 0">
+                                        🔍 Không tìm thấy kết quả
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Đơn vị thi công <span class="required">*</span>
+                        </label>
+                        <input type="text" class="form-input" placeholder="Nhập tên đơn vị thi công" [(ngModel)]="MaintenanceForm.ImplementedBy" name="ImplementedBy" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Chi tiết phụ tùng (Mô tả)
+                        </label>
+                        <textarea class="form-input form-textarea" placeholder="Nhập mô tả chi tiết..." [(ngModel)]="MaintenanceForm.Description" name="Description"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Chi phí <span class="required">*</span>
+                        </label>
+                        <input type="number" class="form-input" placeholder="Nhập chi phí" [(ngModel)]="MaintenanceForm.Cost" name="Cost" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" (click)="closeAddModal()">Hủy</button>
+                        <button type="submit" class="btn-save">{{isEditMode ? 'Cập nhật' : 'Lưu'}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail -->
+    <div class="modal-overlay" [class.show]="isDetailModalOpen" (click)="onOverlayClick($event, 'detail')">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Chi tiết bảo dưỡng</h2>
+                <button class="modal-close" (click)="closeDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body" *ngIf="currentMaintenance">
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Mã đơn bảo dưỡng</label>
+                        <input type="text" class="form-input readonly" [(ngModel)]="currentMaintenance.maintenanceID" name="MaintenanceID" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ngày thực hiện <span class="required">*</span></label>
+                        <input type="date" class="form-input" [(ngModel)]="currentMaintenance.scheduledDate" name="scheduledDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Biển số xe</label>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select-trigger" [class.active]="showTruckDropdownDetail" (click)="toggleDropdown('truckDetail')">
+                                <span class="custom-select-value">{{getSelectedTruckNoDetail() || 'Chọn số xe'}}</span>
+                                <span class="custom-select-arrow">▼</span>
+                            </div>
+                            <div class="custom-select-dropdown" [class.show]="showTruckDropdownDetail">
+                                <div class="custom-select-search">
+                                    <input type="text" placeholder="🔍 Tìm kiếm số xe..." [(ngModel)]="truckSearchTermDetail" [ngModelOptions]="{standalone: true}" (input)="filterTrucksDetail()">
+                                </div>
+                                <div class="custom-select-options">
+                                    <div class="custom-select-option" 
+                                         *ngFor="let truck of filteredTrucksDetail"
+                                         [class.selected]="currentMaintenance.truckID === truck.truckID"
+                                         (click)="selectTruckDetail(truck)">
+                                        {{truck.truckNo}}
+                                    </div>
+                                    <div class="custom-select-option no-results" *ngIf="filteredTrucksDetail.length === 0">
+                                        🔍 Không tìm thấy kết quả
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Hạng mục bảo dưỡng</label>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select-trigger" [class.active]="showMaintenanceTypeDropdownDetail" (click)="toggleDropdown('maintenanceTypeDetail')">
+                                <span class="custom-select-value">{{getSelectedMaintenanceTypeNameDetail() || 'Chọn hạng mục'}}</span>
+                                <span class="custom-select-arrow">▼</span>
+                            </div>
+                            <div class="custom-select-dropdown" [class.show]="showMaintenanceTypeDropdownDetail">
+                                <div class="custom-select-search">
+                                    <input type="text" placeholder="🔍 Tìm kiếm hạng mục..." [(ngModel)]="maintenanceTypeSearchTermDetail" [ngModelOptions]="{standalone: true}" (input)="filterMaintenanceTypesDetail()">
+                                </div>
+                                <div class="custom-select-options">
+                                    <div class="custom-select-option" 
+                                         *ngFor="let type of filteredMaintenanceTypesDetail"
+                                         [class.selected]="currentMaintenance.maintenanceTypeID === type.maintenanceTypeID"
+                                         (click)="selectMaintenanceTypeDetail(type)">
+                                        {{type.nameType}}
+                                    </div>
+                                    <div class="custom-select-option no-results" *ngIf="filteredMaintenanceTypesDetail.length === 0">
+                                        🔍 Không tìm thấy kết quả
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Người tạo đơn</label>
+                        <input type="text" class="form-input readonly" [(ngModel)]="currentMaintenance.userName" name="userName" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Chi phí <span class="required">*</span></label>
+                        <input type="number" class="form-input" [(ngModel)]="currentMaintenance.cost" name="cost" [readonly]="roleName != 'Admin'">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Đơn vị thực hiện <span class="required">*</span></label>
+                        <input type="text" class="form-input" [(ngModel)]="currentMaintenance.implementedBy" name="implementedBy">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Chi tiết phụ tùng (Mô tả)</label>
+                        <textarea class="form-input form-textarea" [(ngModel)]="currentMaintenance.description" name="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" *ngIf="currentMaintenance">
+                <button type="button" class="btn-secondary" (click)="closeDetailModal()">Đóng</button>
+                <button type="button" class="btn-primary" (click)="updateMaintenance(currentMaintenance.maintenanceID)">Cập nhật</button>
+            </div>
+        </div>
+    </div>

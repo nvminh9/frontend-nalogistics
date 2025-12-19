@@ -1,0 +1,239 @@
+<div class="main-content">
+    <div class="content-card update-form-section">
+        <div class="card-header">
+            <h2>
+                <span class="icon">✏️</span>
+                Tạo mới đơn hàng
+            </h2>
+            <div class="subtitle">Tạo chi tiết đơn hàng vận chuyển</div>
+        </div>
+
+        <div class="form-container">
+            <div class="form-grid">
+                <!-- Ngày giao hàng  -->
+                <div class="form-group">
+                    <label>Ngày giao hàng</label>
+                    <input type="date" id="datePicker" name="orderDate" class="form-input" [(ngModel)]="currentOrderDTO.OrderDate" >
+                </div>
+
+                <!-- Khách hàng - Searchable Dropdown -->
+                <div class="form-group">
+                    <label>Khách hàng</label>
+                    <div class="searchable-dropdown" id="customerDropdown">
+                        <div class="dropdown-toggle" (click)="showListObject('customerDropdown')">
+                            <span class="selected-text">{{ currentOrderDTO.CustomerName || 'Chọn khách hàng'}}</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm khách hàng..." 
+                                   (input)="toggleDropdown('customerDropdown', $event)">
+                                   
+                            <ul *ngIf="listCustomerDTO.length > 0" class="dropdown-list">
+                                <li *ngFor="let c of listCustomerDTO" 
+                                    class="dropdown-item"
+                                    (click)="onSelectCustomer(c.customerID)">
+                                    {{c.customerName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Số Container</label>
+                    <input type="text" class="form-input" placeholder="Số container" name="ContainerNo" [(ngModel)]="currentOrderDTO.ContainerNo">
+                </div>
+
+                <div class="form-group">
+                    <label>Loại Container</label>
+                    <select class="form-select" name="ContainerType" [(ngModel)]="currentOrderDTO.ContainerType">
+                        <option value="20 feet">20 feet</option>
+                        <option value="30 feet">30 feet</option>
+                        <option value="40 feet">40 feet</option>
+                        <option value="45 feet">45 feet</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Số Bill/Booking</label>
+                    <input type="text" class="form-input" placeholder="Số Bill/Booking" name="BillBookingNo" [(ngModel)]="currentOrderDTO.BillBookingNo">
+                </div>
+                
+                <!-- Cảng nhận Container - Searchable Dropdown -->
+                <div class="form-group">
+                    <label>Cảng nhận Container</label>
+                    <div class="searchable-dropdown" id="portReceiveDropdown">
+                        <div class="dropdown-toggle" (click)="showListObject('portReceiveDropdown')">
+                            <span class="selected-text">{{currentOrderDTO.FromLocationName || 'Chọn cảng nhận'}}</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm cảng nhận..." 
+                                   (input)="toggleDropdown('portReceiveDropdown', $event)">
+                            <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
+                                <li *ngFor="let l of listLocationDTO" 
+                                    class="dropdown-item"
+                                    (click)="onSelectLocation(l.locationId,'FromLocationID')">
+                                    {{l.locationName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kho nhận/giao hàng - Searchable Dropdown -->
+                <div class="form-group">
+                    <label>Kho nhận/giao hàng</label>
+                    <div class="searchable-dropdown" id="warehouseDropdown">
+                        <div class="dropdown-toggle" (click)="showListObject('warehouseDropdown')">
+                            <span class="selected-text">{{currentOrderDTO.FromWhereName || 'Chọn kho'}}</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm kho..." 
+                                   (input)="toggleDropdown('warehouseDropdown', $event)">
+                            <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
+                                <li *ngFor="let l of listLocationDTO" 
+                                    class="dropdown-item"
+                                    (click)="onSelectLocation(l.locationId,'FromWhereID')">
+                                    {{l.locationName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cảng hạ/trả Container - Searchable Dropdown -->
+                <div class="form-group">
+                    <label>Cảng hạ/trả Container</label>
+                    <div class="searchable-dropdown" id="portReturnDropdown">
+                        <div class="dropdown-toggle" (click)="showListObject('portReturnDropdown')">
+                            <span class="selected-text">{{currentOrderDTO.ToLocationName || 'Chọn cảng hạ'}}</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <input type="search" class="dropdown-search" placeholder="Tìm kiếm cảng hạ..." 
+                                   (input)="toggleDropdown('portReturnDropdown', $event)">
+                            
+                            <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
+                                <li *ngFor="let l of listLocationDTO" 
+                                    class="dropdown-item"
+                                    (click)="onSelectLocation(l.locationId,'ToLocationID')">
+                                    {{l.locationName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- //////// -->
+
+                <!-- Tài xế - Searchable Dropdown -->
+                <!-- <div class="form-group">
+                    <label>Tài xế</label>
+                    <div class="searchable-dropdown" id="driverDropdown">
+                        <div class="dropdown-toggle" (click)="showListObject('driverDropdown')">
+                            <span class="selected-text"> {{ currentOrderDTO.driverName || 'Chọn tài xế' }} </span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm tài xế..." 
+                                   (input)="toggleDropdown('driverDropdown', $event)">
+                            <ul *ngIf="listDriverDTO.length > 0" class="dropdown-list">
+                                <li *ngFor="let d of listDriverDTO" 
+                                    class="dropdown-item"
+                                    (click)="onSelectDriver(d.driverID)">
+                                    {{d.driverName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- Số xe - Searchable Dropdown -->
+                <!-- <div class="form-group">
+                    <label>Số xe</label>
+                    <div class="searchable-dropdown" id="vehicleDropdown">
+                        <div class="dropdown-toggle" (click)="showListObject('vehicleDropdown')">
+                            <span class="selected-text">{{currentOrderDTO.TruckNo || 'Chọn số xe' }}</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm số xe..." 
+                                   (input)="toggleDropdown('vehicleDropdown', $event)">
+                            <ul *ngIf="listTruckDTO.length > 0" class="dropdown-list">
+                                <li *ngFor="let t of listTruckDTO" 
+                                    class="dropdown-item"
+                                    (click)="onSelectTruck(t.truckID)">
+                                    {{t.truckNo}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- Số Rmooc - Searchable Dropdown -->
+                <!-- <div class="form-group">
+                    <label>Số Rmooc</label>
+                    <div class="searchable-dropdown" id="rmoorDropdown">
+                        <div class="dropdown-toggle" (click)="showListObject('rmoorDropdown')">
+                            <span class="selected-text">{{currentOrderDTO.RmoocNo || 'Chọn Rmooc'}}</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm Rmooc..." 
+                                   (input)="toggleDropdown('rmoorDropdown', $event)">
+                            <ul *ngIf="listRmoocDTO.length > 0" class="dropdown-list">
+                                <li *ngFor="let r of listRmoocDTO" 
+                                    class="dropdown-item"
+                                    (click)="onSelectRmooc(r.truckID)">
+                                    {{r.truckNo}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> -->
+
+            </div>
+
+            <!-- Phần danh mục chi phí -->
+            <div class="expense-section" *ngIf="rolename == '' ">
+                <div class="expense-header">
+                    <span class="icon">💰</span>
+                    <h3>Danh mục chi phí</h3>
+                </div>
+                
+                <table class="expense-table">
+                    <thead>
+                        <tr>
+                            <th>Danh mục chi phí</th>
+                            <th>Giá tiền gốc</th>
+                            <th>Giá hiện tại</th>
+                            <th>Có hóa đơn?</th>
+                            <th>Số hóa đơn</th>
+                            <th>Tên hóa đơn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let line of currentOrderDTO.OrderLineList; let idx = index "  >
+                            <input type="hidden" [(ngModel)]="line.ItemID" name="ItemID{{idx}}" >
+                            <td><input type="text" [value]="line.ItemName" readonly></td>
+                            <td><input type="text" [value]="line.fixedPrice | number:'1.0-0':'en-US'" readonly></td>
+                            <td><input type="number" placeholder="0" [(ngModel)]="line.ItemCost" name="ItemCost{{idx}}"></td>
+                            <td>
+                                <input type="checkbox" id="invoice1" [(ngModel)]="line.hasInvoice" name="hasInvoice{{idx}}">
+                                <label for="invoice1" style="margin-left: 8px;">Có</label>
+                            </td>
+                            <td><input type="text" placeholder="Số hóa đơn"  [(ngModel)]="line.InvoiceNo" name="InvoiceNo{{idx}}"></td>
+                            <td><input type="text" placeholder="Tên hóa đơn" [(ngModel)]="line.InvoiceName" name="InvoiceName{{idx}}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" (click)="cancelOrder()" class="btn-cancel">Hủy bỏ</button>
+                <button type="button" class="btn-save" (click)="saveOrder()">Lưu đơn hàng</button>
+            </div>
+        </div>
+    </div>
+</div>

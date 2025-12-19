@@ -1,0 +1,283 @@
+<!-- Header -->
+<div class="header">
+    <div class="logo-section">
+        <button class="mobile-menu-toggle" (click)="toggleMobileSidebar()">☰</button>
+        <div class="company-logo">NA</div>
+        <div class="company-info">
+            <h1>Ngọc An Logistics</h1>
+            <p>Hệ thống quản lý vận tải</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Sidebar Overlay for mobile -->
+    <div class="sidebar-overlay" [class.active]="isMobileOpen" (click)="toggleMobileSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileOpen">
+
+        <div class="admin-info">
+            <div class="admin-avatar">🏢</div>
+            <h3>UnifyAdmin</h3>
+            <p>Management System</p>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-title">Quản lý chính</div>
+
+            <a *ngIf="rolename == 'Admin'" routerLink="/admin/dashboard" routerLinkActive="active" class="menu-item"
+                data-tooltip="Dashboard">
+                <div class="icon">📊</div>
+                <span class="menu-item-text">Dashboard</span>
+            </a>
+
+            <!-- Đơn hàng Menu -->
+            <a class="menu-item has-submenu" [class.open]="submenus.orders" data-tooltip="Đơn hàng"
+                (click)="toggleSubmenu('orders')">
+                <div class="icon">📦</div>
+                <span class="menu-item-text">Đơn hàng</span>
+            </a>
+
+            <div class="submenu" [class.open]="submenus.orders">
+                <a routerLink="/admin/list-order" routerLinkActive="active" class="menu-item"
+                    data-tooltip="Danh sách đơn hàng">
+                    <div class="icon">📋</div>
+                    <span class="menu-item-text">Danh sách đơn hàng</span>
+                </a>
+                <a routerLink="/entry/create-order" routerLinkActive="active" class="menu-item"
+                    data-tooltip="Tạo đơn hàng">
+                    <div class="icon">➕</div>
+                    <span class="menu-item-text">Tạo đơn hàng</span>
+                </a>
+                <!-- <a routerLink="/entry/update-order" routerLinkActive="active" class="menu-item" 
+                    data-tooltip="Cập nhật đơn hàng">
+                    <div class="icon">✏️</div>
+                    <span class="menu-item-text">Cập nhật đơn hàng</span>
+                </a> -->
+            </div>
+
+            <!-- Danh mục Menu -->
+            <a class="menu-item has-submenu" [class.open]="submenus.categories" data-tooltip="Danh mục"
+                (click)="toggleSubmenu('categories')">
+                <div class="icon">📂</div>
+                <span class="menu-item-text">Danh mục</span>
+                <!-- <span class="badge">6</span> -->
+            </a>
+
+            <div class="submenu" [class.open]="submenus.categories">
+                <a routerLink="/admin/list-transportSalary" routerLinkActive="active" class="menu-item"
+                    data-tooltip="Tiền lương vận chuyển">
+                    <div class="icon">🚚</div>
+                    <span class="menu-item-text">Tiền lương vận chuyển</span>
+                </a>
+
+                <a routerLink="/admin/list-customer" routerLinkActive="active" class="menu-item"
+                    data-tooltip="Khách hàng">
+                    <div class="icon">👥</div>
+                    <span class="menu-item-text">Khách hàng</span>
+                </a>
+                <a routerLink="/admin/list-driver" routerLinkActive="active" class="menu-item" data-tooltip="Tài xế">
+                    <div class="icon">🚗</div>
+                    <span class="menu-item-text">Tài xế</span>
+                </a>
+                <a routerLink="/admin/list-location" routerLinkActive="active" class="menu-item"
+                    data-tooltip="Địa điểm">
+                    <div class="icon">📍</div>
+                    <span class="menu-item-text">Địa điểm</span>
+                </a>
+                <a routerLink="/admin/list-truck" routerLinkActive="active" class="menu-item" data-tooltip="Xe">
+                    <div class="icon">🚛</div>
+                    <span class="menu-item-text">Số Xe</span>
+                </a>
+                <a routerLink="/admin/list-rmooc" routerLinkActive="active" class="menu-item" data-tooltip="Rmooc">
+                    <div class="icon">🚚</div>
+                    <span class="menu-item-text">Số Rmooc</span>
+                </a>
+                <a routerLink="/admin/list-item" routerLinkActive="active" class="menu-item" data-tooltip="Chi phí">
+                    <div class="icon">💰</div>
+                    <span class="menu-item-text">Chi phí</span>
+                </a>
+            </div>
+
+            <a *ngIf="rolename == 'Admin' " class="menu-item has-submenu" [class.open]="submenus.maintenance"
+                data-tooltip="Danh mục bảo dưỡng" (click)="toggleSubmenu('maintenance')">
+                <div class="icon">🔧 </div>
+                <span class="menu-item-text">Bảo dưỡng</span>
+                <!-- <span class="badge">6</span> -->
+            </a>
+            <div class="submenu" [class.open]="submenus.maintenance">
+                <a *ngIf="rolename == 'Admin' " routerLink="/admin/list-maintenance" routerLinkActive="active"
+                    class="menu-item" data-tooltip="Người dùng">
+                    <div class="icon">🔧</div>
+                    <span class="menu-item-text">Bảo dưỡng</span>
+                </a>
+                <a *ngIf="rolename == 'Admin' " routerLink="/admin/list-maintenanceType" routerLinkActive="active"
+                    class="menu-item" data-tooltip="Người dùng">
+                    <div class="icon">📋</div>
+                    <span class="menu-item-text">Mục bảo dưỡng</span>
+                </a>
+            </div>
+
+
+            <a *ngIf="rolename == 'Admin' " class="menu-item has-submenu" [class.open]="submenus.user"
+                data-tooltip="Người dùng" (click)="toggleSubmenu('user')">
+                <div class="icon">🧑‍💼 </div>
+                <span class="menu-item-text">Người dùng</span>
+                <!-- <span class="badge">6</span> -->
+            </a>
+            <div class="submenu" [class.open]="submenus.user">
+                <a routerLink="/admin/list-userRole" routerLinkActive="active" class="menu-item"
+                    data-tooltip="Người dùng">
+                    <div class="icon">🧑‍💼</div>
+                    <span class="menu-item-text">Người dùng</span>
+                </a>
+            </div>
+
+            <a routerLink="/reports" routerLinkActive="active" class="menu-item" data-tooltip="Báo cáo thống kê">
+                <div class="icon">📈</div>
+                <span class="menu-item-text">Báo cáo thống kê</span>
+            </a>
+
+            <button type="button" (click)="Logout()">Đăng xuất</button>
+        </div>
+    </aside>
+
+    <!-- Toggle Button -->
+    <div class="sidebar-toggle" [class.collapsed]="isCollapsed" (click)="toggleSidebar()">
+        <svg viewBox="0 0 24 24">
+            <path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" [class.expanded]="isCollapsed">
+        <router-outlet></router-outlet>
+    </main>
+</div>
+
+
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <div class="company-footer">
+                <div class="footer-logo">NA</div>
+                <div>
+                    <h3>Ngọc An Logistics</h3>
+                </div>
+            </div>
+            <p>Công ty vận tải logistics hàng đầu Việt Nam, chuyên cung cấp dịch vụ vận chuyển hàng hóa an toàn, nhanh
+                chóng và tiết kiệm chi phí.</p>
+            <div class="social-links">
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">📞</a>
+                <a href="#" class="social-link">✉️</a>
+                <a href="#" class="social-link">🌐</a>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <h3>Dịch vụ</h3>
+            <a href="#">Vận chuyển nội địa</a>
+            <a href="#">Vận chuyển quốc tế</a>
+            <a href="#">Kho bãi</a>
+            <a href="#">Phân phối</a>
+            <a href="#">Tư vấn logistics</a>
+        </div>
+
+        <div class="footer-section">
+            <h3>Hỗ trợ</h3>
+            <a href="#">Trung tâm trợ giúp</a>
+            <a href="#">Theo dõi đơn hàng</a>
+            <a href="#">Báo giá</a>
+            <a href="#">Liên hệ</a>
+            <a href="#">FAQ</a>
+        </div>
+
+        <div class="footer-section">
+            <h3>Liên hệ</h3>
+            <p>📍 123 Đường ABC, Quận 1, TP.HCM</p>
+            <p>📞 Hotline: 1900-xxxx</p>
+            <p>✉️ Email: infongocanlogistics.com</p>
+            <p>🕒 T2-T6: 8:00 - 17:30</p>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2024 Ngọc An Logistics. Tất cả quyền được bảo lưu. | Thiết kế bởi UnifyAdmin System</p>
+    </div>
+</footer>
+
+
+<script>
+    // Toggle Sidebar Collapse/Expand
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const toggleBtn = document.getElementById('sidebarToggle');
+
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        toggleBtn.classList.toggle('collapsed');
+
+        // Save state to localStorage
+        const isCollapsed = sidebar.classList.contains('collapsed');
+        localStorage.setItem('sidebarCollapsed', isCollapsed);
+    }
+
+    // Toggle Submenu
+    function toggleSubmenu(event, submenuId) {
+        event.preventDefault();
+        const submenu = document.getElementById(submenuId);
+        const menuItem = event.currentTarget;
+
+        // Don't open submenu if sidebar is collapsed
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar.classList.contains('collapsed')) {
+            return;
+        }
+
+        submenu.classList.toggle('open');
+        menuItem.classList.toggle('open');
+    }
+
+    // Toggle Mobile Sidebar
+    function toggleMobileSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active');
+    }
+
+    // Load saved state on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (isCollapsed) {
+            document.getElementById('sidebar').classList.add('collapsed');
+            document.getElementById('mainContent').classList.add('expanded');
+            document.getElementById('sidebarToggle').classList.add('collapsed');
+        }
+    });
+
+    // Active menu item
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            if (!this.classList.contains('has-submenu')) {
+                e.preventDefault();
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            document.querySelector('.sidebar-overlay').classList.remove('active');
+            document.getElementById('sidebar').classList.remove('mobile-open');
+        }
+    });
+</script>

@@ -1,0 +1,44 @@
+# Node modules and dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Angular specific
+/.angular/cache
+.sass-cache/
+
+# IDE and editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+
+# Testing and coverage
+/coverage
+testem.log
+TEST*.xml
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+.history/*
+/connect.lock
+/libpeerconnection.log

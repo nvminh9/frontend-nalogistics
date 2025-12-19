@@ -1,0 +1,506 @@
+<div class="main-content">
+    <div class="content-card update-form-section">
+        <div class="card-header">
+            <h2>
+                <span class="icon">✏️</span>
+                Chỉnh sửa đơn hàng có mã Order ID : {{ orderID }}
+            </h2>
+            <div class="subtitle">Phân quyền theo vai trò - Cập nhật thông tin đơn hàng</div>
+        </div>
+
+        <div class="form-container">
+            <!-- PHẦN ENTRY - NGƯỜI NHẬP LIỆU -->
+            <div class="role-section entry-role">
+                <div class="role-header">
+                    <div class="role-icon">📝</div>
+                    <div>
+                        <h3 class="role-title">Phần Entry - Người nhập liệu</h3>
+                        <div class="role-description">Thông tin cơ bản về đơn hàng, khách hàng và logistics</div>
+                    </div>
+                </div>
+
+                <div class="form-grid">                    
+                    <!-- Ngày tạo đơn hàng  -->
+                    <div class="form-group">
+                        <label>Ngày tạo đơn hàng</label>
+                        <input type="date" id="datePicker" name="createdDate" class="form-input"
+                            [(ngModel)]="currentOrderDTO.CreatedDate" disabled>
+                    </div>
+                    <!-- Ngày giao hàng -->
+                    <div class="form-group">
+                        <label>Ngày giao hàng</label>
+                        <input type="date" id="datePicker" name="orderDate" class="form-input"
+                            [(ngModel)]="currentOrderDTO.OrderDate">
+                    </div>
+
+                    <!-- Khách hàng - Searchable Dropdown -->
+                    <div class="form-group">
+                        <label>Khách hàng</label>
+                        <div class="searchable-dropdown" id="customerDropdown">
+                            <div class="dropdown-toggle" (click)="showListObject('customerDropdown')">
+                                <span class="selected-text">{{ currentOrderDTO.CustomerName || 'Chọn khách
+                                    hàng'}}</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm khách hàng..."
+                                    (input)="toggleDropdown('customerDropdown', $event)">
+
+                                <ul *ngIf="listCustomerDTO.length > 0" class="dropdown-list">
+                                    <li *ngFor="let c of listCustomerDTO" class="dropdown-item"
+                                        (click)="onSelectCustomer(c.customerID)">
+                                        {{c.customerName}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Số Container</label>
+                        <input type="text" class="form-input" placeholder="Số container" name="ContainerNo"
+                            [(ngModel)]="currentOrderDTO.ContainerNo">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Loại Container</label>
+                        <select class="form-select" name="ContainerType" [(ngModel)]="currentOrderDTO.ContainerType">
+                            <option value="20 feet">20 feet</option>
+                            <option value="30 feet">30 feet</option>
+                            <option value="40 feet">40 feet</option>
+                            <option value="45 feet">45 feet</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Số Billing/Booking</label>
+                        <input type="text" class="form-input" placeholder="Số Billing/Booking" name="BillBookingNo"
+                            [(ngModel)]="currentOrderDTO.BillBookingNo">
+                    </div>
+
+                    <!-- Cảng nhận Container - Searchable Dropdown -->
+                    <div class="form-group">
+                        <label>Cảng nhận Container</label>
+                        <div class="searchable-dropdown" id="portReceiveDropdown">
+                            <div class="dropdown-toggle" (click)="showListObject('portReceiveDropdown')">
+                                <span class="selected-text">{{currentOrderDTO.FromLocationName || 'Chọn cảng
+                                    nhận'}}</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm cảng nhận..."
+                                    (input)="toggleDropdown('portReceiveDropdown', $event)">
+                                <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
+                                    <li *ngFor="let l of listLocationDTO" class="dropdown-item"
+                                        (click)="onSelectLocation(l.locationId,'FromLocationID')">
+                                        {{l.locationName}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kho nhận/giao hàng - Searchable Dropdown -->
+                    <div class="form-group">
+                        <label>Kho nhận/giao hàng</label>
+                        <div class="searchable-dropdown" id="warehouseDropdown">
+                            <div class="dropdown-toggle" (click)="showListObject('warehouseDropdown')">
+                                <span class="selected-text">{{currentOrderDTO.FromWhereName || 'Chọn kho'}}</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm kho..."
+                                    (input)="toggleDropdown('warehouseDropdown', $event)">
+                                <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
+                                    <li *ngFor="let l of listLocationDTO" class="dropdown-item"
+                                        (click)="onSelectLocation(l.locationId,'FromWhereID')">
+                                        {{l.locationName}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cảng hạ/trả Container - Searchable Dropdown -->
+                    <div class="form-group">
+                        <label>Cảng hạ/trả Container</label>
+                        <div class="searchable-dropdown" id="portReturnDropdown">
+                            <div class="dropdown-toggle" (click)="showListObject('portReturnDropdown')">
+                                <span class="selected-text">{{currentOrderDTO.ToLocationName || 'Chọn cảng hạ'}}</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <input type="search" class="dropdown-search" placeholder="Tìm kiếm cảng hạ..."
+                                    (input)="toggleDropdown('portReturnDropdown', $event)">
+
+                                <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
+                                    <li *ngFor="let l of listLocationDTO" class="dropdown-item"
+                                        (click)="onSelectLocation(l.locationId,'ToLocationID')">
+                                        {{l.locationName}} 
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PHẦN OPERATIONS - NGƯỜI ĐIỀU HÀNH -->
+            <div class="role-section operations-role">
+                <div class="role-header">
+                    <div class="role-icon">🚛</div>
+                    <div>
+                        <h3 class="role-title">Phần Operations - Người điều hành</h3>
+                        <div class="role-description">Phân bổ tài xế, xe tải và thiết bị vận chuyển</div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Tài xế -->
+                    <div class="form-group">
+                        <label>Tài xế</label>
+                        <div class="searchable-dropdown" id="driverDropdown">
+                            <div class="dropdown-toggle" (click)="showListObject('driverDropdown')">
+                                <span class="selected-text"> {{ currentOrderDTO.driverName || 'Chọn tài xế' }} </span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm tài xế..."
+                                    (input)="toggleDropdown('driverDropdown', $event)">
+                                <ul *ngIf="listDriverDTO.length > 0" class="dropdown-list">
+                                    <li *ngFor="let d of listDriverDTO" class="dropdown-item"
+                                        (click)="onSelectDriver(d.driverID)">
+                                        {{d.driverName}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Số xe - Searchable Dropdown -->
+                    <div class="form-group">
+                        <label>Số xe</label>
+                        <div class="searchable-dropdown" id="vehicleDropdown">
+                            <div class="dropdown-toggle" (click)="showListObject('vehicleDropdown')">
+                                <span class="selected-text">{{currentOrderDTO.TruckNo || 'Chọn số xe' }}</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm số xe..."
+                                    (input)="toggleDropdown('vehicleDropdown', $event)">
+                                <ul *ngIf="listTruckDTO.length > 0" class="dropdown-list">
+                                    <li *ngFor="let t of listTruckDTO" class="dropdown-item"
+                                        (click)="onSelectTruck(t.truckID)">
+                                        {{t.truckNo}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Số Rmooc - Searchable Dropdown -->
+                    <div class="form-group">
+                        <label>Số Rmooc</label>
+                        <div class="searchable-dropdown" id="rmoorDropdown">
+                            <div class="dropdown-toggle" (click)="showListObject('rmoorDropdown')">
+                                <span class="selected-text">{{currentOrderDTO.RmoocNo || 'Chọn Rmooc'}}</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm Rmooc..."
+                                    (input)="toggleDropdown('rmoorDropdown', $event)">
+                                <ul *ngIf="listRmoocDTO.length > 0" class="dropdown-list">
+                                    <li *ngFor="let r of listRmoocDTO" class="dropdown-item"
+                                        (click)="onSelectRmooc(r.truckID)">
+                                        {{r.truckNo}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHẦN QUẢN LÝ HÌNH ẢNH - BẰNG CHỨNG ĐƠN HÀNG -->
+            <div class="role-section image-role">
+                <div class="role-header">
+                    <div class="role-icon">📷</div>
+                    <div>
+                        <h3 class="role-title">Quản lý hình ảnh đơn hàng</h3>
+                        <div class="role-description">Upload và quản lý hình ảnh bằng chứng về đơn hàng</div>
+                    </div>
+                </div>
+                <div class="image-section">
+                    <div class="image-header">
+                        <div class="image-title-group">
+                            <div class="image-title">Hình ảnh đơn hàng</div>
+                            <div class="image-description">Quản lý hình ảnh liên quan đến quá trình vận chuyển</div>
+                        </div>
+                        <div class="image-count-badge">
+                            {{(orderImages.length + orderImageUpload.length)}} hình ảnh
+                        </div>
+                    </div>
+
+                    <!-- Upload Area -->
+                    <div class="upload-area" (click)="fileInput.click()" *ngIf="currentOrderDTO.Status < 6">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">Nhấp để tải lên hình ảnh</div>
+                        <div class="upload-subtext">Hỗ trợ JPG, PNG, GIF (tối đa 2MB) - Chọn từng ảnh một</div>
+                        <input  #fileInput type="file" accept="image/*" style="display: none"
+                            (change)="onFileSelected($event)">
+                    </div>
+
+                    <!-- Existing Order Images -->
+                    <div class="image-grid" *ngIf="orderImages.length > 0; else noExistingImages">
+                        <div class="image-card" *ngFor="let image of orderImages; let i = index">
+                            <div class="image-preview" (click)="viewImage(i, 'existing')">
+                                <img [src]="image.url" [alt]="image.fileName || 'Order image'"
+                                    (error)="onImageError($event)">
+                                <div class="placeholder-icon" style="display:none;">🖼️</div>
+                            </div>
+                            <div class="image-info">
+                                <div class="image-name" [title]="image.fileName" *ngIf="image.fileName">
+                                    {{image.fileName}}
+                                </div>
+                                <div class="image-date" *ngIf="image.created">
+                                    {{image.created | date:'dd/MM/yyyy'}}
+                                </div>
+                                <div class="image-actions">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #noExistingImages>
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📷</div>
+                            <div>Chưa có hình ảnh nào</div>
+                        </div>
+                    </ng-template>
+
+                    <!-- New Uploaded Images -->
+                    <div class="section-header" *ngIf="orderImageUpload.length > 0">
+                        Hình ảnh vừa tải lên ({{orderImageUpload.length}})
+                    </div>
+                    <div class="image-grid" *ngIf="orderImageUpload.length > 0">
+                        <div class="image-card" *ngFor="let image of orderImageUpload; let i = index">
+                            <div class="image-preview" (click)="viewImage(i, 'new')">
+                                <img [src]="image.url" [alt]="image.fileName || 'New image'">
+                            </div>
+                            <div class="image-info">
+                                <div class="image-description-text" *ngIf="image.descrip">
+                                    Mô tả hình {{i + 1}}: {{image.descrip}}
+                                </div>
+
+                                <div class="image-name" [title]="image.fileName" *ngIf="image.fileName">
+                                    {{image.fileName}}
+                                </div>
+                                <div class="image-date" *ngIf="image.created">
+                                    {{image.created | date:'dd/MM/yyyy'}}
+                                </div>
+                                <textarea class="description-input" placeholder="Nhập chú thích cho hình ảnh..."
+                                    [(ngModel)]="image.descrip" (input)="onDescriptionChange(i, $event)">
+                </textarea>
+                                <div class="image-actions">
+                                    <button class="btn-view" (click)="viewImage(i, 'new')">Xem</button>
+                                    <button class="btn-view" (click)="uploadImage(i, 'new')">Lưu</button>
+                                    <button class="btn-delete" (click)="deleteImage(i, 'new')">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PHẦN ACCOUNTING - NGƯỜI KẾ TOÁN -->
+            <div class="role-section accounting-role" *ngIf="currentOrderDTO.Status >= 4">
+                <div class="role-header">
+                    <div class="role-icon">💰</div>
+                    <div>
+                        <h3 class="role-title">Phần Accounting - Người kế toán</h3>
+                        <div class="role-description">Quản lý chi phí, hóa đơn và duyệt thanh toán</div>
+                    </div>
+                </div>
+
+                <div class="expense-section">
+                    <table class="expense-table">
+                        <thead>
+                            <tr>
+                                <th>Danh mục chi phí</th>
+                                <th>Giá tiền gốc</th>
+                                <th>Giá hiện tại</th>
+                                <th>Có hóa đơn?</th>
+                                <th>Số hóa đơn</th>
+                                <th>Tên hóa đơn</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let line of currentOrderDTO.OrderLineList; let idx = index">
+                                <input type="hidden" [(ngModel)]="line.itemID" name="itemID{{idx}}">
+
+                                <!-- Danh mục chi phí -->
+                                <td>
+                                    <input type="text" [value]="line.itemName" readonly class="filled-field">
+                                </td>
+
+                                <!-- Giá tiền gốc -->
+                                <td>
+                                    <input type="text" [value]="line.fixedPrice | number:'1.0-0':'en-US'" readonly
+                                        class="filled-field">
+                                </td>
+
+                                <!-- Giá hiện tại -->
+                                <td>
+                                    <input type="number" placeholder="Nhập giá hiện tại..." [(ngModel)]="line.itemCost"
+                                        name="itemCost{{idx}}"
+                                        [class]="line.itemCost && line.itemCost != 0 ? 'filled-field' : 'empty-field'">
+                                </td>
+
+                                <!-- Có hóa đơn -->
+                                <td>
+                                    <input type="checkbox" id="invoice{{idx}}" [(ngModel)]="line.hasInvoice"
+                                        name="hasInvoice{{idx}}">
+                                    <label for="invoice{{idx}}" style="margin-left: 8px;">Có</label>
+                                </td>
+
+                                <!-- Số hóa đơn -->
+                                <td>
+                                    <input type="text" placeholder="Nhập số hóa đơn..." [(ngModel)]="line.invoiceNo"
+                                        name="invoiceNo{{idx}}"
+                                        [class]="line.invoiceNo && line.invoiceNo.trim() != '' ? 'filled-field' : 'empty-field'">
+                                </td>
+
+                                <!-- Tên hóa đơn -->
+                                <td>
+                                    <input type="text" placeholder="Nhập tên hóa đơn..." [(ngModel)]="line.invoiceName"
+                                        name="invoiceName{{idx}}"
+                                        [class]="line.invoiceName && line.invoiceName.trim() != '' ? 'filled-field' : 'empty-field'">
+                                </td>
+                                <td>
+                                    <button type="button" (click)="DeleteItemInOrderLine(idx)">Xóa</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div>
+                    <input type="number">
+                    <input type="number">
+                    <input type="number">
+                    <input type="number">
+                    <input type="text">
+                </div>
+            </div>
+
+            <!-- PHẦN TRACKING TRẠNG THÁI ĐỢN HÀNG -->
+            <div class="role-section status-role">
+                <div class="role-header">
+                    <div class="role-icon">📋</div>
+                    <div>
+                        <h3 class="role-title">Theo dõi trạng thái đơn hàng</h3>
+
+                        <ng-container *ngFor="let status of statusList">
+                            <div *ngIf="currentOrderDTO.Status == status.key" class="role-description">
+                                Trạng thái hiện tại: {{status.value}}
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="status-tracking">
+                    <div class="status-timeline">
+                        <div class="status-step" *ngFor="let status of statusList"
+                            [ngClass]="getStatusClass(status.key)">
+                            <div class="status-circle">
+                                <span class="status-icon">{{status.key}}</span>
+                            </div>
+                            <div class="status-label">
+                                <div class="status-name">{{status.value}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="current-status-info">
+                        <div class="current-status-card">
+                            <div class="current-status-icon"></div>
+                            <div class="current-status-details">
+                                <div class="current-status-title">Trạng thái hiện tại</div>
+                                <div class="current-status-name">{{currentOrderDTO.Status}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Modal -->
+            <div class="image-modal" [class.show]="showImageModal" (click)="closeImageModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <div class="modal-title">Chi tiết hình ảnh</div>
+                        <button class="modal-close" (click)="closeImageModal()">×</button>
+                    </div>
+                    <div class="modal-body" *ngIf="selectedImageIndex >= 0 && currentViewImage">
+                        <div class="gallery-image">
+                            <img [src]="currentViewImage.url" [alt]="currentViewImage.fileName">
+
+                            <!-- Navigation arrows -->
+                            <div class="gallery-navigation" *ngIf="currentImages.length > 1">
+                                <button class="nav-btn prev" (click)="previousImage()"
+                                    [disabled]="selectedImageIndex === 0">
+                                    ‹
+                                </button>
+                                <button class="nav-btn next" (click)="nextImage()"
+                                    [disabled]="selectedImageIndex === currentImages.length - 1">
+                                    ›
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="gallery-info">
+                            <div class="gallery-name">{{currentViewImage.fileName}}</div>
+                            <div class="gallery-details">
+                                <div *ngIf="currentViewImage.created">
+                                    <strong>Ngày tải lên:</strong>
+                                    {{currentViewImage.created | date:'dd/MM/yyyy HH:mm'}}
+                                </div>
+                                <div>
+                                    <strong>Mô tả:</strong>
+                                    {{currentViewImage.descrip || 'Không có mô tả'}}
+                                </div>
+                                <div *ngIf="currentViewImage.userID">
+                                    <strong>Người tải:</strong>
+                                    {{currentViewImage.userID}}
+                                </div>
+                            </div>
+
+                            <!-- Image counter -->
+                            <div class="image-counter" *ngIf="currentImages.length > 1">
+                                {{selectedImageIndex + 1}} / {{currentImages.length}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-actions">
+                <button type="button" (click)="back()" class="btn-cancel">Về trang trước</button>
+                <button type="button" *ngIf="roleName == 'Operator' && currentOrderDTO.Status == 0" class="btn-save"
+                    (click)="updateStatusInprogress()">Duyệt tới trạng thái Đang Xử lí</button>
+                <button type="button" *ngIf="roleName == 'Accountant' && currentOrderDTO.Status == 4" class="btn-save"
+                    (click)="updateStatusAwaitingApproval()">Duyệt tới trạng thái Chờ phê duyệt</button>
+                <button type="button" *ngIf="roleName == 'Approver' && currentOrderDTO.Status == 5" class="btn-save"
+                    (click)="updateStatusSuccess()">Duyệt tới trạng thái Hoàn thành</button>
+                <button type="button" *ngIf="currentOrderDTO.Status < 6 || roleName == 'Admin'" class="btn-save" (click)="saveOrder()">Cập nhật đơn hàng</button>
+                <button type="button"  class="btn-save" (click)="ExportOrderDetail('csv')">Xuất Excel</button>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,305 @@
+<div class="customer-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-title">
+      <div class="page-icon">👥</div>
+      <h1>Danh mục Người dùng</h1>
+    </div>
+    <button class="btn-add" (click)="openAddModal()">
+      <span>➕</span>
+      <span>Thêm mới</span>
+    </button>
+  </div>
+
+  <!-- Simple Filter -->
+  <div class="simple-filter">
+    <div class="search-box">
+      <input 
+        type="text" 
+        class="search-input" 
+        id="searchInput"
+        placeholder="🔍 Tìm kiếm theo tên, mã người dùng, SĐT..." (input)="searchUser($event)">
+    </div>
+    <select class="sort-select" id="sortSelect" (change)="sortData($event)">
+      <option value="id-old">Ngày tạo (cũ nhất)</option>
+      <option value="id-new">Ngày tạo (mới nhất)</option>
+      <option value="name-az">Tên (A-Z)</option>
+      <option value="name-za">Tên (Z-A)</option>
+    </select>
+    <select class="sort-select" id="entriesSelect" (change)="showEntries($event)">
+      <option value="30">Số lượng hiển thị 30</option>
+      <option value="35">35</option>
+      <option value="40">40</option>
+      <option value="50">50</option>
+    </select>
+    <select class="sort-select" id="entriesSelect" (change)="filterRole($event)">
+      <option [value]="0">Tất cả quyền</option>
+      <option *ngFor="let r of listRole" [value]="r.roleID">{{r.roleName}}</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Tên người dùng</th>
+          <th>Quyền</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="customerTableBody">
+        <tr *ngFor="let user of listUser">
+          <td>{{user.userID}}</td>
+          <td>{{user.userName}}</td>
+          <td>{{user.fullName}}</td>
+
+          <td *ngIf="user.roleID == 1">Admin</td> 
+          <td *ngIf="user.roleID == 2">User</td> 
+          <td *ngIf="user.roleID == 3">Driver</td> 
+          <td *ngIf="user.roleID == 4">Customer</td> 
+          <td *ngIf="user.roleID == 5">Entry</td> 
+          <td *ngIf="user.roleID == 6">Operator</td> 
+          <td *ngIf="user.roleID == 7">Accountant</td> 
+          <td *ngIf="user.roleID == 8">Approver</td> 
+          <td *ngIf="user.roleID == 9">Nguời khai báo chi phí Bảo dưỡng</td> 
+
+          <td>
+            <div class="action-buttons">
+                <button class="btn-action btn-edit" (click)="openDetailModal(user.userID)">Chi tiết</button>
+                <button class="btn-action btn-delete" (click)="DeleteUser(user.userID)">Xóa</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Add -->
+<div class="modal-overlay" [class.show]="isAddModalOpen" (click)="onOverlayClick($event, 'add')">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">{{modalTitle}}</h2>
+      <button class="modal-close" (click)="closeAddModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="customerForm" (ngSubmit)="saveUser()">
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label">
+            Tên đăng nhập <span class="required">*</span>
+          </label>
+          <input type="text" class="form-input" id="userName" [(ngModel)]="userForm.userName" name="userName" required>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label">
+            Mật khẩu <span class="required">*</span>
+          </label>
+          <input type="password" class="form-input" id="password" [(ngModel)]="userForm.password" name="password" required>
+        </div>
+
+        <!-- Full Name -->
+        <div class="form-group">
+          <label class="form-label">
+            Họ và tên <span class="required">*</span>
+          </label>
+          <input type="text" class="form-input" id="fullName" [(ngModel)]="userForm.fullName" name="fullName" required>
+        </div>  
+        
+        <div class="form-group">
+          <label class="form-label">
+            Quyền hạn
+          </label>
+          <select class="form-input" [(ngModel)]="userForm.roleID" name="roleID">
+            <option *ngFor="let r of listRole" [value]="r.roleID" >{{r.roleName}}</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeAddModal()">Hủy</button>
+          <button type="submit" class="btn-save">{{isEditMode ? 'Cập nhật' : 'Lưu'}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Chi tiết -->
+<div class="modal-overlay" [class.show]="isDetailModalOpen" (click)="onOverlayClick($event, 'detail')">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Chi tiết Người dùng</h2>
+      <button class="modal-close" (click)="closeDetailModal()">&times;</button>
+    </div>
+    <div class="modal-body" *ngIf="currentUser; else loadingTemplate">
+      <form id="detailCustomerForm" >
+        <!-- ID khách hàng - READ ONLY -->
+        <div class="form-group">
+          <label class="form-label">ID Người dùng:</label>
+          <input 
+            type="text" 
+            class="form-input readonly" 
+            [(ngModel)]="currentUser.userID" 
+            name="userID"
+            readonly>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label">
+            Username<span class="required">*</span>
+          </label>
+          <input type="text" class="form-input" id="userName" [(ngModel)]="currentUser.userName" name="userName" readonly>
+        </div>
+
+        <!-- Password - CÓ THỂ EDIT -->
+        <div class="form-group">
+          <label class="form-label">
+            Mật khẩu ( Ctrl + Z để hoàn lại mật khẩu ban đầu)<span class="required">*</span>
+          </label>
+          <input type="text" class="form-input" [(ngModel)]="currentUser.password" name="password" required>
+        </div>
+
+        <!-- Mã khách hàng - CÓ THỂ EDIT -->
+        <div class="form-group">
+          <label class="form-label">
+            Họ và tên người dùng <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            class="form-input" 
+            [(ngModel)]="currentUser.fullName" 
+            name="fullName"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Quyền hạn
+          </label>
+          <select class="form-input" [(ngModel)]="currentUser.roleID" name="roleID">
+            <option *ngFor="let r of listRole" [value]="r.roleID" >{{r.roleName}}</option>
+          </select>
+        </div>
+      </form>
+    </div>
+             
+    <!-- Loading template -->
+    <ng-template #loadingTemplate>
+      <div class="modal-body loading-container">
+        <div class="loading"></div>
+        <p>Đang tải thông tin...</p>
+      </div>
+    </ng-template>
+             
+    <div class="modal-footer" *ngIf="currentUser">
+      <button type="button" class="btn-secondary" (click)="closeDetailModal()">Đóng</button>
+      <button type="button" class="btn-primary" (click)="updateUserFromDetail(currentUser.userID)">Cập nhật</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="pagination-container pagination-fade-in">
+    <!-- Info Text -->
+    <div class="pagination-info">
+        Tổng <strong>1-10</strong> của <strong>156</strong> kết quả
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        <!-- Previous Button -->
+        <button class="pagination-btn nav-btn prev" 
+                [disabled]="pageNumber === 1"
+                (click)="changePage(pageNumber - 1)">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            Trước
+        </button>
+
+        <!-- Page Numbers -->
+        <button class="pagination-btn" 
+                [class.active]="pageNumber === 1"
+                (click)="changePage(1)">1</button>
+        <button class="pagination-btn" 
+                [class.active]="pageNumber === 2"
+                (click)="changePage(2)">2</button>
+        <button class="pagination-btn" 
+                [class.active]="pageNumber === 3"
+                (click)="changePage(3)">3</button>
+        <button class="pagination-btn mobile-hidden" 
+                [class.active]="pageNumber === 4"
+                (click)="changePage(4)">4</button>
+        <button class="pagination-btn mobile-hidden" 
+                [class.active]="pageNumber === 5"
+                (click)="changePage(5)">5</button>
+
+        <!-- Ellipsis -->
+        <span class="pagination-ellipsis mobile-hidden">...</span>
+
+        <!-- Last Page -->
+        <button class="pagination-btn mobile-hidden" 
+                [class.active]="pageNumber === 16"
+                (click)="changePage(16)">16</button>
+
+        <!-- Next Button -->
+        <button class="pagination-btn nav-btn next"
+                [disabled]="pageNumber === 16"
+                (click)="changePage(pageNumber + 1)">
+            Sau
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<script>
+    // Basic functionality for demonstration
+    document.addEventListener('DOMContentLoaded', function() {
+        const paginationBtns = document.querySelectorAll('.pagination-btn:not(.nav-btn)');
+        const prevBtn = document.querySelector('.pagination-btn.prev');
+        const nextBtn = document.querySelector('.pagination-btn.next');
+        const pageSizeSelect = document.getElementById('pageSize');
+
+        // Page number click handling
+        paginationBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                paginationBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Add animation
+                this.classList.add('pagination-slide-in');
+                setTimeout(() => {
+                    this.classList.remove('pagination-slide-in');
+                }, 300);
+            });
+        });
+
+        // Page size change handling
+        pageSizeSelect.addEventListener('change', function() {
+            console.log('Page size changed to:', this.value);
+            // Add your page size change logic here
+        });
+
+        // Navigation button handling
+        prevBtn.addEventListener('click', function() {
+            console.log('Previous page clicked');
+            // Add your previous page logic here
+        });
+
+        nextBtn.addEventListener('click', function() {
+            console.log('Next page clicked');
+            // Add your next page logic here
+        });
+    });
+</script>
