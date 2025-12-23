@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class OrderService {
     private http: HttpClient
   ) { }
 
-  private url = "http://localhost:5167/api/";
+  protected readonly url = environment.apiUrl;
   options = { headers: new HttpHeaders().set("Content-Type", "application/json") }
   private token = localStorage.getItem("token")
   private pageSize = 50

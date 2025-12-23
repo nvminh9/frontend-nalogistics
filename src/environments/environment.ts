@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
+    apiUrl: 'http://103.163.119.173:5000/api',
     OrderStatusPattern: [
         { key: 0, value: "Đang chờ" },
         { key: 1, value: "Đang xử lý" },

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 
 @Injectable({
@@ -12,7 +13,8 @@ export class AuthServiceService {
     private http: HttpClient
   ) { }
 
-  private url: string = "http://localhost:5167/api";
+  protected readonly url = environment.apiUrl;
+
   options = { headers: new HttpHeaders().set("Content-Type", "application/json") }
   token = localStorage.getItem("token")
 
