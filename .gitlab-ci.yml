@@ -10,4 +10,5 @@ build:
         - pwd
         - ls -l
     tags:
-        - frontend_ubuntu
+        - ubuntu_frontend
+
