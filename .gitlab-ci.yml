@@ -7,16 +7,16 @@ build:
     stage: build
     variables:
         GIT_STRATEGY: clone
+    artifacts:             
+        paths:
+            - dist/
+        expire_in: 1 hour
     script:
         - whoami
         - pwd
         - ls
         - npm i --force
         - ng build --configuration=production
-        - sudo cp -r dist/logictic-app-frontend/ /datas/appfrontend-logistics
-        - sudo chown frontend:frontend /datas/appfrontend-logistics
-        - sudo su frontend -c "cd /datas/appfrontend-logistics/logictic-app-frontend/browser; ls -l "
-
     tags:
         - ubuntu_frontend
 
@@ -25,9 +25,11 @@ deploy:
     variables:
         GIT_STRATEGY: none
     script:
-        - whoami
-        - pwd
-        - ls
+        - sudo cp -r dist/logictic-app-frontend/ /datas/appfrontend-logistics
+        - sudo chown frontend:frontend /datas/appfrontend-logistics
+        - sudo su frontend -c "cd /datas/appfrontend-logistics/logictic-app-frontend/browser; ls -l "
+    dependencies:           
+        - build
     tags:
         - ubuntu_frontend    
 
