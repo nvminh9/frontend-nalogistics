@@ -8,7 +8,7 @@ build:
     script:
         - whoami
         - pwd
-        - ls -l
+        - ls
     tags:
         - ubuntu_frontend
 
