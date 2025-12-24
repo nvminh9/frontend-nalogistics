@@ -23,7 +23,7 @@ deploy:
     script:
         - sudo cp -r dist/logictic-app-frontend/ /datas/appfrontend-logistics
         - sudo chown -R frontend:frontend /datas/appfrontend-logistics
-        - sudo su frontend -c "cd /datas/appfrontend-logistics/logictic-app-frontend/; ls -l "
+        - sudo su frontend -c "cd /datas/appfrontend-logistics/logictic-app-frontend/; ls -l"
     tags:
         - ubuntu_frontend    
 
