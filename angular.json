@@ -107,6 +107,12 @@
     }
   },
   "cli": {
-    "analytics": "c7906238-91ff-4754-8055-1f66095900b1"
+    "analytics": "c7906238-91ff-4754-8055-1f66095900b1",
+    "cache": {
+      "enabled": true,
+      "path": ".angular", 
+      "environment": "all"
+    }
+
   }
 }
