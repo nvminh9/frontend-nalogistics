@@ -9,3 +9,5 @@ build:
         - whoami
         - pwd
         - ls -l
+    tags:
+        - frontend_ubuntu
