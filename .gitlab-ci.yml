@@ -27,5 +27,5 @@ buildandpush:
 #         - sudo chown -R frontend:frontend /datas/appfrontend-logistics
 #         - sudo su frontend -c "cd /datas/appfrontend-logistics/logictic-app-frontend/; ls -l"
 #     tags:
-#         - ubuntu_frontend   
+#         - ubuntu_frontend      
 
