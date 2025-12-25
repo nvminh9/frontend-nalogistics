@@ -1,6 +1,6 @@
 variables:
     # domain/project-registry/project-gitlab:tag_commit
-    DOCKER_IMAGE: ${DOCKER_USERNAME}/${REGISTRY_URL}/${CI_PROJECT_NAME}:test_${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE: ${DOCKER_USERNAME}/${REGISTRY_URL}:test_${CI_COMMIT_SHORT_SHA}
     DOCKER_CONTAINER : ${CI_PROJECT_NAME}  
 stages:
     - buildandpush
