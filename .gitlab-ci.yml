@@ -1,6 +1,7 @@
 variables:
     # domain/project-registry/project-gitlab:tag_commit
-    DOCKER_IMAGE: ${REGISTRY_URL}:test_${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE: ${DOCKER_USERNAME}/${REGISTRY_URL}/${CI_PROJECT_NAME}:test_${CI_COMMIT_SHORT_SHA}
+    DOCKER_CONTAINER : ${CI_PROJECT_NAME}  
 stages:
     - buildandpush
     - deploy
@@ -18,14 +19,26 @@ buildandpush:
     tags:
         - ubuntu_frontend
 
-# deploy:
-#     stage: deploy
-#     variables:
-#         GIT_STRATEGY: none
-#     script:
-#         - sudo cp -r dist/logictic-app-frontend/ /datas/appfrontend-logistics
-#         - sudo chown -R frontend:frontend /datas/appfrontend-logistics
-#         - sudo su frontend -c "cd /datas/appfrontend-logistics/logictic-app-frontend/; ls -l"
-#     tags:
-#         - ubuntu_frontend      
+deploy:
+    stage: deploy
+    variables:
+        GIT_STRATEGY: none
+    before_script:
+        - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+    script:
+        - docker pull $DOCKER_IMAGE
+        - docker rm -f $DOCKER_CONTAINER || true
+        - docker run --name $DOCKER_CONTAINER -dp 9999:80 $DOCKER_IMAGE
+    tags:
+        - ubuntu_frontend    
+
+showlog:
+    stage: showlog
+    variables:
+        GIT_STRATEGY: none
+    script:
+        - sleep 20
+        - docker logs $DOCKER_CONTAINER
+    tags:
+        - ubuntu_frontend  
 
