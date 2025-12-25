@@ -32,8 +32,8 @@ deploy:
     tags:
         - ubuntu_frontend    
 
-showlog:
-    stage: showlog
+checklog:
+    stage: checklog
     variables:
         GIT_STRATEGY: none
     script:
