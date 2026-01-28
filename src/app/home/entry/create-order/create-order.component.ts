@@ -3,6 +3,7 @@ import { OrderService } from '../../../../services/order-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 import { NumberFormatPipe } from '../../../NumberFormatPipe';
 
 export interface OrderLineDTO {
@@ -96,6 +97,7 @@ export class CreateOrderComponent {
   constructor(
     private o_service: OrderService,
     private toastr: ToastrService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -199,7 +201,14 @@ export class CreateOrderComponent {
     });
     this.o_service.CreateOrder(this.currentOrderDTO).subscribe((data: any) => {
       if (data.statusCode == 200) {
-        this.toastr.success(data.message)
+        const toastRef = this.toastr.success(
+          data.message + '<br><span class="toast-view-detail-btn">Xem chi tiết đơn hàng</span>',
+          '',
+          { enableHtml: true, timeOut: 5000 }
+        );
+        toastRef.onTap.subscribe(() => {
+          this.router.navigate(['/entry/update-order'], { queryParams: { orderID: data.data } });
+        });
         this.cancelOrder()
       }
       else if (data.statusCode == 400) {
