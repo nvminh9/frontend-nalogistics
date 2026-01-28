@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Toast view detail button */
+.toast-view-detail-btn {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.toast-view-detail-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
