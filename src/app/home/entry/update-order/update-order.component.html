@@ -10,7 +10,7 @@
 
         <div class="form-container">
             <!-- PHẦN ENTRY - NGƯỜI NHẬP LIỆU -->
-            <div class="role-section entry-role" >
+            <div class="role-section entry-role">
                 <div class="role-header">
                     <div class="role-icon">📝</div>
                     <div>
@@ -223,7 +223,7 @@
             </div>
 
             <!-- PHẦN QUẢN LÝ HÌNH ẢNH - BẰNG CHỨNG ĐƠN HÀNG -->
-            <div class="role-section image-role" >
+            <div class="role-section image-role">
                 <div class="role-header">
                     <div class="role-icon">📷</div>
                     <div>
@@ -315,7 +315,8 @@
             </div>
 
             <!-- PHẦN ACCOUNTING - NGƯỜI KẾ TOÁN -->
-            <div class="role-section accounting-role" *ngIf="currentOrderDTO.Status >= 4 && roleName != 'Entry' && roleName != 'Operator' " >
+            <div class="role-section accounting-role"
+                *ngIf="currentOrderDTO.Status >= 4 && roleName != 'Entry' && roleName != 'Operator' ">
                 <div class="role-header">
                     <div class="role-icon">💰</div>
                     <div>
@@ -347,8 +348,7 @@
                                 <!-- Giá hiện tại -->
                                 <td>
                                     <input type="number" placeholder="Nhập giá hiện tại..." [(ngModel)]="line.itemCost"
-                                        name="itemCost{{idx}}"
-                                        (ngModelChange)="updateTotalCost()"
+                                        name="itemCost{{idx}}" (ngModelChange)="updateTotalCost()"
                                         [class]="line.itemCost && line.itemCost != 0 ? 'filled-field' : 'empty-field'">
                                 </td>
 
@@ -385,17 +385,22 @@
                         <h4>Thông tin tài chính bổ sung</h4>
                     </div>
                     <div class="fields-grid">
-                        <div class="field-group">
+                        <!-- <div class="field-group">
                             <label>Tiền lương</label>
                             <input type="text" class="form-input" placeholder="Nhập tiền lương..." 
                                  name="EmployeeFee" 
                                 [value]="currentOrderDTO.EmployeeFee | number:'1.0-0':'en-US'" >
+                        </div> -->
+                        <div class="field-group">
+                            <label>Tiền lương</label>
+                            <input type="number" class="form-input" placeholder="Nhập tiền lương..." name="EmployeeFee"
+                                [(ngModel)]="currentOrderDTO.EmployeeFee">
                         </div>
+
                         <div class="field-group">
                             <label>Chi phí</label>
-                            <input type="text" class="form-input" placeholder="Nhập chi phí..." 
-                                 name="totalCost" 
-                                [value]="currentOrderDTO.totalCost | number:'1.0-0':'en-US'" >
+                            <input type="text" class="form-input" placeholder="Nhập chi phí..." name="totalCost"
+                                [value]="currentOrderDTO.totalCost | number:'1.0-0':'en-US'">
                         </div>
                         <div class="field-group">
                             <label>Tạm ứng</label>
@@ -404,21 +409,19 @@
                         </div>
                         <div class="field-group">
                             <label>Thanh toán còn lại</label>
-                            <input type="text" class="form-input" 
-                                [value]="((currentOrderDTO.EmployeeFee + currentOrderDTO.totalCost) - currentOrderDTO.PrePayFee) | number:'1.0-0':'en-US'" 
+                            <input type="text" class="form-input"
+                                [value]="((currentOrderDTO.EmployeeFee + currentOrderDTO.totalCost) - currentOrderDTO.PrePayFee) | number:'1.0-0':'en-US'"
                                 readonly>
                         </div>
                         <div class="field-group">
                             <label>Ghi chú</label>
                             <textarea class="form-input" placeholder="Nhập ghi chú..."
-                                    [(ngModel)]="currentOrderDTO.Notes" 
-                                    name="notes"
-                                    rows="4">
+                                [(ngModel)]="currentOrderDTO.Notes" name="notes" rows="4">
                             </textarea>
-                        </div>                    
+                        </div>
                     </div>
                 </div>
- 
+
             </div>
 
             <!-- PHẦN TRACKING TRẠNG THÁI ĐỢN HÀNG -->

@@ -63,15 +63,15 @@ export interface OrderDTO {
   totalCost : number
 }
 
-export enum OrderStatus {
-  InProgress,
-  PickedUp,
-  InTransit,
-  Delivered,
-  Completed,
-  Cancelled,
-  FailedDelivery
-}
+// export enum OrderStatus {
+//   InProgress,
+//   PickedUp,
+//   InTransit,
+//   Delivered,
+//   Completed,
+//   Cancelled,
+//   FailedDelivery
+// }
 
 @Component({
   selector: 'app-update-order',
@@ -161,7 +161,8 @@ export class UpdateOrderComponent {
 
   UpdateOrderDetail() {
     this.o_service.DetailOrder(this.orderID).subscribe((data: any) => {
-      if (data.statusCode == 200) {                
+      if (data.statusCode == 200) {  
+        console.log(data.data);
         this.currentOrderDTO = {
           OrderDate: data.data.orderDate.substring(0, 10),
           CustomerId: data.data.customerId,
@@ -204,6 +205,8 @@ export class UpdateOrderComponent {
           totalCost : data.data.totalCost,
           EmployeeFee : data.data.employeeFee,
         };
+        console.log(this.currentOrderDTO);
+        
         this.orderImages = data.data.orderImageList || []
       }
       else if (data.statusCode == 400) this.toastr.error(data.message)

@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -19,9 +18,8 @@ export class AuthServiceService {
   token = localStorage.getItem("token")
 
 
-
   Login(username: string, password: string): Observable<any> {
-    let api = "/auth/login";
+    let api = "auth/login";
     let data = {
       Username: username,
       Password: password
@@ -30,7 +28,7 @@ export class AuthServiceService {
   }
 
   CheckToken(token: string): Observable<any> {
-    let api = "/auth/decodedToken";
+    let api = "auth/decodedToken";
     let header = new HttpHeaders({
       'Authorization': "Bearer " + token
     })

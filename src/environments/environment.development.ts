@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:5167/api',
+    apiUrl: 'http://localhost:5167/api/',
     OrderStatusPattern : [
         { key: 0, value: "Đang chờ" },
         { key: 1, value: "Đang xử lý" },
