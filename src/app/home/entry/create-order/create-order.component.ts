@@ -207,7 +207,8 @@ export class CreateOrderComponent {
           { enableHtml: true, timeOut: 5000 }
         );
         toastRef.onTap.subscribe(() => {
-          this.router.navigate(['/entry/update-order'], { queryParams: { orderID: data.data } });
+          this.router.navigate(['/entry/update-order'], { queryParams: { orderID: data?.data?.[0]?.orderId } });
+          console.log("check 'data.data' line 210: ", data);
         });
         this.cancelOrder()
       }
