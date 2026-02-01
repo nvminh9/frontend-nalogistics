@@ -12,10 +12,11 @@ yarn-error.log
 # Angular specific
 /.angular/cache
 .sass-cache/
+.angular/
 
 # IDE and editors
 .vscode/*
-!.vscode/settings.json
+# !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -42,3 +43,6 @@ Thumbs.db
 .history/*
 /connect.lock
 /libpeerconnection.log
+
+# Prettier
+.prettierrc

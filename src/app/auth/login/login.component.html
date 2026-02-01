@@ -1,27 +1,40 @@
 <div class="background"></div>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
 
+<div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
+
+<!-- Login Wrapper -->
+<div class="login-wrapper">
     <div class="login-container">
+        <!-- Top -->
+        <div class="login-top">
+            <div class="top">
+                <span class="logo-title">NGỌC AN LOGISTICS</span>
+                <span class="sub-title">HỆ THỐNG QUẢN LÝ</span>
+            </div>
+            <div class="bottom">
+                <span class="welcome-text">Chào mừng trở lại</span>
+            </div>
+        </div>
+        <!-- Login Form -->
         <div class="login-form">
             <form>
                 <div class="form-group">
-                    <input type="text" name="username" placeholder="Tên đăng nhập" #username>
-                </div>
+                    <input type="text" name="username" placeholder="Tên đăng nhập" spellcheck="false" #username>
+                </div>                
                 <div class="form-group">
                     <input type="password" name="password" placeholder="Mật khẩu" #password>
                 </div>
                 <div class="form-actions">
-                    <a href="#" class="forgot-password">Quên mật khẩu?</a>
                     <button type="button" class="login-btn" (click)="Login(username.value, password.value )">Đăng nhập</button>
+                    <a href="#" class="forgot-password">Quên mật khẩu?</a>
                 </div>
             </form>
         </div>
-
-        <div class="image-section">
+        <!-- <div class="image-section">
             <div class="decorative-circle"></div>
             <div class="decorative-circle"></div>
             <div class="image-overlay"></div>
@@ -29,28 +42,29 @@
                 <h2>Chào mừng trở lại!</h2>
                 <p>Đăng nhập để tiếp tục sử dụng<br>các tính năng tuyệt vời của chúng tôi</p>
             </div>
-        </div>
+        </div> -->
     </div>
+</div>
 
-    <script>
-        // Add some interactive effects
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input');
-            
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.style.transform = 'translateY(-2px)';
-                });
-                
-                input.addEventListener('blur', function() {
-                    this.parentElement.style.transform = 'translateY(0)';
-                });
+<script>
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input');
+        
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
             });
-
-            // Add floating animation to shapes
-            const shapes = document.querySelectorAll('.shape');
-            shapes.forEach((shape, index) => {
-                shape.style.animationDelay = `${index * 2}s`;
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
             });
         });
-    </script>
+
+        // Add floating animation to shapes
+        const shapes = document.querySelectorAll('.shape');
+        shapes.forEach((shape, index) => {
+            shape.style.animationDelay = `${index * 2}s`;
+        });
+    });
+</script>

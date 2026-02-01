@@ -1,162 +1,282 @@
 <!-- Header -->
 <div class="header">
     <div class="logo-section">
-        <button class="mobile-menu-toggle" (click)="toggleMobileSidebar()">☰</button>
-        <div class="company-logo">NA</div>
+        <button class="mobile-menu-toggle" (click)="toggleMobileSidebar()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <!-- <div class="company-logo">NA</div> -->
         <div class="company-info">
-            <h1>Ngọc An Logistics</h1>
+            <h1>NGỌC AN LOGISTICS</h1>
             <p>Hệ thống quản lý vận tải</p>
         </div>
     </div>
 </div>
-
+<!-- Main Container -->
 <div class="container">
     <!-- Sidebar Overlay for mobile -->
     <div class="sidebar-overlay" [class.active]="isMobileOpen" (click)="toggleMobileSidebar()"></div>
-
     <!-- Sidebar -->
     <aside class="sidebar" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileOpen">
-
-        <div class="admin-info">
+        <!-- <div class="admin-info">
             <div class="admin-avatar">🏢</div>
             <h3>UnifyAdmin</h3>
             <p>Management System</p>
-        </div>
-
+        </div> -->
+        <!-- Menu -->
         <div class="menu-section">
+            <!-- Title -->
             <div class="menu-title">Quản lý chính</div>
-
-            <a *ngIf="rolename == 'Admin'" routerLink="/admin/dashboard" routerLinkActive="active" class="menu-item"
-                data-tooltip="Dashboard">
-                <div class="icon">📊</div>
-                <span class="menu-item-text">Dashboard</span>
-            </a>
-
-            <!-- Đơn hàng Menu -->
-            <a class="menu-item has-submenu" [class.open]="submenus.orders" data-tooltip="Đơn hàng"
-                (click)="toggleSubmenu('orders')">
-                <div class="icon">📦</div>
-                <span class="menu-item-text">Đơn hàng</span>
-            </a>
-
+            <!-- Dashboard -->
+            <div class="menu-item-wrapper">
+                <a
+                    *ngIf="rolename == 'Admin'"
+                    routerLink="/admin/dashboard"
+                    routerLinkActive="active"
+                    class="menu-item"
+                    data-tooltip="Dashboard"
+                >
+                    <div class="icon">
+                        <mat-icon>analytics</mat-icon>
+                    </div>
+                    <span class="menu-item-text">Dashboard</span>
+                </a>
+            </div>
+            <!-- Đơn hàng -->
+            <div class="menu-item-wrapper">
+                <a
+                    class="menu-item has-submenu"
+                    [class.open]="submenus.orders"
+                    data-tooltip="Đơn hàng"
+                    (click)="toggleSubmenu('orders')"
+                >
+                    <div class="icon">
+                        <mat-icon>layers</mat-icon>
+                    </div>
+                    <span class="menu-item-text">Đơn hàng</span>
+                </a>
+            </div>
+            <!-- Đơn hàng Submenu -->
             <div class="submenu" [class.open]="submenus.orders">
-                <a routerLink="/admin/list-order" routerLinkActive="active" class="menu-item"
-                    data-tooltip="Danh sách đơn hàng">
-                    <div class="icon">📋</div>
-                    <span class="menu-item-text">Danh sách đơn hàng</span>
-                </a>
-                <a routerLink="/entry/create-order" routerLinkActive="active" class="menu-item"
-                    data-tooltip="Tạo đơn hàng">
-                    <div class="icon">➕</div>
-                    <span class="menu-item-text">Tạo đơn hàng</span>
-                </a>
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/admin/list-order"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Danh sách đơn hàng"
+                    >
+                        <div class="icon">
+                            <mat-icon>assignment</mat-icon>
+                        </div>
+                        <span class="menu-item-text">Danh sách đơn hàng</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/entry/create-order"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Tạo đơn hàng"
+                    >
+                        <div class="icon">
+                            <mat-icon>add_box</mat-icon>
+                        </div>
+                        <span class="menu-item-text">Tạo đơn hàng</span>
+                    </a>
+                </div>
                 <!-- <a routerLink="/entry/update-order" routerLinkActive="active" class="menu-item" 
                     data-tooltip="Cập nhật đơn hàng">
                     <div class="icon">✏️</div>
                     <span class="menu-item-text">Cập nhật đơn hàng</span>
                 </a> -->
             </div>
-
-            <!-- Danh mục Menu -->
-            <a class="menu-item has-submenu" [class.open]="submenus.categories" data-tooltip="Danh mục"
-                (click)="toggleSubmenu('categories')">
-                <div class="icon">📂</div>
-                <span class="menu-item-text">Danh mục</span>
-                <!-- <span class="badge">6</span> -->
-            </a>
-
+            <!-- Danh mục -->
+            <div class="menu-item-wrapper">
+                <a
+                    class="menu-item has-submenu"
+                    [class.open]="submenus.categories"
+                    data-tooltip="Danh mục"
+                    (click)="toggleSubmenu('categories')"
+                >
+                    <div class="icon">
+                        <!-- 📂 -->
+                        <mat-icon>library_books</mat-icon>
+                    </div>
+                    <span class="menu-item-text">Danh mục</span>
+                    <!-- <span class="badge">6</span> -->
+                </a>
+            </div>
+            <!-- Danh mục Submenu -->
             <div class="submenu" [class.open]="submenus.categories">
-                <a routerLink="/admin/list-transportSalary" routerLinkActive="active" class="menu-item"
-                    data-tooltip="Tiền lương vận chuyển">
-                    <div class="icon">🚚</div>
-                    <span class="menu-item-text">Tiền lương vận chuyển</span>
-                </a>
-
-                <a routerLink="/admin/list-customer" routerLinkActive="active" class="menu-item"
-                    data-tooltip="Khách hàng">
-                    <div class="icon">👥</div>
-                    <span class="menu-item-text">Khách hàng</span>
-                </a>
-                <a routerLink="/admin/list-driver" routerLinkActive="active" class="menu-item" data-tooltip="Tài xế">
-                    <div class="icon">🚗</div>
-                    <span class="menu-item-text">Tài xế</span>
-                </a>
-                <a routerLink="/admin/list-location" routerLinkActive="active" class="menu-item"
-                    data-tooltip="Địa điểm">
-                    <div class="icon">📍</div>
-                    <span class="menu-item-text">Địa điểm</span>
-                </a>
-                <a routerLink="/admin/list-truck" routerLinkActive="active" class="menu-item" data-tooltip="Xe">
-                    <div class="icon">🚛</div>
-                    <span class="menu-item-text">Số Xe</span>
-                </a>
-                <a routerLink="/admin/list-rmooc" routerLinkActive="active" class="menu-item" data-tooltip="Rmooc">
-                    <div class="icon">🚚</div>
-                    <span class="menu-item-text">Số Rmooc</span>
-                </a>
-                <a routerLink="/admin/list-item" routerLinkActive="active" class="menu-item" data-tooltip="Chi phí">
-                    <div class="icon">💰</div>
-                    <span class="menu-item-text">Chi phí</span>
-                </a>
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/admin/list-transportSalary"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Tiền lương vận chuyển"
+                    >
+                        <div class="icon">
+                            <mat-icon>local_shipping</mat-icon>
+                        </div>
+                        <span class="menu-item-text">Tiền lương vận chuyển</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/admin/list-customer"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Khách hàng"
+                    >
+                        <div class="icon"><mat-icon>contacts</mat-icon></div>
+                        <span class="menu-item-text">Khách hàng</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/admin/list-driver"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Tài xế"
+                    >
+                        <div class="icon"><mat-icon>local_taxi</mat-icon></div>
+                        <span class="menu-item-text">Tài xế</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/admin/list-location"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Địa điểm"
+                    >
+                        <div class="icon"><mat-icon>fmd_good</mat-icon></div>
+                        <span class="menu-item-text">Địa điểm</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a routerLink="/admin/list-truck" routerLinkActive="active" class="menu-item" data-tooltip="Xe">
+                        <div class="icon"><mat-icon>pin</mat-icon></div>
+                        <span class="menu-item-text">Số Xe</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a routerLink="/admin/list-rmooc" routerLinkActive="active" class="menu-item" data-tooltip="Rmooc">
+                        <div class="icon"><mat-icon>pin</mat-icon></div>
+                        <span class="menu-item-text">Số Rmooc</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a routerLink="/admin/list-item" routerLinkActive="active" class="menu-item" data-tooltip="Chi phí">
+                        <div class="icon"><mat-icon>request_quote</mat-icon></div>
+                        <span class="menu-item-text">Chi phí</span>
+                    </a>
+                </div>
             </div>
-
-            <a *ngIf="rolename == 'Admin' " class="menu-item has-submenu" [class.open]="submenus.maintenance"
-                data-tooltip="Danh mục bảo dưỡng" (click)="toggleSubmenu('maintenance')">
-                <div class="icon">🔧 </div>
-                <span class="menu-item-text">Bảo dưỡng</span>
-                <!-- <span class="badge">6</span> -->
-            </a>
-            <div class="submenu" [class.open]="submenus.maintenance">
-                <a *ngIf="rolename == 'Admin' " routerLink="/admin/list-maintenance" routerLinkActive="active"
-                    class="menu-item" data-tooltip="Người dùng">
-                    <div class="icon">🔧</div>
+            <!-- Bảo dưỡng -->
+            <div class="menu-item-wrapper">
+                <a
+                    *ngIf="rolename == 'Admin'"
+                    class="menu-item has-submenu"
+                    [class.open]="submenus.maintenance"
+                    data-tooltip="Danh mục bảo dưỡng"
+                    (click)="toggleSubmenu('maintenance')"
+                >
+                    <div class="icon"><mat-icon>build_circle</mat-icon></div>
                     <span class="menu-item-text">Bảo dưỡng</span>
-                </a>
-                <a *ngIf="rolename == 'Admin' " routerLink="/admin/list-maintenanceType" routerLinkActive="active"
-                    class="menu-item" data-tooltip="Người dùng">
-                    <div class="icon">📋</div>
-                    <span class="menu-item-text">Mục bảo dưỡng</span>
+                    <!-- <span class="badge">6</span> -->
                 </a>
             </div>
-
-
-            <a *ngIf="rolename == 'Admin' " class="menu-item has-submenu" [class.open]="submenus.user"
-                data-tooltip="Người dùng" (click)="toggleSubmenu('user')">
-                <div class="icon">🧑‍💼 </div>
-                <span class="menu-item-text">Người dùng</span>
-                <!-- <span class="badge">6</span> -->
-            </a>
-            <div class="submenu" [class.open]="submenus.user">
-                <a routerLink="/admin/list-userRole" routerLinkActive="active" class="menu-item"
-                    data-tooltip="Người dùng">
-                    <div class="icon">🧑‍💼</div>
+            <!-- Bảo dưỡng Submenu -->
+            <div class="submenu" [class.open]="submenus.maintenance">
+                <div class="submenu-item-wrapper">
+                    <a
+                        *ngIf="rolename == 'Admin'"
+                        routerLink="/admin/list-maintenance"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Người dùng"
+                    >
+                        <div class="icon"><mat-icon>car_repair</mat-icon></div>
+                        <span class="menu-item-text">Bảo dưỡng</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a
+                        *ngIf="rolename == 'Admin'"
+                        routerLink="/admin/list-maintenanceType"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Người dùng"
+                    >
+                        <div class="icon"><mat-icon>text_snippet</mat-icon></div>
+                        <span class="menu-item-text">Mục bảo dưỡng</span>
+                    </a>
+                </div>
+            </div>
+            <!-- Người dùng -->
+            <div class="menu-item-wrapper">
+                <a
+                    *ngIf="rolename == 'Admin'"
+                    class="menu-item has-submenu"
+                    [class.open]="submenus.user"
+                    data-tooltip="Người dùng"
+                    (click)="toggleSubmenu('user')"
+                >
+                    <div class="icon"><mat-icon>account_circle</mat-icon></div>
                     <span class="menu-item-text">Người dùng</span>
+                    <!-- <span class="badge">6</span> -->
                 </a>
             </div>
-
-            <a routerLink="/reports" routerLinkActive="active" class="menu-item" data-tooltip="Báo cáo thống kê">
-                <div class="icon">📈</div>
-                <span class="menu-item-text">Báo cáo thống kê</span>
-            </a>
-
-            <button type="button" (click)="Logout()">Đăng xuất</button>
+            <!-- Người dùng Submenu -->
+            <div class="submenu" [class.open]="submenus.user">
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/admin/list-userRole"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Người dùng"
+                    >
+                        <div class="icon"><mat-icon>assignment_ind</mat-icon></div>
+                        <span class="menu-item-text">Người dùng</span>
+                    </a>
+                </div>
+            </div>
+            <!-- Báo cáo thống kê -->
+            <div class="menu-item-wrapper">
+                <a routerLink="/reports" routerLinkActive="active" class="menu-item" data-tooltip="Báo cáo thống kê">
+                    <div class="icon"><mat-icon>area_chart</mat-icon></div>
+                    <span class="menu-item-text">Báo cáo thống kê</span>
+                </a>
+            </div>
+            <!-- Settings -->
+            <div class="settings">
+                <!-- Title -->
+                <div class="menu-title">Cài đặt</div>
+                <div class="menu-item-wrapper">
+                    <label class="btnLogoutContainer" htmlFor="btnLogoutID">
+                        <mat-icon>logout</mat-icon>
+                        <button id="btnLogoutID" class="btnLogout" type="button" (click)="Logout()">Đăng xuất</button>
+                    </label>
+                </div>
+            </div>
         </div>
     </aside>
-
     <!-- Toggle Button -->
     <div class="sidebar-toggle" [class.collapsed]="isCollapsed" (click)="toggleSidebar()">
-        <svg viewBox="0 0 24 24">
+        <!-- <svg viewBox="0 0 24 24">
             <path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        </svg> -->
+        @if (isCollapsed) {
+            <mat-icon>last_page</mat-icon>
+        } @else {
+            <mat-icon>first_page</mat-icon>
+        }
     </div>
-
     <!-- Main Content -->
     <main class="main-content" [class.expanded]="isCollapsed">
         <router-outlet></router-outlet>
     </main>
 </div>
-
-
 
 <!-- Footer -->
 <footer class="footer">
@@ -168,8 +288,10 @@
                     <h3>Ngọc An Logistics</h3>
                 </div>
             </div>
-            <p>Công ty vận tải logistics hàng đầu Việt Nam, chuyên cung cấp dịch vụ vận chuyển hàng hóa an toàn, nhanh
-                chóng và tiết kiệm chi phí.</p>
+            <p>
+                Công ty vận tải logistics hàng đầu Việt Nam, chuyên cung cấp dịch vụ vận chuyển hàng hóa an toàn, nhanh
+                chóng và tiết kiệm chi phí.
+            </p>
             <div class="social-links">
                 <a href="#" class="social-link">📘</a>
                 <a href="#" class="social-link">📞</a>
@@ -210,7 +332,7 @@
     </div>
 </footer>
 
-
+<!-- JS Script Handle Toggle Sidebar -->
 <script>
     // Toggle Sidebar Collapse/Expand
     function toggleSidebar() {
@@ -263,11 +385,11 @@
     });
 
     // Active menu item
-    document.querySelectorAll('.menu-item').forEach(item => {
+    document.querySelectorAll('.menu-item').forEach((item) => {
         item.addEventListener('click', function (e) {
             if (!this.classList.contains('has-submenu')) {
                 e.preventDefault();
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.menu-item').forEach((i) => i.classList.remove('active'));
                 this.classList.add('active');
             }
         });

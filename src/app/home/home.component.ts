@@ -14,7 +14,8 @@ import { MaintenanceComponent } from './admin/maintenance/maintenance.component'
 import { MaintenanceTypeComponent } from './admin/maintenance-type.component/maintenance-type.component';
 import { Router } from '@angular/router';
 import { TransportSalaryComponent } from './admin/transport-salary.component/transport-salary.component';
-
+import { MatIcon } from "@angular/material/icon";
+import { MatIconModule } from '@angular/material/icon';
 
 interface SubmenusState {
   orders: boolean;
@@ -25,7 +26,7 @@ interface SubmenusState {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, CommonModule, CreateOrderComponent, UpdateOrderComponent, DashboardComponent,DriverComponent,LocationComponent,ItemComponent,TruckComponent,RmoocComponent,UserRoleComponent, MaintenanceComponent, MaintenanceTypeComponent, TransportSalaryComponent],
+  imports: [RouterOutlet, RouterModule, CommonModule, CreateOrderComponent, UpdateOrderComponent, DashboardComponent, DriverComponent, LocationComponent, ItemComponent, TruckComponent, RmoocComponent, UserRoleComponent, MaintenanceComponent, MaintenanceTypeComponent, TransportSalaryComponent, MatIcon, MatIconModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

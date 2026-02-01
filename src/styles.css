@@ -1,20 +1,59 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --primary-color: #121212;
+    --secondary-color: #ffffff;
+    --success-color: #28a745;
+    --text-color-dark: #121212;
+    --text-color-gray: #444444;
+    --text-color-light: #ffffff;
+    --bg-body-dark: #121212;
+    --bg-body-light: #ffffff;
+    --bg-home-light: rgb(248 248 248);
+    --bg-home-dark: #121212;
+    /* --font-family: 'Roboto', sans-serif; */
+    --font-family: system-ui;
+}
+
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    /* font-size: 62.5%; */
+    scroll-behavior: smooth;
+    background-color: var(--bg-body-dark);
+}
+
+body {
+    height: 100%;
+    font-family: var(--font-family) !important;
+    /* font-size: 1.6rem; */
+    /* text-rendering: optimizeSpeed; */
+    margin: 0;
+}
 
 /* Toast view detail button */
 .toast-view-detail-btn {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 4px;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s ease;
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 .toast-view-detail-btn:hover {
-  background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.35);
 }

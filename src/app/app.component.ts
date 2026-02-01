@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes  } from '@angular/router';
 
-
 @Component({
   selector: 'app-root',
   standalone: true,
