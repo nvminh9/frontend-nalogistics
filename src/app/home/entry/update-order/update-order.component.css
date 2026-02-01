@@ -617,171 +617,293 @@ body {
     opacity: 0.7;
 }
 
-/* MODAL STYLES */
-.image-modal {
+/* ======== NOTION-LIKE IMAGE VIEWER ======== */
+.viewer-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: rgba(15, 15, 15, 0.95);
     z-index: 10000;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
-    padding: 20px;
+    transition: opacity 0.2s ease;
 }
 
-.image-modal.show {
+.viewer-overlay.show {
     opacity: 1;
     visibility: visible;
 }
 
-.modal-content {
-    background: white;
-    border-radius: 12px;
-    max-width: 90vw;
-    max-height: 90vh;
-    width: 800px;
-    overflow: hidden;
+.viewer-container {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-.modal-header {
+/* Toolbar */
+.viewer-toolbar {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    border-bottom: 1px solid #e2e8f0;
-    background: #f7fafc;
+    padding: 8px 16px;
+    background: rgba(30, 30, 30, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+    min-height: 48px;
+    z-index: 2;
 }
 
-.modal-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2d3748;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #718096;
-    width: 32px;
-    height: 32px;
+.viewer-toolbar-left {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-.modal-close:hover {
-    background: #e2e8f0;
-    color: #2d3748;
-}
-
-.modal-body {
+    gap: 12px;
+    min-width: 0;
     flex: 1;
-    overflow-y: auto;
-    padding: 0;
 }
 
-.gallery-image {
-    width: 100%;
-    height: 400px;
-    background: #000;
+.viewer-filename {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.viewer-counter {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.viewer-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.viewer-tool-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    transition: all 0.15s ease;
 }
 
-.gallery-image img {
-    max-width: 100%;
+.viewer-tool-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.viewer-close-btn:hover {
+    background: rgba(255, 59, 48, 0.2);
+    color: #ff6b6b;
+}
+
+.viewer-zoom-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    min-width: 44px;
+    text-align: center;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+.viewer-zoom-label:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.viewer-tool-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 0 4px;
+}
+
+/* Main image area */
+.viewer-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.viewer-image-wrapper {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: default;
+    user-select: none;
+}
+
+.viewer-image-wrapper.is-zoomed {
+    cursor: grab;
+}
+
+.viewer-image-wrapper.is-panning {
+    cursor: grabbing;
+}
+
+.viewer-main-image {
+    max-width: 90%;
     max-height: 100%;
     object-fit: contain;
+    transition: transform 0.15s ease;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
-.gallery-navigation {
+.viewer-image-wrapper.is-panning .viewer-main-image {
+    transition: none;
+}
+
+/* Navigation buttons */
+.viewer-nav-btn {
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
     transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-    pointer-events: none;
-}
-
-.nav-btn {
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 18px;
-    font-weight: bold;
-    color: #2d3748;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
     cursor: pointer;
-    pointer-events: auto;
-    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.15s ease;
+    backdrop-filter: blur(4px);
 }
 
-.nav-btn:hover:not(:disabled) {
-    background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+.viewer-nav-prev {
+    left: 16px;
 }
 
-.nav-btn:disabled {
-    opacity: 0.5;
+.viewer-nav-next {
+    right: 16px;
+}
+
+.viewer-nav-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.viewer-nav-btn:disabled {
+    opacity: 0.25;
     cursor: not-allowed;
 }
 
-.gallery-info {
-    padding: 24px;
-    background: white;
+/* Info bar */
+.viewer-info-bar {
+    padding: 8px 16px;
+    background: rgba(30, 30, 30, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+    z-index: 2;
 }
 
-.gallery-name {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 16px;
+.viewer-info-details {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
-.gallery-details {
-    font-size: 14px;
-    color: #4a5568;
-    line-height: 1.6;
+.viewer-info-item {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
 }
 
-.gallery-details > div {
-    margin-bottom: 8px;
+.viewer-info-descrip {
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.gallery-details strong {
-    color: #2d3748;
-    font-weight: 600;
+/* Thumbnail strip */
+.viewer-thumbnails {
+    padding: 10px 16px;
+    background: rgba(25, 25, 25, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+    overflow-x: auto;
+    z-index: 2;
 }
 
-.image-counter {
-    text-align: center;
-    font-size: 14px;
-    color: #718096;
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #e2e8f0;
+.viewer-thumbnail-track {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    min-width: min-content;
+}
+
+.viewer-thumbnail {
+    width: 56px;
+    height: 56px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: 2px solid transparent;
+    opacity: 0.5;
+    transition: all 0.15s ease;
+}
+
+.viewer-thumbnail:hover {
+    opacity: 0.8;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.viewer-thumbnail.active {
+    opacity: 1;
+    border-color: white;
+}
+
+.viewer-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Scrollbar styling for thumbnail strip */
+.viewer-thumbnails::-webkit-scrollbar {
+    height: 4px;
+}
+
+.viewer-thumbnails::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.viewer-thumbnails::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+}
+
+.viewer-thumbnails::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* EXPENSE TABLE */
@@ -1188,35 +1310,39 @@ body {
         padding: 24px 16px;
     }
 
-    .modal-content {
-        width: 95vw;
-        max-height: 95vh;
-    }
-
-    .gallery-image {
-        height: 250px;
-    }
-
-    .gallery-info {
-        padding: 16px;
-    }
-
-    .nav-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-    }
-
-    .gallery-navigation {
-        padding: 0 10px;
-    }
-
     .image-title {
         font-size: 18px;
     }
 
     .image-description {
         font-size: 13px;
+    }
+
+    /* Viewer responsive - tablet */
+    .viewer-toolbar {
+        padding: 6px 12px;
+    }
+
+    .viewer-filename {
+        font-size: 13px;
+    }
+
+    .viewer-nav-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .viewer-nav-prev {
+        left: 8px;
+    }
+
+    .viewer-nav-next {
+        right: 8px;
+    }
+
+    .viewer-thumbnail {
+        width: 48px;
+        height: 48px;
     }
 }
 
@@ -1263,39 +1389,68 @@ body {
         font-size: 12px;
     }
 
-    .modal-content {
-        width: 98vw;
-        max-height: 98vh;
+    /* Viewer responsive - mobile */
+    .viewer-toolbar {
+        padding: 6px 8px;
+        min-height: 42px;
     }
 
-    .gallery-image {
-        height: 200px;
+    .viewer-filename {
+        font-size: 12px;
+        max-width: 120px;
     }
 
-    .gallery-info {
-        padding: 12px;
+    .viewer-counter {
+        font-size: 11px;
     }
 
-    .gallery-name {
-        font-size: 16px;
+    .viewer-tool-btn {
+        width: 32px;
+        height: 32px;
     }
 
-    .gallery-details {
-        font-size: 13px;
+    .viewer-zoom-label {
+        font-size: 11px;
+        min-width: 36px;
     }
 
-    .nav-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 14px;
+    .viewer-nav-btn {
+        width: 34px;
+        height: 34px;
     }
 
-    .modal-header {
-        padding: 16px;
+    .viewer-nav-prev {
+        left: 4px;
     }
 
-    .modal-title {
-        font-size: 16px;
+    .viewer-nav-next {
+        right: 4px;
+    }
+
+    .viewer-nav-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .viewer-main-image {
+        max-width: 98%;
+    }
+
+    .viewer-thumbnail {
+        width: 44px;
+        height: 44px;
+    }
+
+    .viewer-thumbnails {
+        padding: 8px 8px;
+    }
+
+    .viewer-info-bar {
+        padding: 6px 10px;
+    }
+
+    .viewer-info-item {
+        font-size: 12px;
     }
 }
 
