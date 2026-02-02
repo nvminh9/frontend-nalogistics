@@ -24,10 +24,11 @@ export class WebSocketService {
   }
 
 
+  protected readonly WS_Url = environment.socketUrl;
 
   connect() {
     try {
-      this.socket = new WebSocket('ws://localhost:5167/api/DashBoard/truck-statistics?token=' + this.token);
+      this.socket = new WebSocket(this.WS_Url + 'DashBoard/truck-statistics?token=' + this.token);
       
       this.socket.onopen = (event:any) => {
         console.log('✅ WebSocket connected successfully');

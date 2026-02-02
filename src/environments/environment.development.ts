@@ -1,6 +1,7 @@
 export const environment = {
     production: false,
     apiUrl: 'http://localhost:5167/api/',
+    socketUrl: 'ws://localhost:5167/api/',  // ws://localhost:5167/api/DashBoard/truck-statistics?token=' + this.token
     OrderStatusPattern : [
         { key: 0, value: "Đang chờ" },
         { key: 1, value: "Đang xử lý" },
