@@ -12,7 +12,7 @@ yarn-error.log
 # Angular specific
 /.angular/cache
 .sass-cache/
-# .angular/
+.angular/
 
 # IDE and editors
 .vscode/*
