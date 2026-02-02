@@ -1,5 +1,5 @@
 // update-order.component.ts - Complete Component
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { OrderService } from '../../../../services/order-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 import { environment } from '../../../../environments/environment.development';
 import { ImageService } from '../../../../services/image-service';
 import { NumberUtilService } from '../../../../services/number-util-service';
+import { ImageViewerComponent, ImageDTO } from '../../../components/image-viewer/image-viewer.component';
 
 export interface OrderLineDTO {
   OrderLineId: number
@@ -23,16 +24,6 @@ export interface OrderLineDTO {
   invoiceName?: string,
   invoiceNo?: string,
   isActive: boolean
-}
-
-export interface ImageDTO {
-  orderID: number, 
-  fileName: string, 
-  File: File,
-  url: string,
-  descrip: string,
-  userID: number,
-  created: Date
 }
 
 export interface OrderDTO {
@@ -76,7 +67,7 @@ export interface OrderDTO {
 @Component({
   selector: 'app-update-order',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, ImageViewerComponent],
   templateUrl: './update-order.component.html',
   styleUrl: './update-order.component.css'
 })
@@ -98,18 +89,6 @@ export class UpdateOrderComponent {
   currentImages: ImageDTO[] = []
   currentViewImage: ImageDTO | null = null
   currentImageType: 'existing' | 'new' = 'existing'
-
-  // Image viewer (Notion-like) properties
-  zoomLevel: number = 1
-  minZoom: number = 0.5
-  maxZoom: number = 5
-  panX: number = 0
-  panY: number = 0
-  isPanning: boolean = false
-  panStartX: number = 0
-  panStartY: number = 0
-  lastPanX: number = 0
-  lastPanY: number = 0
 
   statusList = environment.OrderStatusPattern
 
@@ -311,9 +290,7 @@ export class UpdateOrderComponent {
     }
 
     this.currentViewImage = this.currentImages[index];
-    this.resetZoomPan();
     this.showImageModal = true;
-    document.body.style.overflow = 'hidden';
   }
 
   uploadImage(index: number, type: 'existing' | 'new'){
@@ -340,189 +317,6 @@ export class UpdateOrderComponent {
     this.selectedImageIndex = -1;
     this.currentImages = [];
     this.currentViewImage = null;
-    this.resetZoomPan();
-    document.body.style.overflow = '';
-  }
-
-  previousImage(): void {
-    if (this.selectedImageIndex > 0) {
-      this.selectedImageIndex--;
-      this.currentViewImage = this.currentImages[this.selectedImageIndex];
-      this.resetZoomPan();
-    }
-  }
-
-  nextImage(): void {
-    if (this.selectedImageIndex < this.currentImages.length - 1) {
-      this.selectedImageIndex++;
-      this.currentViewImage = this.currentImages[this.selectedImageIndex];
-      this.resetZoomPan();
-    }
-  }
-
-  selectThumbnail(index: number): void {
-    this.selectedImageIndex = index;
-    this.currentViewImage = this.currentImages[index];
-    this.resetZoomPan();
-  }
-
-  // Zoom & Pan methods
-  resetZoomPan(): void {
-    this.zoomLevel = 1;
-    this.panX = 0;
-    this.panY = 0;
-    this.lastPanX = 0;
-    this.lastPanY = 0;
-    this.isPanning = false;
-  }
-
-  zoomIn(): void {
-    if (this.zoomLevel < this.maxZoom) {
-      this.zoomLevel = Math.min(this.zoomLevel + 0.5, this.maxZoom);
-      if (this.zoomLevel === 1) {
-        this.panX = 0;
-        this.panY = 0;
-        this.lastPanX = 0;
-        this.lastPanY = 0;
-      }
-    }
-  }
-
-  zoomOut(): void {
-    if (this.zoomLevel > this.minZoom) {
-      this.zoomLevel = Math.max(this.zoomLevel - 0.5, this.minZoom);
-      if (this.zoomLevel <= 1) {
-        this.panX = 0;
-        this.panY = 0;
-        this.lastPanX = 0;
-        this.lastPanY = 0;
-      }
-    }
-  }
-
-  resetZoom(): void {
-    this.resetZoomPan();
-  }
-
-  onImageWheel(event: WheelEvent): void {
-    event.preventDefault();
-    if (event.deltaY < 0) {
-      this.zoomIn();
-    } else {
-      this.zoomOut();
-    }
-  }
-
-  onPanStart(event: MouseEvent): void {
-    if (this.zoomLevel > 1) {
-      event.preventDefault();
-      this.isPanning = true;
-      this.panStartX = event.clientX;
-      this.panStartY = event.clientY;
-    }
-  }
-
-  onPanMove(event: MouseEvent): void {
-    if (this.isPanning && this.zoomLevel > 1) {
-      event.preventDefault();
-      const dx = event.clientX - this.panStartX;
-      const dy = event.clientY - this.panStartY;
-      this.panX = this.lastPanX + dx;
-      this.panY = this.lastPanY + dy;
-    }
-  }
-
-  onPanEnd(): void {
-    if (this.isPanning) {
-      this.isPanning = false;
-      this.lastPanX = this.panX;
-      this.lastPanY = this.panY;
-    }
-  }
-
-  onTouchStart(event: TouchEvent): void {
-    if (this.zoomLevel > 1 && event.touches.length === 1) {
-      this.isPanning = true;
-      this.panStartX = event.touches[0].clientX;
-      this.panStartY = event.touches[0].clientY;
-    }
-  }
-
-  onTouchMove(event: TouchEvent): void {
-    if (this.isPanning && this.zoomLevel > 1 && event.touches.length === 1) {
-      event.preventDefault();
-      const dx = event.touches[0].clientX - this.panStartX;
-      const dy = event.touches[0].clientY - this.panStartY;
-      this.panX = this.lastPanX + dx;
-      this.panY = this.lastPanY + dy;
-    }
-  }
-
-  onTouchEnd(): void {
-    this.onPanEnd();
-  }
-
-  getImageTransform(): string {
-    return `scale(${this.zoomLevel}) translate(${this.panX / this.zoomLevel}px, ${this.panY / this.zoomLevel}px)`;
-  }
-
-  getZoomPercent(): number {
-    return Math.round(this.zoomLevel * 100);
-  }
-
-  downloadImage(): void {
-    if (!this.currentViewImage) return;
-    const url = this.currentViewImage.url;
-    const fileName = this.currentViewImage.fileName || 'image.jpg';
-
-    fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        const blobUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(blobUrl);
-      })
-      .catch(() => {
-        // Fallback: open in new tab
-        window.open(url, '_blank');
-      });
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent): void {
-    if (!this.showImageModal) return;
-
-    switch (event.key) {
-      case 'Escape':
-        this.closeImageModal();
-        break;
-      case 'ArrowLeft':
-        event.preventDefault();
-        this.previousImage();
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        this.nextImage();
-        break;
-      case '+':
-      case '=':
-        event.preventDefault();
-        this.zoomIn();
-        break;
-      case '-':
-        event.preventDefault();
-        this.zoomOut();
-        break;
-      case '0':
-        event.preventDefault();
-        this.resetZoom();
-        break;
-    }
   }
 
   deleteImage(index: number, type: 'existing' | 'new'): void {
