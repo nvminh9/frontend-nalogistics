@@ -1,0 +1,157 @@
+<!-- Notion-like Image Viewer Modal -->
+<div class="viewer-overlay" [class.show]="show" (click)="closeModal()">
+    <div
+        class="viewer-container"
+        (click)="$event.stopPropagation()"
+        *ngIf="selectedIndex >= 0 && currentViewImage"
+    >
+        <!-- Top toolbar -->
+        <div class="viewer-toolbar">
+            <div class="viewer-toolbar-left">
+                <span class="viewer-filename">{{ currentViewImage.fileName }}</span>
+                <span class="viewer-counter" *ngIf="images.length > 1">
+                    {{ selectedIndex + 1 }} / {{ images.length }}
+                </span>
+            </div>
+            <div class="viewer-toolbar-right">
+                <button class="viewer-tool-btn" (click)="zoomOut()" title="Thu nho (-)">
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        <line x1="8" y1="11" x2="14" y2="11" />
+                    </svg>
+                </button>
+                <span class="viewer-zoom-label" (click)="resetZoom()">{{ getZoomPercent() }}%</span>
+                <button class="viewer-tool-btn" (click)="zoomIn()" title="Phong to (+)">
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        <line x1="11" y1="8" x2="11" y2="14" />
+                        <line x1="8" y1="11" x2="14" y2="11" />
+                    </svg>
+                </button>
+                <div class="viewer-tool-divider"></div>
+                <button class="viewer-tool-btn" (click)="downloadImage()" title="Tai ve">
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                </button>
+                <div class="viewer-tool-divider"></div>
+                <button class="viewer-tool-btn viewer-close-btn" (click)="closeModal()" title="Dong (Esc)">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main image area -->
+        <div class="viewer-main">
+            <!-- Previous button -->
+            <button
+                class="viewer-nav-btn viewer-nav-prev"
+                (click)="previousImage()"
+                *ngIf="images.length > 1"
+                [disabled]="selectedIndex === 0"
+                title="Anh truoc"
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            </button>
+
+            <!-- Image display area with zoom/pan -->
+            <div
+                class="viewer-image-wrapper"
+                (wheel)="onImageWheel($event)"
+                (mousedown)="onPanStart($event)"
+                (mousemove)="onPanMove($event)"
+                (mouseup)="onPanEnd()"
+                (mouseleave)="onPanEnd()"
+                (touchstart)="onTouchStart($event)"
+                (touchmove)="onTouchMove($event)"
+                (touchend)="onTouchEnd()"
+                [class.is-zoomed]="zoomLevel > 1"
+                [class.is-panning]="isPanning"
+            >
+                <img
+                    [src]="currentViewImage.url"
+                    [alt]="currentViewImage.fileName"
+                    [style.transform]="getImageTransform()"
+                    draggable="false"
+                    class="viewer-main-image"
+                />
+            </div>
+
+            <!-- Next button -->
+            <button
+                class="viewer-nav-btn viewer-nav-next"
+                (click)="nextImage()"
+                *ngIf="images.length > 1"
+                [disabled]="selectedIndex === images.length - 1"
+                title="Anh tiep"
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Image info bar -->
+        <div class="viewer-info-bar">
+            <div class="viewer-info-details">
+                <span *ngIf="currentViewImage.created" class="viewer-info-item">
+                    {{ currentViewImage.created | date: 'dd/MM/yyyy HH:mm' }}
+                </span>
+                <span class="viewer-info-item viewer-info-descrip">
+                    {{ currentViewImage.descrip || 'Chua co chu thich' }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Thumbnail strip -->
+        <div class="viewer-thumbnails" *ngIf="images.length > 1">
+            <div class="viewer-thumbnail-track">
+                <div
+                    class="viewer-thumbnail"
+                    *ngFor="let img of images; let i = index"
+                    [class.active]="i === selectedIndex"
+                    (click)="selectThumbnail(i)"
+                >
+                    <img [src]="img.url" [alt]="img.fileName || 'Thumbnail'" draggable="false" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
