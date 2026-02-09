@@ -2,11 +2,8 @@
     <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <h1 class="header-title">
-                <!-- <span class="icon">🚛</span> -->
-                Dashboard Quản Lý Vận Tải
-            </h1>
-
+            <h1 class="header-title">Dashboard</h1>
+            <!-- Header Controls -->
             <div class="header-controls">
                 <!-- View Mode Selector -->
                 <select class="view-selector">
@@ -24,14 +21,18 @@
 
                 <!-- Last Updated -->
                 <div class="last-updated fresh">
-                    <span class="icon">🕒</span>
+                    <span class="icon">
+                        <mat-icon>access_time</mat-icon>
+                    </span>
                     <span>{{ getTimeAgo() }}</span>
                 </div>
 
                 <!-- Refresh Button -->
                 <button class="btn btn-refresh" (click)="onRefreshData()">
-                    <span class="icon">🔄</span>
-                    Refresh
+                    <span class="icon">
+                        <mat-icon>refresh</mat-icon>
+                    </span>
+                    Làm mới
                 </button>
             </div>
         </div>
@@ -40,7 +41,7 @@
     <!-- Loading State -->
     <div *ngIf="!truckStatistics" class="loading-state">
         <div class="loading-spinner"></div>
-        <p>Đang tải dữ liệu từ WebSocket...</p>
+        <p>Đang tải dữ liệu...</p>
     </div>
 
     <!-- Main Dashboard Content -->
@@ -49,33 +50,26 @@
         <div class="stats-grid">
             <!-- Total Orders Card -->
             <div class="stat-card orders" (click)="onStatCardClick('orders', $event)">
-                <div class="stat-icon">📦</div>
-                <div class="stat-value">{{ truckStatistics.totalCompletedOrder }}</div>
-                <div class="stat-label">Tổng đơn hàng hoàn thành</div>
+                <div class="stat-label"><mat-icon>layers</mat-icon>Tổng đơn hàng hoàn thành</div>
+                <div class="stat-value">{{ truckStatistics.totalCompletedOrder || 0 }}</div>
                 <div class="stat-detail">Cập nhật real-time</div>
             </div>
-
             <!-- Best Truck Card -->
             <div class="stat-card top-truck" (click)="onStatCardClick('top-truck', $event)">
-                <div class="stat-icon">🏆</div>
-                <div class="stat-value">{{ truckStatistics.mostTrip.truckNo || 'N/A' }}</div>
-                <div class="stat-label">Xe xuất sắc nhất</div>
-                <div class="stat-detail">{{ truckStatistics.mostTrip.countCompletedTrip }} chuyến hoàn thành</div>
+                <div class="stat-label"><mat-icon>local_shipping</mat-icon>Xe xuất sắc nhất</div>
+                <div class="stat-value">{{ truckStatistics.mostTrip.truckNo || 0 }}</div>
+                <div class="stat-detail">{{ truckStatistics.mostTrip.countCompletedTrip || 0 }} chuyến hoàn thành</div>
             </div>
-
             <!-- Average Performance Card -->
             <div class="stat-card performance" (click)="onStatCardClick('performance', $event)">
-                <div class="stat-icon">📊</div>
-                <div class="stat-value">{{ avgPerformance }}</div>
-                <div class="stat-label">Trung bình chuyến/xe</div>
+                <div class="stat-label"><mat-icon>signal_cellular_alt_2_bar</mat-icon>Trung bình chuyến/xe</div>
+                <div class="stat-value">{{ avgPerformance || 0 }}</div>
                 <div class="stat-detail">Hiệu suất đội xe</div>
             </div>
-
             <!-- Active Fleet Card -->
             <div class="stat-card fleet" (click)="onStatCardClick('fleet', $event)">
-                <div class="stat-icon">🚛</div>
-                <div class="stat-value">{{ truckStatistics.topTrucks.length }}</div>
-                <div class="stat-label">Xe đang hoạt động</div>
+                <div class="stat-label"><mat-icon>no_crash</mat-icon>Xe đang hoạt động</div>
+                <div class="stat-value">{{ truckStatistics.topTrucks.length || 0 }}</div>
                 <div class="stat-detail">Toàn bộ đội xe</div>
             </div>
         </div>
@@ -86,12 +80,12 @@
             <div class="section-card">
                 <div class="section-header">
                     <h2 class="section-title">
-                        <span class="icon">🏅</span>
-                        Top {{ truckStatistics.topTrucks.length }} Xe Tốt Nhất
+                        <!-- Top {{ truckStatistics.topTrucks.length }} Xe Tốt Nhất -->
+                        Danh sách xe tốt nhất
                     </h2>
                     <div class="section-actions">
                         <span class="section-badge">{{ truckStatistics.topTrucks.length }} xe</span>
-                        <button class="btn btn-export">📊 Export</button>
+                        <button class="btn btn-export"><mat-icon>import_export</mat-icon>Export</button>
                     </div>
                 </div>
 
@@ -131,7 +125,7 @@
 
                     <!-- Empty State -->
                     <div *ngIf="truckStatistics.topTrucks.length === 0" class="empty-state">
-                        <div class="empty-icon">🚛</div>
+                        <!-- <div class="empty-icon"><mat-icon>local_shipping</mat-icon></div> -->
                         <p>Chưa có dữ liệu xe</p>
                     </div>
                 </div>
@@ -143,7 +137,7 @@
                 <div class="section-card">
                     <div class="section-header">
                         <h2 class="section-title">
-                            <span class="icon">📈</span>
+                            <!-- <span class="icon">📈</span> -->
                             Phân Tích Hiệu Suất
                         </h2>
                     </div>
@@ -208,7 +202,7 @@
                 <div class="section-card">
                     <div class="section-header">
                         <h2 class="section-title">
-                            <span class="icon">📊</span>
+                            <!-- <span class="icon">📊</span> -->
                             Phân Bố Hiệu Suất
                         </h2>
                     </div>
@@ -251,7 +245,7 @@
                 <div class="section-card">
                     <div class="section-header">
                         <h2 class="section-title">
-                            <span class="icon">📋</span>
+                            <!-- <span class="icon">📋</span> -->
                             Thống Kê Chi Tiết
                         </h2>
                     </div>

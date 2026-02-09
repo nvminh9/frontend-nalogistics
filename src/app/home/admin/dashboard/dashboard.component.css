@@ -2,23 +2,19 @@
 .dashboard-container {
     /* background: #f5f7fa; */
     min-height: 100vh;
-    padding: 0px;
+    padding: 10px;
     box-sizing: border-box;
+    background-color: var(--bg-home-light);
 }
 
 /* Header - Sạch sẽ */
 .header {
-    /* padding: 20px 24px; */
-    padding: 15px 20px;
-    margin-bottom: 24px;
-    background-color: #ffffff;
-    box-shadow:
-        rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    padding: 7px 14px;
+    padding-right: 0px;
+    margin-bottom: 10px;
     border: none;
     border-radius: 14px;
 }
-
 .header-content {
     display: flex;
     justify-content: space-between;
@@ -26,20 +22,18 @@
     flex-wrap: wrap;
     gap: 16px;
 }
-
 .header-title {
     /* color: #2d3748; */
     /* font-size: 24px; */
     /* font-weight: 600; */
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
     color: #222;
     margin: 0;
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
 .header-controls {
     display: flex;
     align-items: center;
@@ -49,23 +43,21 @@
 
 /* View Selector - Đơn giản */
 .view-selector {
-    background: #4a5568;
-    color: white;
+    background-color: #ffffff;
+    box-shadow:
+        rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    color: #222;
     border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-family: var(--font-family);
     font-weight: 500;
     font-size: 14px;
     cursor: pointer;
 }
-
-.view-selector:hover {
-    background: #2d3748;
-}
-
 .view-selector:focus {
-    outline: 2px solid #4a5568;
-    outline-offset: 2px;
+    outline: none;
 }
 
 /* Connection Status - Tối giản */
@@ -74,28 +66,30 @@
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 13px;
+    border-radius: 10px;
+    font-size: 14px;
     font-weight: 500;
 }
-
 .status-connected {
-    background: #48bb78;
-    color: white;
+    /* background: #48bb78;
+    color: white; */
+    background-color: #ffffff;
+    box-shadow:
+        rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    color: #222;
 }
-
 .status-disconnected {
     background: #f56565;
-    color: white;
 }
-
 .status-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: currentColor;
+    /* color: #48bb78; */
+    color: var(--success-color);
 }
-
 .status-dot.pulse {
     animation: pulse 2s infinite;
 }
@@ -114,70 +108,93 @@
 .last-updated {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
-    color: #718096;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
-    padding: 6px 10px;
-    border-radius: 6px;
-    background: #edf2f7;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow:
+        rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    color: #222;
+    .mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        height: max-content;
+        width: max-content;
+    }
 }
-
 .last-updated.fresh {
-    color: #38a169;
-    background: #f0fff4;
+    /*  */
 }
 
 /* Buttons - Đơn giản */
 .btn {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: ease-out 0.2s;
     gap: 4px;
+    box-shadow:
+        rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    .mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        height: max-content;
+        width: max-content;
+    }
 }
-
 .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
-
 .btn-refresh {
-    background: #4299e1;
+    /* background: #4299e1; */
+    background-color: var(--success-color);
     color: white;
 }
-
 .btn-refresh:hover:not(:disabled) {
-    background: #3182ce;
+    background: darkgreen;
 }
-
 .btn-export {
-    background: #48bb78;
+    background: #000;
     color: white;
-    padding: 4px 10px;
-    font-size: 12px;
+    /* padding: 4px 10px; */
+    /* font-size: 12px; */
 }
-
 .btn-export:hover {
-    background: #38a169;
+    background-color: #1f1f1f;
 }
 
 /* Loading State */
 .loading-state {
     text-align: center;
     padding: 60px 20px;
-    color: #4a5568;
+    /* color: #4a5568; */
+    /* color: var(--success-color); */
+    color: #222;
 }
-
 .loading-spinner {
     width: 40px;
     height: 40px;
+    /* border: 3px solid #e2e8f0;
+    border-top: 3px solid #4299e1; */
     border: 3px solid #e2e8f0;
-    border-top: 3px solid #4299e1;
+    border-top: 3px solid var(--success-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto 16px;
@@ -197,28 +214,35 @@
     font-weight: 500;
 }
 
+/* Dashboard Content */
+.dashboard-content {
+    display: grid;
+    gap: 12px;
+}
+
 /* Stats Grid - Sạch sẽ */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-bottom: 24px;
+    gap: 12px;
+    /* margin-bottom: 24px; */
 }
-
 .stat-card {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e1e5e9;
+    background-color: #ffffff;
+    box-shadow:
+        rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    color: #222;
+    border-radius: 14px;
+    /* padding: 14px; */
+    padding: 18px 20px;
     cursor: pointer;
+    transition: ease-out 0.2s;
 }
-
 .stat-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    background-color: #e2e2e2;
 }
-
-.stat-card::before {
+/* .stat-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -226,8 +250,7 @@
     right: 0;
     height: 3px;
     background: var(--accent-color);
-}
-
+} */
 .stat-icon {
     width: 44px;
     height: 44px;
@@ -240,25 +263,38 @@
     color: white;
     background: var(--icon-color);
 }
-
-.stat-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: #2d3748;
-    margin-bottom: 4px;
-    line-height: 1;
-}
-
 .stat-label {
-    color: #4a5568;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #333333;
+    font-family: var(--font-family);
     font-size: 14px;
     font-weight: 500;
-    margin-bottom: 4px;
+    margin-bottom: 25px;
+    height: max-content;
+    width: max-content;
+    .mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+        height: max-content;
+        width: max-content;
+    }
 }
-
+.stat-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 6px;
+    line-height: 1;
+}
 .stat-detail {
     font-size: 12px;
-    color: #718096;
+    font-weight: 500;
+    color: #222222aa;
 }
 
 /* Stat Card Colors - Tối giản */
@@ -286,49 +322,55 @@
 .details-grid {
     display: grid;
     grid-template-columns: 1.6fr 1fr;
-    gap: 24px;
+    gap: 12px;
 }
 
 .section-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e1e5e9;
     overflow: hidden;
+    background-color: #ffffff;
+    box-shadow:
+        rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    color: #222;
+    border-radius: 14px;
+    /* padding: 14px; */
+    padding: 20px;
+    cursor: pointer;
+    transition: ease-out 0.2s;
 }
-
 .section-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid #e2e8f0;
-    background: #f7fafc;
+    background-color: transparent;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
-
 .section-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #2d3748;
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
     margin: 0;
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
 .section-actions {
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
 .section-badge {
-    background: #4299e1;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
+    background-color: #ffffff;
+    box-shadow:
+        rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 14px;
     font-weight: 500;
+    color: #222;
+    cursor: pointer;
+    transition: ease-out 0.2s;
 }
 
 /* Trucks Container */
@@ -475,11 +517,11 @@
 .charts-section {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
 }
 
 .performance-container {
-    padding: 16px 20px;
+    /* padding: 16px 20px; */
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -560,7 +602,7 @@
 
 /* Distribution Chart - Đơn giản */
 .chart-container {
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 .distribution-chart {
@@ -658,7 +700,7 @@
 
 /* Stats Detail */
 .stats-detail {
-    padding: 16px 20px;
+    /* padding: 16px 20px; */
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -693,19 +735,24 @@
 /* Empty State */
 .empty-state {
     text-align: center;
-    padding: 40px 20px;
-    color: #718096;
+    padding: 130px 0px;
+    .mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+        color: var(--text-color-gray);
+    }
 }
-
 .empty-icon {
-    font-size: 40px;
+    /* font-size: 40px;
     margin-bottom: 12px;
-    opacity: 0.5;
+    opacity: 0.5; */
 }
-
 .empty-state p {
     font-size: 14px;
     font-weight: 500;
+    color: var(--text-color-gray);
     margin: 0;
 }
 

@@ -5,7 +5,15 @@
             <mat-icon>menu</mat-icon>
         </button>
         <!-- <div class="company-logo">NA</div> -->
-        <div class="company-info">
+        @if (isCollapsed) {
+            <div class="company-info-mini">NA</div>
+        } @else {
+            <div class="company-info">
+                <h1>NGỌC AN LOGISTICS</h1>
+                <p>Hệ thống quản lý vận tải</p>
+            </div>
+        }
+        <div class="company-info-mobile">
             <h1>NGỌC AN LOGISTICS</h1>
             <p>Hệ thống quản lý vận tải</p>
         </div>
@@ -283,13 +291,18 @@
         }
     </div>
     <!-- Main Content -->
+    @if (isCollapsed) {
+        <div class="sidebar-offset" style="width: 70px"></div>
+    } @else {
+        <div class="sidebar-offset" style="width: 280px"></div>
+    }
     <main class="main-content" [class.expanded]="isCollapsed">
         <router-outlet></router-outlet>
     </main>
 </div>
 
 <!-- Footer -->
-<footer class="footer">
+<!-- <footer class="footer">
     <div class="footer-content">
         <div class="footer-section">
             <div class="company-footer">
@@ -340,7 +353,7 @@
     <div class="footer-bottom">
         <p>&copy; 2024 Ngọc An Logistics. Tất cả quyền được bảo lưu. | Thiết kế bởi UnifyAdmin System</p>
     </div>
-</footer>
+</footer> -->
 
 <!-- JS Script Handle Toggle Sidebar -->
 <script>

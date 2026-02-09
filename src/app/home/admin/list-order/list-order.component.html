@@ -1,173 +1,192 @@
-<div class="main-content">
-    <!-- Phần danh sách đơn hàng -->
-    <div class="content-card order-list-section">
-        <div class="card-header">
-            <h2>
-                <span class="icon">📦</span>
-                Danh sách đơn hàng
-            </h2>
-            <div class="subtitle">Chi tiết đơn hàng vận chuyển</div>
-        </div>
-
-        <div class="filter-controls">
-            <div class="filter-row">
-                <div class="filter-group">
-                    <label>Từ ngày</label>
-                    <input type="date" class="filter-input" name="fromDateStr" [(ngModel)]="fromDateStr">
+<div class="list-order">
+    <div class="main-content">
+        <!-- Phần danh sách đơn hàng -->
+        <div class="content-card order-list-section">
+            <!-- Header -->
+            <div class="card-header">
+                <h2>Danh sách đơn hàng</h2>
+                <!-- <div class="subtitle">Chi tiết đơn hàng vận chuyển</div> -->
+            </div>
+            <!-- Filter -->
+            <div class="filter-controls">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>Từ ngày</label>
+                        <input type="date" class="filter-input" name="fromDateStr" [(ngModel)]="fromDateStr" />
+                    </div>
+                    <div class="filter-group">
+                        <label>Đến ngày</label>
+                        <input type="date" class="filter-input" name="toDateStr" [(ngModel)]="toDateStr" />
+                    </div>
+                    <div class="filter-group">
+                        <label>Tìm kiếm</label>
+                        <input
+                            type="text"
+                            class="filter-input"
+                            placeholder="ID đơn,container,Rmooc,địa điểm"
+                            name="keySearch"
+                            [(ngModel)]="keySearch"
+                        />
+                    </div>
+                    <div class="filter-group">
+                        <label>Trạng thái</label>
+                        <select class="filter-select" [(ngModel)]="status" (change)="sortStatus($event)">
+                            <option value="">Tất cả đơn hàng</option>
+                            <option value="Pending">Đang chờ</option>
+                            <option value="InProgress">Đang xử lí</option>
+                            <option value="PickedUp">Đã lấy hàng</option>
+                            <option value="InTransit">Đang vận chuyển</option>
+                            <option value="Delivered">Đã giao</option>
+                            <option value="AwaitingApproval">Chờ phê duyệt</option>
+                            <option value="Completed">Hoàn thành</option>
+                            <option value="Cancelled">Đã hủy</option>
+                            <option value="FailedDelivery">Giao thất bại</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Show Entries</label>
+                        <select class="filter-select" (change)="showEntries($event)">
+                            <option value="30">Mặc định ( 30 đơn hàng)</option>
+                            <option value="37">37 đơn hàng</option>
+                            <option value="45">45 đơn hàng</option>
+                            <option value="60">60 đơn hàng</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Lọc danh sách tìm kiếm</label>
+                        <select class="filter-select" (change)="sortData($event)">
+                            <option value="id-asc">Ngày giao cũ nhất (Mặc định)</option>
+                            <option value="id-desc">Ngày giao mới nhất</option>
+                            <!-- <option value="price-asc">Giá thấp đến cao</option>
+                            <option value="price-desc">Giá cao đến thấp</option> -->
+                        </select>
+                    </div>
+                    <!-- <div class="filter-group"></div>
+                    <div class="filter-group"></div>
+                    <div class="filter-group"></div>
+                    <div class="filter-group"></div> -->
+                    <div class="filter-group">
+                        <button type="button" (click)="searchObject()" class="btn-view-detail">Tìm kiếm</button>
+                    </div>
+                    <div class="filter-group">
+                        <button type="button" (click)="ExportOrders('csv')" class="btn-view-detail">Xuất Excel</button>
+                    </div>
                 </div>
-                <div class="filter-group">
-                    <label>Đến ngày</label>
-                    <input type="date" class="filter-input" name="toDateStr" [(ngModel)]="toDateStr">
-                </div>
-                <div class="filter-group">
-                    <label>Tìm kiếm</label>
-                    <input type="text" class="filter-input" placeholder="ID đơn,container,Rmooc,địa điểm"
-                        name="keySearch" [(ngModel)]="keySearch">
-                </div>
-
-                <div class="filter-group">
-                    <label>Trạng thái</label>
-                    <select class="filter-select" [(ngModel)]="status" (change)="sortStatus($event)">
-                        <option value="">Tất cả đơn hàng</option>
-                        <option value="Pending">Đang chờ</option>
-                        <option value="InProgress">Đang xử lí</option>
-                        <option value="PickedUp">Đã lấy hàng</option>
-                        <option value="InTransit">Đang vận chuyển</option>
-                        <option value="Delivered">Đã giao</option>
-                        <option value="AwaitingApproval">Chờ phê duyệt</option>
-                        <option value="Completed">Hoàn thành</option>
-                        <option value="Cancelled">Đã hủy</option>
-                        <option value="FailedDelivery">Giao thất bại</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <button type="button" (click)="searchObject()" class="btn-view-detail">Tìm kiếm</button>
-                </div>
-                <div class="filter-group">
-                    <button type="button" (click)="ExportOrders('csv')" class="btn-view-detail">Xuất Excel</button>
-                </div>
-                <div class="filter-group">
-                    <label>Show Entries</label>
-                    <select class="filter-select" (change)="showEntries($event)">
-                        <option value="30">Mặc định ( 30 đơn hàng)</option>
-                        <option value="37">37 đơn hàng</option>
-                        <option value="45">45 đơn hàng</option>
-                        <option value="60">60 đơn hàng</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Lọc danh sách tìm kiếm</label>
-                    <select class="filter-select" (change)="sortData($event)">
-                        <option value="id-asc">Ngày giao cũ nhất (Mặc định)</option>
-                        <option value="id-desc">Ngày giao mới nhất </option>
-                        <!-- <option value="price-asc">Giá thấp đến cao</option>
-                        <option value="price-desc">Giá cao đến thấp</option> -->
-                    </select>
-                </div>
-                
+            </div>
+            <!-- Result -->
+            <div class="table-container">
+                <table class="orders-table" *ngIf="listOrder.length > 0; else other_content">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ngày giao hàng</th>
+                            <th>Tên khách hàng</th>
+                            <th>BillBooking</th>
+                            <th>Cảng nhận Cont/Rống/hàng</th>
+                            <th>Kho nhận hàng/Kho giao hàng</th>
+                            <th>Cảng hạ Cont/Cảng trả Cont</th>
+                            <th>Tên tài xế</th>
+                            <th>Số xe</th>
+                            <th>Số Rmooc</th>
+                            <th>Số Container</th>
+                            <th>Trạng thái</th>
+                            <th>Chi tiết</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let order of listOrder">
+                            <td data-label="ID">{{ order.orderID }}</td>
+                            <td data-label="Ngày nhập">{{ order.orderDate | stringDateFormatPipe: 'dd/MM/yyyy' }}</td>
+                            <td data-label="Tên khách hàng">{{ order.customerName }}</td>
+                            <td data-label="BillBookingNo ">{{ order.billBookingNo }}</td>
+                            <td data-label="Cảng nhận">{{ order.fromLocationName }}</td>
+                            <td data-label="Kho nhận/giao">{{ order.fromWhereName }}</td>
+                            <td data-label="Cảng hạ">{{ order.toLocationName }}</td>
+                            <td data-label="Tên tài xế">{{ order.driverName }}</td>
+                            <td data-label="Số xe">{{ order.truckNo }}</td>
+                            <td data-label="Số Rmooc">{{ order.rmoocNo }}</td>
+                            <td data-label="Chi phí">{{ order.containerNo }}</td>
+                            <td data-label="Trạng thái">
+                                <span class="status-badge status-processing">{{ order.status }}</span>
+                            </td>
+                            <td data-label="Chi tiết">
+                                <button type="button" (click)="DetailOrder(order.orderID)" class="btn-detail">
+                                    Xem
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ng-template #other_content><span class="orders-table-empty">Danh sách rỗng</span></ng-template>
             </div>
         </div>
-        
-
-        <div class="table-container" >
-            <table class="orders-table" *ngIf="listOrder.length > 0; else other_content">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Ngày giao hàng</th>
-                        <th>Tên khách hàng</th>
-                        <th>BillBooking</th>
-                        <th>Cảng nhận Cont/Rống/hàng</th>
-                        <th>Kho nhận hàng/Kho giao hàng</th>
-                        <th>Cảng hạ Cont/Cảng trả Cont</th>
-                        <th>Tên tài xế</th>
-                        <th>Số xe</th>
-                        <th>Số Rmooc</th>
-                        <th>Số Container</th>
-                        <th>Trạng thái</th>
-                        <th>Chi tiết</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let order of listOrder">
-                        <td data-label="ID">{{order.orderID}}</td>
-                        <td data-label="Ngày nhập">{{order.orderDate | stringDateFormatPipe:'dd/MM/yyyy' }}</td>
-                        <td data-label="Tên khách hàng">{{order.customerName}}</td>
-                        <td data-label="BillBookingNo ">{{order.billBookingNo}}</td>
-                        <td data-label="Cảng nhận">{{order.fromLocationName}}</td>
-                        <td data-label="Kho nhận/giao">{{order.fromWhereName}}</td>
-                        <td data-label="Cảng hạ">{{order.toLocationName}}</td>
-                        <td data-label="Tên tài xế">{{order.driverName}}</td>
-                        <td data-label="Số xe">{{order.truckNo}}</td>
-                        <td data-label="Số Rmooc">{{order.rmoocNo}}</td>
-                        <td data-label="Chi phí">{{order.containerNo}}</td>
-                        <td data-label="Trạng thái"><span class="status-badge status-processing">{{order.status}}</span></td>
-                        <td data-label="Chi tiết"><button type="button" (click)="DetailOrder(order.orderID)" class="btn-detail">Xem</button></td>
-                    </tr>
-
-                </tbody>
-            </table>
-            <ng-template #other_content>Danh sách rỗng</ng-template>
+    </div>
+    <!-- Navigation Bar -->
+    <div class="pagination-container pagination-fade-in">
+        <!-- Info Text -->
+        <div class="pagination-info">
+            Tổng <strong> {{ listOrderLength }} </strong> <strong></strong> đơn hàng
         </div>
 
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+            <!-- Previous Button -->
+            <button
+                class="pagination-btn nav-btn prev"
+                [disabled]="pageNumber === 1"
+                (click)="changePage(pageNumber - 1)"
+            >
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        fill-rule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+                Trước
+            </button>
+
+            <!-- Page Numbers -->
+            <button class="pagination-btn" [class.active]="pageNumber === 1" (click)="changePage(1)">1</button>
+            <button class="pagination-btn" [class.active]="pageNumber === 2" (click)="changePage(2)">2</button>
+            <button class="pagination-btn" [class.active]="pageNumber === 3" (click)="changePage(3)">3</button>
+            <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 4" (click)="changePage(4)">
+                4
+            </button>
+            <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 5" (click)="changePage(5)">
+                5
+            </button>
+
+            <!-- Ellipsis -->
+            <span class="pagination-ellipsis mobile-hidden">...</span>
+
+            <!-- Last Page -->
+            <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 16" (click)="changePage(16)">
+                16
+            </button>
+
+            <!-- Next Button -->
+            <button
+                class="pagination-btn nav-btn next"
+                [disabled]="pageNumber === 16"
+                (click)="changePage(pageNumber + 1)"
+            >
+                Sau
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+            </button>
+        </div>
     </div>
 </div>
-
-
-
-<div class="pagination-container pagination-fade-in">
-    <!-- Info Text -->
-    <div class="pagination-info">
-        Tổng <strong> {{listOrderLength}} </strong> <strong></strong> đơn hàng
-    </div>
-
-    <!-- Pagination Controls -->
-    <div class="pagination-controls">
-        <!-- Previous Button -->
-        <button class="pagination-btn nav-btn prev" [disabled]="pageNumber === 1" (click)="changePage(pageNumber - 1)">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-            </svg>
-            Trước
-        </button>
-
-        <!-- Page Numbers -->
-        <button class="pagination-btn" [class.active]="pageNumber === 1" (click)="changePage(1)">1</button>
-        <button class="pagination-btn" [class.active]="pageNumber === 2" (click)="changePage(2)">2</button>
-        <button class="pagination-btn" [class.active]="pageNumber === 3" (click)="changePage(3)">3</button>
-        <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 4"
-            (click)="changePage(4)">4</button>
-        <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 5"
-            (click)="changePage(5)">5</button>
-
-        <!-- Ellipsis -->
-        <span class="pagination-ellipsis mobile-hidden">...</span>
-
-        <!-- Last Page -->
-        <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 16"
-            (click)="changePage(16)">16</button>
-
-        <!-- Next Button -->
-        <button class="pagination-btn nav-btn next" [disabled]="pageNumber === 16" (click)="changePage(pageNumber + 1)">
-            Sau
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd" />
-            </svg>
-        </button>
-    </div>
-</div>
-
-
-
-
 
 <script>
     // Thêm hiệu ứng interactive
-    document.querySelectorAll('.btn-detail').forEach(btn => {
+    document.querySelectorAll('.btn-detail').forEach((btn) => {
         btn.addEventListener('click', function () {
             const row = this.closest('tr');
             const orderId = row.cells[0].textContent;
@@ -187,7 +206,7 @@
             fromDate,
             toDate,
             vehicle,
-            status
+            status,
         });
 
         // Simulate search loading
@@ -202,7 +221,7 @@
     });
 
     // Thêm hiệu ứng hover cho rows
-    document.querySelectorAll('.orders-table tr').forEach(row => {
+    document.querySelectorAll('.orders-table tr').forEach((row) => {
         if (row.parentNode.tagName === 'TBODY') {
             row.addEventListener('mouseenter', function () {
                 this.style.transform = 'scale(1.01)';
