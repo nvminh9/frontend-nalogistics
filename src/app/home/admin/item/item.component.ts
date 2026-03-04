@@ -38,7 +38,7 @@ export class ItemComponent {
       pageNumber:number = 1
       keySearch:string = ''
       listItem : itemDTO[] = [] 
-    
+      lengthItem  = 0 ;
     
       // Modal states
       isAddModalOpen: boolean = false;
@@ -50,6 +50,7 @@ export class ItemComponent {
         this.i_service.listItem( this.order , this.sortBy , this.pageSize, this.pageNumber , this.keySearch ).subscribe((data:any)=>{
           if (data.statusCode == 200) {
             this.listItem = data.data
+            this.lengthItem = this.listItem.length
           }
           else if (data.statusCode == 400){
             this.toastr.error(data.message)

@@ -41,19 +41,20 @@
             <tr>
             <th>ID</th>
             <th>Tên Chi phí</th>
-            <th>Trạng thái<th>
-            <!-- <th>Thao tác</th> -->
+            <th>Thứ tự xuất hiện<th>
+            <th>Thao tác</th>
             </tr>
         </thead>
         <tbody id="customerTableBody" *ngIf="listItem.length > 0 ">
             <tr *ngFor="let l of listItem">
             <td>{{l.itemID}}</td>
             <td>{{l.itemName}}</td>
-            <td>
+            <td>{{l.displayOrder}}</td>
+            <!-- <td>
                 <span class="status-badge" [class.active]="l.isActive" [class.inactive]="!l.isActive">
                 {{l.isActive}}
                 </span>
-            </td>
+            </td> -->
             <td>
                 <div class="action-buttons">
                     <button class="btn-action btn-edit" (click)="openDetailModal(l.itemID)">Chi tiết</button>
@@ -187,7 +188,7 @@
 <div class="pagination-container pagination-fade-in">
     <!-- Info Text -->
     <div class="pagination-info">
-    Hiển thị <strong>XX Items</strong> của trang <strong>XX</strong>
+      Hiển thị <strong>{{lengthItem}} Chi phí </strong> trong trang <strong></strong>
     </div>
 
     <!-- Pagination Controls -->
