@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 interface TruckData {
     truckID: number;
@@ -38,7 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dataSubscription?: Subscription;
     private statusSubscription?: Subscription;
 
-    constructor(private wsService: WebSocketService) {}
+    constructor(private wsService: WebSocketService, private router: Router) {}
 
     ngOnInit(): void {
         this.initializeWebSocket();
@@ -194,6 +195,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         event.preventDefault();
         console.log('🚛 Truck clicked:', truck);
         // Có thể navigate đến trang chi tiết xe hoặc hiển thị modal
+    }
+
+    /**
+     * Handle view mode selector change
+     */
+    onViewChange(event: Event): void {
+        const value = (event.target as HTMLSelectElement).value;
+        if (value === 'maintenance') {
+            this.router.navigate(['/admin/dashboard/maintenance']);
+        }
     }
 
     /**
