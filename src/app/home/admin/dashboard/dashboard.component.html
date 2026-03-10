@@ -6,7 +6,7 @@
             <!-- Header Controls -->
             <div class="header-controls">
                 <!-- View Mode Selector -->
-                <select class="view-selector">
+                <select class="view-selector" (change)="onViewChange($event)">
                     <option value="truck-statistics">Truck Statistics</option>
                     <option value="maintenance">Maintenance</option>
                     <option value="routes">Routes Analysis</option>

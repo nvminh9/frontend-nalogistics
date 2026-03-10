@@ -23,6 +23,7 @@ import { UserRoleComponent } from './home/admin/user-role.component/user-role.co
 import { MaintenanceComponent } from './home/admin/maintenance/maintenance.component';
 import { MaintenanceTypeComponent } from './home/admin/maintenance-type.component/maintenance-type.component';
 import { TransportSalaryComponent } from './home/admin/transport-salary.component/transport-salary.component';
+import { DashboardMaintenanceComponent } from './home/admin/dashboard/maintenance/dashboard-maintenance.component';
 
 export const routes: Routes = [
     {path : '', component : LoginComponent, } ,
@@ -40,6 +41,7 @@ export const routes: Routes = [
         {path : 'admin', component : HomeComponent ,canActivate : [authGuard],
             children : [
                 {path: 'dashboard', component: DashboardComponent},
+                {path: 'dashboard/maintenance', component: DashboardMaintenanceComponent},
                 {path: 'list-order', component: ListOrderComponent},
                 {path: 'list-customer', component: CustomerComponent},
                 {path: 'list-driver', component: DriverComponent},
