@@ -1,0 +1,208 @@
+<!-- Sub-header controls -->
+<div class="sub-header">
+    <div class="connection-status" [ngClass]="getConnectionStatusClass()">
+        <div class="status-dot pulse"></div>
+        <span>Live Data</span>
+    </div>
+    <div class="last-updated fresh">
+        <span class="icon"><mat-icon>access_time</mat-icon></span>
+        <span>{{ getTimeAgo() }}</span>
+    </div>
+    <button class="btn btn-refresh" (click)="onRefreshData()">
+        <span class="icon"><mat-icon>refresh</mat-icon></span>
+        Làm mới
+    </button>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="!truckStatistics" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Đang tải dữ liệu...</p>
+</div>
+
+<!-- Main Dashboard Content -->
+<div *ngIf="truckStatistics" class="dashboard-content">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <!-- Total Orders Card -->
+        <div class="stat-card orders" (click)="onStatCardClick('orders', $event)">
+            <div class="stat-label"><mat-icon>layers</mat-icon>Tổng đơn hàng hoàn thành</div>
+            <div class="stat-value">{{ truckStatistics.totalCompletedOrder || 0 }}</div>
+            <div class="stat-detail">Cập nhật real-time</div>
+        </div>
+        <!-- Best Truck Card -->
+        <div class="stat-card top-truck" (click)="onStatCardClick('top-truck', $event)">
+            <div class="stat-label"><mat-icon>local_shipping</mat-icon>Xe xuất sắc nhất</div>
+            <div class="stat-value">{{ truckStatistics.mostTrip.truckNo || 0 }}</div>
+            <div class="stat-detail">{{ truckStatistics.mostTrip.countCompletedTrip || 0 }} chuyến hoàn thành</div>
+        </div>
+        <!-- Average Performance Card -->
+        <div class="stat-card performance" (click)="onStatCardClick('performance', $event)">
+            <div class="stat-label"><mat-icon>signal_cellular_alt_2_bar</mat-icon>Trung bình chuyến/xe</div>
+            <div class="stat-value">{{ avgPerformance || 0 }}</div>
+            <div class="stat-detail">Hiệu suất đội xe</div>
+        </div>
+        <!-- Active Fleet Card -->
+        <div class="stat-card fleet" (click)="onStatCardClick('fleet', $event)">
+            <div class="stat-label"><mat-icon>no_crash</mat-icon>Xe đang hoạt động</div>
+            <div class="stat-value">{{ truckStatistics.topTrucks.length || 0 }}</div>
+            <div class="stat-detail">Toàn bộ đội xe</div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="details-grid">
+        <!-- Top Trucks Section -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Danh sách xe tốt nhất</h2>
+                <div class="section-actions">
+                    <span class="section-badge">{{ truckStatistics.topTrucks.length }} xe</span>
+                    <button class="btn btn-export"><mat-icon>import_export</mat-icon>Export</button>
+                </div>
+            </div>
+
+            <div class="trucks-container">
+                <div
+                    *ngFor="let truck of truckStatistics.topTrucks; trackBy: trackByTruckId; let i = index"
+                    class="truck-item"
+                    [ngClass]="getTruckPerformanceClass(i)"
+                    (click)="onTruckClick(truck, $event)"
+                    [attr.tabindex]="0"
+                    (keydown.enter)="onTruckClick(truck, $event)"
+                >
+                    <div class="truck-rank">{{ getTruckRank(i) }}</div>
+                    <div class="truck-info">
+                        <div class="truck-number">{{ truck.truckNo || 'Chưa có biển số' }}</div>
+                        <div class="truck-id">ID: {{ truck.truckID }}</div>
+                    </div>
+                    <div class="truck-stats">
+                        <div class="trip-count">{{ truck.countCompletedTrip }}</div>
+                        <div class="trip-label">chuyến</div>
+                        <div class="progress-bar">
+                            <div
+                                class="progress-fill"
+                                [style.width.%]="(truck.countCompletedTrip / truckStatistics.mostTrip.countCompletedTrip) * 100"
+                            ></div>
+                        </div>
+                    </div>
+                    <div class="truck-arrow">→</div>
+                </div>
+
+                <div *ngIf="truckStatistics.topTrucks.length === 0" class="empty-state">
+                    <p>Chưa có dữ liệu xe</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance & Charts Section -->
+        <div class="charts-section">
+            <!-- Performance Summary -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">Phân Tích Hiệu Suất</h2>
+                </div>
+                <div class="performance-container">
+                    <div class="performance-item best">
+                        <div class="performance-header">
+                            <span class="performance-icon">🥇</span>
+                            <span class="performance-label">Xe xuất sắc nhất</span>
+                        </div>
+                        <div class="performance-content">
+                            <div class="performance-truck">{{ truckStatistics.mostTrip.truckNo || 'Chưa xác định' }}</div>
+                            <div class="performance-stats">
+                                <span class="performance-number">{{ truckStatistics.mostTrip.countCompletedTrip }}</span>
+                                <span class="performance-unit">chuyến</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="performance-item worst">
+                        <div class="performance-header">
+                            <span class="performance-icon">📉</span>
+                            <span class="performance-label">Xe cần cải thiện</span>
+                        </div>
+                        <div class="performance-content">
+                            <div class="performance-truck">{{ truckStatistics.leastTrip.truckNo || 'Chưa xác định' }}</div>
+                            <div class="performance-stats">
+                                <span class="performance-number">{{ truckStatistics.leastTrip.countCompletedTrip }}</span>
+                                <span class="performance-unit">chuyến</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="performance-item average">
+                        <div class="performance-header">
+                            <span class="performance-icon">📊</span>
+                            <span class="performance-label">Hiệu suất trung bình</span>
+                        </div>
+                        <div class="performance-content">
+                            <div class="performance-truck">Toàn đội xe</div>
+                            <div class="performance-stats">
+                                <span class="performance-number">{{ avgPerformance }}</span>
+                                <span class="performance-unit">chuyến/xe</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real Data Distribution Chart -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">Phân Bố Hiệu Suất</h2>
+                </div>
+                <div class="chart-container">
+                    <div class="distribution-chart">
+                        <div
+                            *ngFor="let truck of truckStatistics.topTrucks; let i = index"
+                            class="chart-bar"
+                            [style.height.%]="(truck.countCompletedTrip / truckStatistics.mostTrip.countCompletedTrip) * 100"
+                            [attr.title]="truck.truckNo + ': ' + truck.countCompletedTrip + ' chuyến'"
+                        >
+                            <div class="bar-value">{{ truck.countCompletedTrip }}</div>
+                            <div class="bar-label">{{ truck.truckNo }}</div>
+                        </div>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color excellent"></span>
+                            <span>Xuất sắc ({{ getExcellentCount() }} xe)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color good"></span>
+                            <span>Tốt ({{ getGoodCount() }} xe)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color average"></span>
+                            <span>Trung bình ({{ getAverageCount() }} xe)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trip Distribution Stats -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">Thống Kê Chi Tiết</h2>
+                </div>
+                <div class="stats-detail">
+                    <div class="detail-item">
+                        <span class="detail-label">Tổng số chuyến:</span>
+                        <span class="detail-value">{{ getTotalTrips() }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Xe hoạt động:</span>
+                        <span class="detail-value">{{ truckStatistics.topTrucks.length }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Hiệu suất cao nhất:</span>
+                        <span class="detail-value">{{ truckStatistics.mostTrip.countCompletedTrip }} chuyến</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Hiệu suất thấp nhất:</span>
+                        <span class="detail-value">{{ truckStatistics.leastTrip.countCompletedTrip }} chuyến</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
