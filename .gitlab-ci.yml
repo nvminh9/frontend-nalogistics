@@ -29,7 +29,10 @@ deploy:
     script:
         - docker pull $DOCKER_IMAGE
         - docker rm -f $DOCKER_CONTAINER || true
-        - docker run --name $DOCKER_CONTAINER -dp 80:80 $DOCKER_IMAGE
+        #- docker run --name $DOCKER_CONTAINER -dp 80:80 $DOCKER_IMAGE
+        - docker network create app-network || true   # ← tạo nếu chưa có
+        - docker run --name $DOCKER_CONTAINER --network app-network -dp 80:80 $DOCKER_IMAGE
+
     tags:
         - ubuntu_frontend    
 
