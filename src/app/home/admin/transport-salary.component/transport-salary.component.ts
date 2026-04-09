@@ -593,7 +593,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateCost(transcostID: number, cost: number, i :number): void {
+  updateCost(fromLocationIdString:number, fromWhereIdString:number,toLocationIdString:number, cost: number, i :number): void {
     if (!cost || cost <= 0) {
       this.toastr.error('Vui lòng nhập giá hợp lệ');
       return;
@@ -601,7 +601,9 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     else{
       let trans = {
         Cost : cost,
-        TranscostID : transcostID
+        fromLocationIdString: fromLocationIdString.toString(),
+        fromWhereIdString: fromWhereIdString.toString(),
+        toLocationIdString: toLocationIdString.toString(),
       }
       this.t_service.UpdateTranscost(trans).subscribe((data:any)=>{
         if (data.statusCode == 200) {

@@ -27,7 +27,7 @@ interface TruckStatistics {
 export class DashboardTruckStatisticsComponent implements OnInit, OnDestroy {
     truckStatistics: TruckStatistics | null = null;
     isConnected: boolean = false;
-    lastUpdated: Date = new Date();
+    lastUpdated: Date = new Date()
     avgPerformance: number = 0;
 
     @ViewChild('dashboardContainer', { static: false }) dashboardContainer!: ElementRef;

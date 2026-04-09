@@ -37,6 +37,7 @@ export class WebSocketService {
       this.socket.onmessage = (event) => {
           const data = JSON.parse(event.data);          
           // Broadcast data cho các component đã subscribe
+          console.log('✅ Broadcast data cho các component đã subscribe');
           this.dataSubject.next(data);
       };
 
