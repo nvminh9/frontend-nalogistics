@@ -458,11 +458,13 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     } else {
       // Logic tạo mới
       const transcostDTO = {
-        FromLocationId: this.TranscostForm.FromLocationId,
-        FromWhereId: this.TranscostForm.FromWhereId,
-        ToLocationId: this.TranscostForm.ToLocationId,
+        FromLocationIdString: this.TranscostForm.FromLocationId.toString(),
+        FromWhereIdString: this.TranscostForm.FromWhereId.toString(),
+        ToLocationIdString: this.TranscostForm.ToLocationId.toString(),
         cost: this.TranscostForm.cost
       };
+      console.log(transcostDTO);
+      
 
       this.t_service.CreateTranscost(transcostDTO).subscribe((data: any) => {
         if (data.statusCode == 200) {
@@ -491,7 +493,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       this.toastr.error('Vui lòng chọn cảng hạ/trả Cont');
       return false;
     }
-    if (this.TranscostForm.cost <= 0) {
+    if (this.TranscostForm.cost <= 0 || this.TranscostForm.cost > 2100000000 ) {
       this.toastr.error('Vui lòng nhập tiền lương hợp lệ');
       return false;
     }
@@ -608,9 +610,10 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       this.t_service.UpdateTranscost(trans).subscribe((data:any)=>{
         if (data.statusCode == 200) {
           this.toastr.success(data.message)
-          console.log(data);
-          
-          this.listTranscost[i].createdDate = data.data.updateAt
+          // console.log(data);
+          if (data.data.updateAt != null) {
+            this.listTranscost[i].createdDate = data.data.updateAt
+          }
         } else if (data.statusCode == 400) {
           this.toastr.error(data.message);
         } else {
