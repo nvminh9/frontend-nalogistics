@@ -82,7 +82,9 @@
                         <div class="progress-bar">
                             <div
                                 class="progress-fill"
-                                [style.width.%]="(truck.countCompletedTrip / truckStatistics.mostTrip.countCompletedTrip) * 100"
+                                [style.width.%]="
+                                    (truck.countCompletedTrip / truckStatistics.mostTrip.countCompletedTrip) * 100
+                                "
                             ></div>
                         </div>
                     </div>
@@ -109,9 +111,13 @@
                             <span class="performance-label">Xe xuất sắc nhất</span>
                         </div>
                         <div class="performance-content">
-                            <div class="performance-truck">{{ truckStatistics.mostTrip.truckNo || 'Chưa xác định' }}</div>
+                            <div class="performance-truck">
+                                {{ truckStatistics.mostTrip.truckNo || 'Chưa xác định' }}
+                            </div>
                             <div class="performance-stats">
-                                <span class="performance-number">{{ truckStatistics.mostTrip.countCompletedTrip }}</span>
+                                <span class="performance-number">{{
+                                    truckStatistics.mostTrip.countCompletedTrip
+                                }}</span>
                                 <span class="performance-unit">chuyến</span>
                             </div>
                         </div>
@@ -122,9 +128,13 @@
                             <span class="performance-label">Xe cần cải thiện</span>
                         </div>
                         <div class="performance-content">
-                            <div class="performance-truck">{{ truckStatistics.leastTrip.truckNo || 'Chưa xác định' }}</div>
+                            <div class="performance-truck">
+                                {{ truckStatistics.leastTrip.truckNo || 'Chưa xác định' }}
+                            </div>
                             <div class="performance-stats">
-                                <span class="performance-number">{{ truckStatistics.leastTrip.countCompletedTrip }}</span>
+                                <span class="performance-number">{{
+                                    truckStatistics.leastTrip.countCompletedTrip
+                                }}</span>
                                 <span class="performance-unit">chuyến</span>
                             </div>
                         </div>
@@ -155,7 +165,9 @@
                         <div
                             *ngFor="let truck of truckStatistics.topTrucks; let i = index"
                             class="chart-bar"
-                            [style.height.%]="(truck.countCompletedTrip / truckStatistics.mostTrip.countCompletedTrip) * 100"
+                            [style.height.%]="
+                                (truck.countCompletedTrip / truckStatistics.mostTrip.countCompletedTrip) * 100
+                            "
                             [attr.title]="truck.truckNo + ': ' + truck.countCompletedTrip + ' chuyến'"
                         >
                             <div class="bar-value">{{ truck.countCompletedTrip }}</div>

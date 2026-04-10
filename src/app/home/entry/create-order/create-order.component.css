@@ -78,7 +78,7 @@
 }
 .form-group label {
     font-family: var(--font-family);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     color: #222;
     text-transform: uppercase;
@@ -90,7 +90,7 @@
     background-color: #ffffff;
     border: 1px solid rgba(27, 31, 35, 0.15);
     border-radius: 10px;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 400;
     font-family: var(--font-family);
     color: #222;
@@ -134,7 +134,7 @@
 .selected-text {
     flex-grow: 1;
     text-align: left;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 400;
     font-family: var(--font-family);
     color: #222;
