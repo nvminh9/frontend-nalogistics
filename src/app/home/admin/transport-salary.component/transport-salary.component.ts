@@ -39,7 +39,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     private l_service: LocationService,
     private numberUtil_service : NumberUtilService
   ) {}
-
+  private debounceTime = 1000; 
   // Basic properties
   token: string = localStorage.getItem("token") || '';
   FromLocationId: number = 0;
@@ -173,14 +173,23 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
   // FILTER DROPDOWN METHODS (separate from modal dropdowns)
   // ==============================================
 
+  // openFilterDropdown(dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
+  //   this.closeAllFilterDropdowns();
+  //   this.filterDropdownStates[dropdownType] = true;
+    
+  //   // Load locations cho dropdown type tương ứng
+  //   this.loadLocationForType(dropdownType, 'filter');
+  // }
   openFilterDropdown(dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
+    // ❌ nếu đã mở rồi thì không làm gì (tránh call API lại)
+    if (this.filterDropdownStates[dropdownType]) return;
+
     this.closeAllFilterDropdowns();
     this.filterDropdownStates[dropdownType] = true;
-    
-    // Load locations cho dropdown type tương ứng
+
+    // ✅ chỉ load khi mở lần đầu
     this.loadLocationForType(dropdownType, 'filter');
   }
-
   toggleFilterDropdown(dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
     if (this.filterDropdownStates[dropdownType]) {
       this.filterDropdownStates[dropdownType] = false;
@@ -215,7 +224,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       this.setSearchKeyForDropdownType(dropdownType, searchTerm);
       this.loadLocationForType(dropdownType, 'filter'); // Call API sau 1 giây
       console.log(`Filter API called for ${dropdownType} with search term:`, searchTerm);
-    }, 1000);
+    }, this.debounceTime);
   }
 
   selectFilterLocation(location: LocationDTO, dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
@@ -283,7 +292,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       this.setSearchKeyForDropdownType(dropdownType, searchTerm);
       this.loadLocationForType(dropdownType, 'modal'); // Call API sau 1 giây
       console.log(`API called for ${dropdownType} with search term:`, searchTerm);
-    }, 1000);
+    }, this.debounceTime);
   }
 
   selectLocation(location: LocationDTO, dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
