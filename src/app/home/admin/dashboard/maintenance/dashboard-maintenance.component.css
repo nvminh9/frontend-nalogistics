@@ -130,6 +130,13 @@
     border-radius: 14px;
     overflow: auto;
 }
+.data-table-null {
+    padding: 15px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: #222222aa;
+}
 .data-table {
     width: 100%;
     border-collapse: collapse;
