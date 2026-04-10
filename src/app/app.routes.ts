@@ -38,27 +38,25 @@ export const routes: Routes = [
 
         ]
     } ,
-    // {path : 'admin', component : HomeComponent, canActivate : [authGuard,adminRoleGuard],
-        {path : 'admin', component : HomeComponent ,canActivate : [authGuard],
-            children : [
-                {path: 'dashboard', component: DashboardComponent, children: [
-                    {path: '', component: DashboardTruckStatisticsComponent},
-                    {path: 'maintenance', component: DashboardMaintenanceComponent},
-                ]},
-                {path: 'list-order', component: ListOrderComponent},
-                {path: 'list-customer', component: CustomerComponent},
-                {path: 'list-driver', component: DriverComponent},
-                {path: 'list-location', component: LocationComponent},
-                {path: 'list-item', component: ItemComponent},
-                {path: 'list-truck', component: TruckComponent},
-                {path: 'list-rmooc', component: RmoocComponent},
-                {path: 'list-userRole', component: UserRoleComponent},
-                {path: 'list-maintenance', component: MaintenanceComponent},
-                {path: 'list-maintenanceType', component: MaintenanceTypeComponent},
-                {path: 'list-transportSalary', component: TransportSalaryComponent},
-            ]
+    {path : 'admin', component : HomeComponent ,canActivate : [authGuard],
+        children : [
+            {path: 'dashboard', component: DashboardComponent, children: [
+                {path: '', component: DashboardTruckStatisticsComponent},
+                {path: 'maintenance', component: DashboardMaintenanceComponent},
+            ]},
+            {path: 'list-order', component: ListOrderComponent},
+            {path: 'list-customer', component: CustomerComponent},
+            {path: 'list-driver', component: DriverComponent},
+            {path: 'list-location', component: LocationComponent},
+            {path: 'list-item', component: ItemComponent},
+            {path: 'list-truck', component: TruckComponent},
+            {path: 'list-rmooc', component: RmoocComponent},
+            {path: 'list-userRole', component: UserRoleComponent},
+            {path: 'list-maintenance', component: MaintenanceComponent},
+            {path: 'list-maintenanceType', component: MaintenanceTypeComponent},
+            {path: 'list-transportSalary', component: TransportSalaryComponent},
+        ]
     } ,
     {path: '**', component: PageNotFoundComponent} // route Not Found nên ở cuối cùng
-
 
 ];

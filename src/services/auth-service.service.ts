@@ -28,7 +28,7 @@ export class AuthServiceService {
   }
 
   CheckToken(token: string): Observable<any> {
-    let api = "auth/decodedToken";
+    let api = "auth/checkToken";
     let header = new HttpHeaders({
       'Authorization': "Bearer " + token
     })
