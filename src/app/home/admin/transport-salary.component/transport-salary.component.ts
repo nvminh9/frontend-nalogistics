@@ -39,7 +39,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     private l_service: LocationService,
     private numberUtil_service : NumberUtilService
   ) {}
-
+  private debounceTime = 1000; 
   // Basic properties
   token: string = localStorage.getItem("token") || '';
   FromLocationId: number = 0;
@@ -173,14 +173,23 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
   // FILTER DROPDOWN METHODS (separate from modal dropdowns)
   // ==============================================
 
+  // openFilterDropdown(dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
+  //   this.closeAllFilterDropdowns();
+  //   this.filterDropdownStates[dropdownType] = true;
+    
+  //   // Load locations cho dropdown type tương ứng
+  //   this.loadLocationForType(dropdownType, 'filter');
+  // }
   openFilterDropdown(dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
+    // ❌ nếu đã mở rồi thì không làm gì (tránh call API lại)
+    if (this.filterDropdownStates[dropdownType]) return;
+
     this.closeAllFilterDropdowns();
     this.filterDropdownStates[dropdownType] = true;
-    
-    // Load locations cho dropdown type tương ứng
+
+    // ✅ chỉ load khi mở lần đầu
     this.loadLocationForType(dropdownType, 'filter');
   }
-
   toggleFilterDropdown(dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
     if (this.filterDropdownStates[dropdownType]) {
       this.filterDropdownStates[dropdownType] = false;
@@ -215,7 +224,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       this.setSearchKeyForDropdownType(dropdownType, searchTerm);
       this.loadLocationForType(dropdownType, 'filter'); // Call API sau 1 giây
       console.log(`Filter API called for ${dropdownType} with search term:`, searchTerm);
-    }, 1000);
+    }, this.debounceTime);
   }
 
   selectFilterLocation(location: LocationDTO, dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
@@ -283,7 +292,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       this.setSearchKeyForDropdownType(dropdownType, searchTerm);
       this.loadLocationForType(dropdownType, 'modal'); // Call API sau 1 giây
       console.log(`API called for ${dropdownType} with search term:`, searchTerm);
-    }, 1000);
+    }, this.debounceTime);
   }
 
   selectLocation(location: LocationDTO, dropdownType: 'fromLocation' | 'fromWhere' | 'toLocation') {
@@ -458,11 +467,13 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     } else {
       // Logic tạo mới
       const transcostDTO = {
-        FromLocationId: this.TranscostForm.FromLocationId,
-        FromWhereId: this.TranscostForm.FromWhereId,
-        ToLocationId: this.TranscostForm.ToLocationId,
+        FromLocationIdString: this.TranscostForm.FromLocationId.toString(),
+        FromWhereIdString: this.TranscostForm.FromWhereId.toString(),
+        ToLocationIdString: this.TranscostForm.ToLocationId.toString(),
         cost: this.TranscostForm.cost
       };
+      console.log(transcostDTO);
+      
 
       this.t_service.CreateTranscost(transcostDTO).subscribe((data: any) => {
         if (data.statusCode == 200) {
@@ -491,7 +502,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       this.toastr.error('Vui lòng chọn cảng hạ/trả Cont');
       return false;
     }
-    if (this.TranscostForm.cost <= 0) {
+    if (this.TranscostForm.cost <= 0 || this.TranscostForm.cost > 2100000000 ) {
       this.toastr.error('Vui lòng nhập tiền lương hợp lệ');
       return false;
     }
@@ -608,9 +619,10 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       this.t_service.UpdateTranscost(trans).subscribe((data:any)=>{
         if (data.statusCode == 200) {
           this.toastr.success(data.message)
-          console.log(data);
-          
-          this.listTranscost[i].createdDate = data.data.updateAt
+          // console.log(data);
+          if (data.data.updateAt != null) {
+            this.listTranscost[i].createdDate = data.data.updateAt
+          }
         } else if (data.statusCode == 400) {
           this.toastr.error(data.message);
         } else {

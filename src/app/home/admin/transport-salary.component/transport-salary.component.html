@@ -25,7 +25,7 @@
                         [value]="filterSearchTerms.fromLocation || getSelectedLocationName(FromLocationId)"
                         (focus)="openFilterDropdown('fromLocation')"
                         (input)="onFilterSearchLocation($event, 'fromLocation')"
-                        (click)="openFilterDropdown('fromLocation')">
+                        (click)="toggleFilterDropdown('fromLocation')">
                     <span class="dropdown-arrow" (click)="toggleFilterDropdown('fromLocation')">▼</span>
                     
                     <div class="dropdown-list" *ngIf="filterDropdownStates.fromLocation">

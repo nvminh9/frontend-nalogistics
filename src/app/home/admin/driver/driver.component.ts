@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DriverService } from '../../../../services/driver-service';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 export interface Driver {
   userName: string,
@@ -30,7 +31,8 @@ export class DriverComponent {
 
     constructor(
       private d_service  :  DriverService,
-      private toastr     :  ToastrService
+      private toastr     :  ToastrService,
+      private router     :  Router
     ){}
   
     token:string = localStorage.getItem("token") || ''
@@ -251,21 +253,34 @@ export class DriverComponent {
   
   
     loadDrivers() {
-      this.d_service.listDriver(this.token , this.order , this.sortBy , this.pageSize, this.pageNumber , this.keySearch ).subscribe((data:any)=>{
-        if (data.statusCode == 200) {
-          this.listDriver = data.data
-          console.log(this.listDriver);
-          
+      this.d_service.listDriver(
+        this.token,
+        this.order,
+        this.sortBy,
+        this.pageSize,
+        this.pageNumber,
+        this.keySearch
+      ).subscribe({
+        next: (data: any) => {
+          if (data.statusCode == 200) {
+            this.listDriver = data.data;
+            console.log(this.listDriver);
+          } else {
+            console.log(data.message);
+          }
+        },
+        error: (err) => {
+          if (err.status === 400) {
+            // HTTP 400 thật → chuyển login
+            this.toastr.error('Hãy đăng nhập lại vì đã hết time token.');
+            this.router.navigate(['/login']);
+          } else {
+            console.log(err.message);
+          }
         }
-        else if (data.statusCode == 400){
-          this.toastr.error(data.message)
-        }
-        else{
-          console.log(data.message)
-        }
-      })
-    }
-  
+
+      });
+    }  
   
     showEntries(event:any){
       this.pageSize = event.target.value
