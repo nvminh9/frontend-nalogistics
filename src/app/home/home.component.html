@@ -183,7 +183,6 @@
             <!-- Bảo dưỡng -->
             <div class="menu-item-wrapper">
                 <a
-                    *ngIf="rolename == 'Admin'"
                     class="menu-item has-submenu"
                     [class.open]="submenus.maintenance"
                     data-tooltip="Danh mục bảo dưỡng"
@@ -198,7 +197,6 @@
             <div class="submenu" [class.open]="submenus.maintenance">
                 <div class="submenu-item-wrapper">
                     <a
-                        *ngIf="rolename == 'Admin'"
                         routerLink="/admin/list-maintenance"
                         routerLinkActive="active"
                         class="menu-item"
@@ -210,7 +208,6 @@
                 </div>
                 <div class="submenu-item-wrapper">
                     <a
-                        *ngIf="rolename == 'Admin'"
                         routerLink="/admin/list-maintenanceType"
                         routerLinkActive="active"
                         class="menu-item"
