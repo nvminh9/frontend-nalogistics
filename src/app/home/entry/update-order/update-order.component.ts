@@ -194,10 +194,10 @@ export class UpdateOrderComponent {
           Notes : data.data.notes,
           PrePayFee : data.data.prePayFee,
           totalCost : data.data.totalCost,
+          // EmployeeFee : data.data.employeeFee,
           EmployeeFee : data.data.employeeFee,
         };
-        console.log(this.currentOrderDTO);
-        
+        // console.log(this.currentOrderDTO);
         this.orderImages = data.data.orderImageList || []
       }
       else if (data.statusCode == 400) this.toastr.error(data.message)

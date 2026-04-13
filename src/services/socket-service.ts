@@ -35,10 +35,10 @@ export class WebSocketService {
       };
 
       this.socket.onmessage = (event) => {
-        console.log(event.data);
+        // console.log(event.data);
           const data = JSON.parse(event.data);          
           // Broadcast data cho các component đã subscribe
-          console.log('✅ Broadcast data cho các component đã subscribe');
+          // console.log('✅ Broadcast data cho các component đã subscribe');
           this.dataSubject.next(data);
       };
 
