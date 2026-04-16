@@ -22,9 +22,10 @@
                 <div class="form-grid">
                     <!-- Ngày tạo đơn hàng  -->
                     <div class="form-group">
-                        <label>Ngày tạo đơn hàng</label>
-                        <input type="date" id="datePicker" name="createdDate" class="form-input"
-                            [(ngModel)]="currentOrderDTO.CreatedDate" disabled />
+                        <label>Ngày/Giờ tạo đơn hàng</label>
+                        <div class="form-input readonly">
+                            {{ currentOrderDTO.CreatedDate | date:'dd/MM/yyyy HH:mm' }}
+                        </div>
                     </div>
                     <!-- Ngày giao hàng -->
                     <div class="form-group">

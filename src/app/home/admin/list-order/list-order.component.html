@@ -80,15 +80,16 @@
                         <tr>
                             <th>ID</th>
                             <th>Ngày giao hàng</th>
+                            <!-- <th>Ngày giao hàng</th> -->
                             <th>Tên khách hàng</th>
-                            <th>BillBooking</th>
-                            <th>Cảng nhận Cont/Rống/hàng</th>
+                            <th>Số Bill / Booking</th>
+                            <th>Cảng nhận Cont/ Rống/ hàng</th>
                             <th>Kho nhận hàng/Kho giao hàng</th>
                             <th>Cảng hạ Cont/Cảng trả Cont</th>
-                            <th>Tên tài xế</th>
-                            <th>Số xe</th>
-                            <th>Số Rmooc</th>
+                            <!-- <th>Số xe</th>
+                            <th>Số Rmooc</th> -->
                             <th>Số Container</th>
+                            <th>Tên tài xế</th>
                             <th>Trạng thái</th>
                             <th>Chi tiết</th>
                         </tr>
@@ -102,10 +103,10 @@
                             <td data-label="Cảng nhận">{{ order.fromLocationName }}</td>
                             <td data-label="Kho nhận/giao">{{ order.fromWhereName }}</td>
                             <td data-label="Cảng hạ">{{ order.toLocationName }}</td>
-                            <td data-label="Tên tài xế">{{ order.driverName }}</td>
-                            <td data-label="Số xe">{{ order.truckNo }}</td>
-                            <td data-label="Số Rmooc">{{ order.rmoocNo }}</td>
-                            <td data-label="Chi phí">{{ order.containerNo }}</td>
+                            <!-- <td data-label="Số xe">{{ order.truckNo }}</td>
+                            <td data-label="Số Rmooc">{{ order.rmoocNo }}</td> -->
+                            <td data-label="containerNo">{{ order.containerNo }}</td>
+                             <td data-label="Tên tài xế">{{ order.driverName }}</td>
                             <td data-label="Trạng thái">
                                 <span class="status-badge status-processing">{{ order.status }}</span>
                             </td>

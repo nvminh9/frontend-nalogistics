@@ -174,7 +174,7 @@ export class UpdateOrderComponent {
           ToLocationID: data.data.toLocationID,
           ToLocationName: data.data.toLocationName,
           Status: data.data.status,
-          CreatedDate: data.data.createdDate.substring(0, 10),
+          CreatedDate: data.data.createdDate,
           OrderLineList: data.data.orderLineList1.map((i: any) => ({
             OrderLineId: i.orderLineId,
             itemID: i.itemID,
@@ -186,11 +186,7 @@ export class UpdateOrderComponent {
             invoiceNo: i.invoiceNo || '',
             invoiceName: i.invoiceName || '',
             isActive: Boolean(i.isActive)
-          })).sort((a: any, b: any) => {
-            if (a.hasInvoice && !b.hasInvoice) return -1;
-            if (!a.hasInvoice && b.hasInvoice) return 1;
-            return a.itemID - b.itemID;
-          }),
+          })),
           Notes : data.data.notes,
           PrePayFee : data.data.prePayFee,
           totalCost : data.data.totalCost,
