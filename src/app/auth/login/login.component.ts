@@ -17,6 +17,25 @@ export class LoginComponent {
         private toastr: ToastrService,
     ) {}
 
+    token = localStorage.getItem("token")
+    roleName = localStorage.getItem("roleName")
+
+    ngOnInit(){
+        if (this.token) {
+            if (this.roleName == 'Admin') {
+                this.router.navigate(['/admin/dashboard']);
+            } else if (this.roleName == 'Entry') {
+                this.router.navigate(['/entry/create-order']);
+            } else if (this.roleName == 'Operator') {
+                this.router.navigate(['/admin/list-order']);
+            } else if (this.roleName == 'Accountant') {
+                this.router.navigate(['/admin/list-order']);
+            } else if (this.roleName == 'Approver') {
+                this.router.navigate(['/admin/list-order']);
+            }
+        }
+    }
+
     Login(username: string, password: string) {
         this.auth_service.Login(username, password).subscribe((data: any) => {
             if (data.statusCode == 200) {

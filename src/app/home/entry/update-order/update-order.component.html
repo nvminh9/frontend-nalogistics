@@ -404,13 +404,13 @@
                         <div class="field-group">
                             <label>Tiền lương</label>
                             <input type="number" class="form-input" placeholder="Nhập tiền lương..." name="EmployeeFee"
-                                [(ngModel)]="currentOrderDTO.EmployeeFee" />
+                                [(ngModel)]="currentOrderDTO.EmployeeFee" readonly/>
                         </div>
 
                         <div class="field-group">
                             <label>Chi phí</label>
                             <input type="text" class="form-input" placeholder="Nhập chi phí..." name="totalCost"
-                                [value]="currentOrderDTO.totalCost | number: '1.0-0' : 'en-US'" />
+                                [value]="currentOrderDTO.totalCost | number: '1.0-0' : 'en-US'" readonly/>
                         </div>
                         <div class="field-group">
                             <label>Tạm ứng</label>
