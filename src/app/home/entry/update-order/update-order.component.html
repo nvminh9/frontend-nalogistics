@@ -20,11 +20,11 @@
                 </div>
 
                 <div class="form-grid">
-                    <!-- Ngày tạo đơn hàng  -->
+                    <!-- Ngày tạo đơn hàng -->
                     <div class="form-group">
                         <label>Ngày/Giờ tạo đơn hàng</label>
                         <div class="form-input readonly">
-                            {{ currentOrderDTO.CreatedDate | date:'dd/MM/yyyy HH:mm' }}
+                             {{ (currentOrderDTO.CreatedDate + 'Z') | date:'dd/MM/yyyy HH:mm' }}
                         </div>
                     </div>
                     <!-- Ngày giao hàng -->
@@ -395,17 +395,17 @@
                         <h4>Thông tin tài chính bổ sung</h4>
                     </div>
                     <div class="fields-grid">
-                        <!-- <div class="field-group">
+                        <div class="field-group">
                             <label>Tiền lương</label>
                             <input type="text" class="form-input" placeholder="Nhập tiền lương..." 
                                  name="EmployeeFee" 
                                 [value]="currentOrderDTO.EmployeeFee | number:'1.0-0':'en-US'" >
-                        </div> -->
-                        <div class="field-group">
+                        </div>
+                        <!-- <div class="field-group">
                             <label>Tiền lương</label>
                             <input type="number" class="form-input" placeholder="Nhập tiền lương..." name="EmployeeFee"
                                 [(ngModel)]="currentOrderDTO.EmployeeFee" readonly/>
-                        </div>
+                        </div> -->
 
                         <div class="field-group">
                             <label>Chi phí</label>

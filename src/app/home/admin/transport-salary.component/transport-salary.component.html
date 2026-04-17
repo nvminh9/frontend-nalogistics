@@ -18,26 +18,22 @@
             <label class="filter-label">Cảng nhận Cont</label>
             <div class="dropdown-container">
                 <div class="dropdown-wrapper" [class.active]="filterDropdownStates.fromLocation">
-                    <input 
-                        type="text" 
-                        class="dropdown-search filter-dropdown" 
-                        placeholder="Chọn cảng nhận..."
+                    <input type="text" class="dropdown-search filter-dropdown" placeholder="Chọn cảng nhận..."
                         [value]="filterSearchTerms.fromLocation || getSelectedLocationName(FromLocationId)"
                         (focus)="openFilterDropdown('fromLocation')"
                         (input)="onFilterSearchLocation($event, 'fromLocation')"
                         (click)="toggleFilterDropdown('fromLocation')">
                     <span class="dropdown-arrow" (click)="toggleFilterDropdown('fromLocation')">▼</span>
-                    
+
                     <div class="dropdown-list" *ngIf="filterDropdownStates.fromLocation">
-                        <div class="dropdown-item" 
-                             (click)="selectFilterLocation({locationId: 0, locationName: 'Không chọn'}, 'fromLocation')"
-                             [class.selected]="FromLocationId === 0">
+                        <div class="dropdown-item"
+                            (click)="selectFilterLocation({locationId: 0, locationName: 'Không chọn'}, 'fromLocation')"
+                            [class.selected]="FromLocationId === 0">
                             Không chọn
                         </div>
-                        <div class="dropdown-item" 
-                             *ngFor="let l of filteredFilterLocations.fromLocation" 
-                             (click)="selectFilterLocation(l, 'fromLocation')"
-                             [class.selected]="FromLocationId === l.locationId">
+                        <div class="dropdown-item" *ngFor="let l of filteredFilterLocations.fromLocation"
+                            (click)="selectFilterLocation(l, 'fromLocation')"
+                            [class.selected]="FromLocationId === l.locationId">
                             {{l.locationName}}
                         </div>
                         <div *ngIf="filteredFilterLocations.fromLocation.length === 0" class="no-results">
@@ -53,26 +49,21 @@
             <label class="filter-label">Kho nhận/Giao hàng</label>
             <div class="dropdown-container">
                 <div class="dropdown-wrapper" [class.active]="filterDropdownStates.fromWhere">
-                    <input 
-                        type="text" 
-                        class="dropdown-search filter-dropdown" 
-                        placeholder="Chọn kho..."
+                    <input type="text" class="dropdown-search filter-dropdown" placeholder="Chọn kho..."
                         [value]="filterSearchTerms.fromWhere || getSelectedLocationName(FromWhereId)"
-                        (focus)="openFilterDropdown('fromWhere')"
-                        (input)="onFilterSearchLocation($event, 'fromWhere')"
+                        (focus)="openFilterDropdown('fromWhere')" (input)="onFilterSearchLocation($event, 'fromWhere')"
                         (click)="openFilterDropdown('fromWhere')">
                     <span class="dropdown-arrow" (click)="toggleFilterDropdown('fromWhere')">▼</span>
-                    
+
                     <div class="dropdown-list" *ngIf="filterDropdownStates.fromWhere">
-                        <div class="dropdown-item" 
-                             (click)="selectFilterLocation({locationId: 0, locationName: 'Không chọn'}, 'fromWhere')"
-                             [class.selected]="FromWhereId === 0">
+                        <div class="dropdown-item"
+                            (click)="selectFilterLocation({locationId: 0, locationName: 'Không chọn'}, 'fromWhere')"
+                            [class.selected]="FromWhereId === 0">
                             Không chọn
                         </div>
-                        <div class="dropdown-item" 
-                             *ngFor="let l of filteredFilterLocations.fromWhere" 
-                             (click)="selectFilterLocation(l, 'fromWhere')"
-                             [class.selected]="FromWhereId === l.locationId">
+                        <div class="dropdown-item" *ngFor="let l of filteredFilterLocations.fromWhere"
+                            (click)="selectFilterLocation(l, 'fromWhere')"
+                            [class.selected]="FromWhereId === l.locationId">
                             {{l.locationName}}
                         </div>
                         <div *ngIf="filteredFilterLocations.fromWhere.length === 0" class="no-results">
@@ -88,26 +79,22 @@
             <label class="filter-label">Cảng hạ/trả Cont</label>
             <div class="dropdown-container">
                 <div class="dropdown-wrapper" [class.active]="filterDropdownStates.toLocation">
-                    <input 
-                        type="text" 
-                        class="dropdown-search filter-dropdown" 
-                        placeholder="Chọn cảng hạ..."
+                    <input type="text" class="dropdown-search filter-dropdown" placeholder="Chọn cảng hạ..."
                         [value]="filterSearchTerms.toLocation || getSelectedLocationName(ToLocationId)"
                         (focus)="openFilterDropdown('toLocation')"
                         (input)="onFilterSearchLocation($event, 'toLocation')"
                         (click)="openFilterDropdown('toLocation')">
                     <span class="dropdown-arrow" (click)="toggleFilterDropdown('toLocation')">▼</span>
-                    
+
                     <div class="dropdown-list" *ngIf="filterDropdownStates.toLocation">
-                        <div class="dropdown-item" 
-                             (click)="selectFilterLocation({locationId: 0, locationName: 'Không chọn'}, 'toLocation')"
-                             [class.selected]="ToLocationId === 0">
+                        <div class="dropdown-item"
+                            (click)="selectFilterLocation({locationId: 0, locationName: 'Không chọn'}, 'toLocation')"
+                            [class.selected]="ToLocationId === 0">
                             Không chọn
                         </div>
-                        <div class="dropdown-item" 
-                             *ngFor="let l of filteredFilterLocations.toLocation" 
-                             (click)="selectFilterLocation(l, 'toLocation')"
-                             [class.selected]="ToLocationId === l.locationId">
+                        <div class="dropdown-item" *ngFor="let l of filteredFilterLocations.toLocation"
+                            (click)="selectFilterLocation(l, 'toLocation')"
+                            [class.selected]="ToLocationId === l.locationId">
                             {{l.locationName}}
                         </div>
                         <div *ngIf="filteredFilterLocations.toLocation.length === 0" class="no-results">
@@ -132,12 +119,12 @@
         <!-- Page Size -->
         <div class="filter-group">
             <label class="filter-label">Hiển thị</label>
-                <select class="filter-select"  (change)="showEntries($event)">
-                    <option value="9" >9 bản ghi</option>
-                    <option value="13">13 bản ghi</option>
-                    <option value="17">17 bản ghi</option>
-                    <option value="25">25 bản ghi</option>
-                </select>        
+            <select class="filter-select" (change)="showEntries($event)">
+                <option value="9">9 bản ghi</option>
+                <option value="13">13 bản ghi</option>
+                <option value="17">17 bản ghi</option>
+                <option value="25">25 bản ghi</option>
+            </select>
         </div>
 
         <!-- Search Button -->
@@ -147,7 +134,7 @@
                 🔍 Tìm kiếm
             </button>
         </div>
-        
+
     </div>
 
     <!-- Table -->
@@ -160,8 +147,11 @@
                     <th>Kho nhận/Giao hàng</th>
                     <th>Cảng hạ/trả Cont</th>
                     <th>Tiền lương(đơn vị tính VND)</th>
+                    <th>Giá xăng/dầu(đơn vị tính VND)</th>
+                    <th>Ngày áp dụng giá</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Trạng thái</th>
                     <th>Người tạo đơn</th>
-                    <th>Ngày áp dụng</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
@@ -171,7 +161,8 @@
                         <div>
                             <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
                             <div style="font-size: 16px; margin-bottom: 8px;">Chưa có dữ liệu</div>
-                            <div style="font-size: 14px;">Vui lòng chọn điều kiện lọc Hoặc Click vào nút "Tìm kiếm" để hiển thị các bản ghi mới nhất</div>
+                            <div style="font-size: 14px;">Vui lòng chọn điều kiện lọc Hoặc Click vào nút "Tìm kiếm" để
+                                hiển thị các bản ghi mới nhất</div>
                         </div>
                     </td>
                 </tr>
@@ -181,18 +172,18 @@
                     <td>{{trans.fromWhereName}}</td>
                     <td>{{trans.toLocationName}}</td>
                     <td>
-                        <input type="text" 
-                            [value]="trans.cost | number:'1.0-0':'en-US'" 
-                            (input)="onCostInput($event, trans)"
-                            (blur)="onCostBlur($event, trans)"
-                            class="cost-input">
+                        <input type="text" [value]="trans.cost | number:'1.0-0':'en-US'"
+                            (input)="onCostInput($event, trans)" (blur)="onCostBlur($event, trans)" class="cost-input">
                     </td>
+                    <td>{{ trans.fuelPriceAtOrderString | number:'1.2-2':'en-US' }} đ</td>
+                    <td>{{ (trans.createdDate + 'Z') | date:'dd/MM/yyyy HH:mm'}}</td>
+                    <td> {{ trans?.updatedDate ? ((trans.updatedDate + 'Z') | date:'dd/MM/yyyy HH:mm') : '' }}</td>
+                    <td>{{ trans.active ? 'Đang áp dụng' : 'Ngừng áp dụng' }}</td>
                     <td>{{trans.createdByName}}</td>
-                    <td>{{trans.createdDate | date: 'dd/MM/yyyy'}}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-action btn-edit" 
-                                    (click)="updateCost(trans.fromLocationId , trans.fromWhereId, trans.toLocationId, trans.cost, i)">
+                            <button class="btn-action btn-edit"
+                                (click)="updateCost(trans.transcostID , trans.cost, i)">
                                 Cập nhật giá
                             </button>
                         </div>
@@ -219,21 +210,17 @@
                     </label>
                     <div class="dropdown-container">
                         <div class="dropdown-wrapper" [class.active]="dropdownStates.fromLocation">
-                            <input 
-                                type="text" 
-                                class="dropdown-search" 
-                                placeholder="Tìm kiếm Cảng nhận Cont..."
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm Cảng nhận Cont..."
                                 [value]="searchTerms.fromLocation || getSelectedLocationName(TranscostForm.FromLocationId)"
                                 (focus)="openDropdown('fromLocation')"
                                 (input)="onSearchLocation($event, 'fromLocation')"
                                 (click)="openDropdown('fromLocation')">
                             <span class="dropdown-arrow" (click)="toggleDropdown('fromLocation')">▼</span>
-                            
+
                             <div class="dropdown-list" *ngIf="dropdownStates.fromLocation">
-                                <div class="dropdown-item" 
-                                     *ngFor="let l of filteredLocations.fromLocation" 
-                                     (click)="selectLocation(l, 'fromLocation')"
-                                     [class.selected]="TranscostForm.FromLocationId === l.locationId">
+                                <div class="dropdown-item" *ngFor="let l of filteredLocations.fromLocation"
+                                    (click)="selectLocation(l, 'fromLocation')"
+                                    [class.selected]="TranscostForm.FromLocationId === l.locationId">
                                     {{l.locationName}}
                                 </div>
                                 <div *ngIf="filteredLocations.fromLocation.length === 0" class="no-results">
@@ -251,21 +238,16 @@
                     </label>
                     <div class="dropdown-container">
                         <div class="dropdown-wrapper" [class.active]="dropdownStates.fromWhere">
-                            <input 
-                                type="text" 
-                                class="dropdown-search" 
-                                placeholder="Tìm kiếm Kho nhận/Giao hàng..."
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm Kho nhận/Giao hàng..."
                                 [value]="searchTerms.fromWhere || getSelectedLocationName(TranscostForm.FromWhereId)"
-                                (focus)="openDropdown('fromWhere')"
-                                (input)="onSearchLocation($event, 'fromWhere')"
+                                (focus)="openDropdown('fromWhere')" (input)="onSearchLocation($event, 'fromWhere')"
                                 (click)="openDropdown('fromWhere')">
                             <span class="dropdown-arrow" (click)="toggleDropdown('fromWhere')">▼</span>
-                            
+
                             <div class="dropdown-list" *ngIf="dropdownStates.fromWhere">
-                                <div class="dropdown-item" 
-                                     *ngFor="let l of filteredLocations.fromWhere" 
-                                     (click)="selectLocation(l, 'fromWhere')"
-                                     [class.selected]="TranscostForm.FromWhereId === l.locationId">
+                                <div class="dropdown-item" *ngFor="let l of filteredLocations.fromWhere"
+                                    (click)="selectLocation(l, 'fromWhere')"
+                                    [class.selected]="TranscostForm.FromWhereId === l.locationId">
                                     {{l.locationName}}
                                 </div>
                                 <div *ngIf="filteredLocations.fromWhere.length === 0" class="no-results">
@@ -283,21 +265,16 @@
                     </label>
                     <div class="dropdown-container">
                         <div class="dropdown-wrapper" [class.active]="dropdownStates.toLocation">
-                            <input 
-                                type="text" 
-                                class="dropdown-search" 
-                                placeholder="Tìm kiếm Cảng hạ/trả Cont..."
+                            <input type="text" class="dropdown-search" placeholder="Tìm kiếm Cảng hạ/trả Cont..."
                                 [value]="searchTerms.toLocation || getSelectedLocationName(TranscostForm.ToLocationId)"
-                                (focus)="openDropdown('toLocation')"
-                                (input)="onSearchLocation($event, 'toLocation')"
+                                (focus)="openDropdown('toLocation')" (input)="onSearchLocation($event, 'toLocation')"
                                 (click)="openDropdown('toLocation')">
                             <span class="dropdown-arrow" (click)="toggleDropdown('toLocation')">▼</span>
-                            
+
                             <div class="dropdown-list" *ngIf="dropdownStates.toLocation">
-                                <div class="dropdown-item" 
-                                     *ngFor="let l of filteredLocations.toLocation" 
-                                     (click)="selectLocation(l, 'toLocation')"
-                                     [class.selected]="TranscostForm.ToLocationId === l.locationId">
+                                <div class="dropdown-item" *ngFor="let l of filteredLocations.toLocation"
+                                    (click)="selectLocation(l, 'toLocation')"
+                                    [class.selected]="TranscostForm.ToLocationId === l.locationId">
                                     {{l.locationName}}
                                 </div>
                                 <div *ngIf="filteredLocations.toLocation.length === 0" class="no-results">
@@ -307,12 +284,29 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">
                         Tiền lương<span class="required">*</span>
                     </label>
-                    <input type="number" class="form-input" id="cost" [(ngModel)]="TranscostForm.cost" name="cost" required>
+                    <input type="number" class="form-input" id="cost" [(ngModel)]="TranscostForm.cost" name="cost"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Giá nhiên liệu xăng/dầu<span class="required">*</span>
+                    </label>
+                    <input type="number" step="0.01" class="form-input" id="fuelPriceAtOrderString"
+                        [(ngModel)]="TranscostForm.fuelPriceAtOrderString" name="fuelPriceAtOrderString" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Ngày bắt đầu áp dụng giá<span class="required">*</span>
+                    </label>
+                    <input type="datetime-local" class="form-input" id="createdDate"
+                        [(ngModel)]="TranscostForm.createdDate" name="createdDate" required>
                 </div>
 
                 <div class="form-actions">

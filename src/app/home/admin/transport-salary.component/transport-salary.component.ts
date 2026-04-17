@@ -17,7 +17,10 @@ export interface Transcost {
   createdBy: number;
   createdByName: string;
   createdDate: Date;
+  updatedDate : Date
   cost: number;
+  active : boolean
+  fuelPriceAtOrderString : string
 }
 
 export interface LocationDTO {
@@ -116,7 +119,9 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     FromLocationId: 0,
     FromWhereId: 0,
     ToLocationId: 0,
-    cost: 0
+    cost: 0,
+    fuelPriceAtOrderString : "0",
+    createdDate : new Date()
   };
 
   // Debounce timers - tách riêng cho từng dropdown type
@@ -437,6 +442,8 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       FromWhereId: transcost.fromWhereId,
       ToLocationId: transcost.toLocationId,
       cost: transcost.cost,
+      fuelPriceAtOrderString : transcost.fuelPriceAtOrderString,
+      createdDate : transcost.createdDate
     };
   }
 
@@ -445,7 +452,9 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
       FromLocationId: 0,
       FromWhereId: 0,
       ToLocationId: 0,
-      cost: 0
+      cost: 0,
+      fuelPriceAtOrderString : "0.00",
+      createdDate : new Date(new Date().getFullYear(), new Date().getMonth(), 1)
     };
     // Reset search terms
     this.searchTerms = {
@@ -470,11 +479,12 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
         FromLocationIdString: this.TranscostForm.FromLocationId.toString(),
         FromWhereIdString: this.TranscostForm.FromWhereId.toString(),
         ToLocationIdString: this.TranscostForm.ToLocationId.toString(),
-        cost: this.TranscostForm.cost
+        cost: this.TranscostForm.cost,
+        fuelPriceAtOrderString : this.TranscostForm.fuelPriceAtOrderString.toString(),
+        createdDate : this.TranscostForm.createdDate
       };
       console.log(transcostDTO);
       
-
       this.t_service.CreateTranscost(transcostDTO).subscribe((data: any) => {
         if (data.statusCode == 200) {
           this.toastr.success(data.message);
@@ -539,7 +549,7 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     ).subscribe((data: any) => {
       if (data.statusCode == 200) {
         this.listTranscost = data.data.listTrans;
-        // console.log(data);
+        console.log(this.listTranscost);
         
         this.fromDateStr = data.data.fromDateStr
         this.toDateStr = data.data.toDateStr
@@ -604,7 +614,8 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateCost(fromLocationIdString:number, fromWhereIdString:number,toLocationIdString:number, cost: number, i :number): void {
+  // updateCost(fromLocationIdString:number, fromWhereIdString:number,toLocationIdString:number, cost: number, i :number): void {
+    updateCost(transcostID :number, cost: number, i :number): void {
     if (!cost || cost <= 0) {
       this.toastr.error('Vui lòng nhập giá hợp lệ');
       return;
@@ -612,17 +623,19 @@ export class TransportSalaryComponent implements OnInit, OnDestroy {
     else{
       let trans = {
         Cost : cost,
-        fromLocationIdString: fromLocationIdString.toString(),
-        fromWhereIdString: fromWhereIdString.toString(),
-        toLocationIdString: toLocationIdString.toString(),
+        transcostId : transcostID
+        // fromLocationIdString: fromLocationIdString.toString(),
+        // fromWhereIdString: fromWhereIdString.toString(),
+        // toLocationIdString: toLocationIdString.toString(),
       }
       this.t_service.UpdateTranscost(trans).subscribe((data:any)=>{
         if (data.statusCode == 200) {
           this.toastr.success(data.message)
           // console.log(data);
-          if (data.data.updateAt != null) {
-            this.listTranscost[i].createdDate = data.data.updateAt
-          }
+          // if (data.data.updateAt != null) {
+          //   this.listTranscost[i].createdDate = data.data.updateAt
+          // }
+          this.loadTranscost()
         } else if (data.statusCode == 400) {
           this.toastr.error(data.message);
         } else {
