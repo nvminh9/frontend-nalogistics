@@ -22,17 +22,25 @@ export class LoginComponent {
 
     ngOnInit(){
         if (this.token) {
-            if (this.roleName == 'Admin') {
-                this.router.navigate(['/admin/dashboard']);
-            } else if (this.roleName == 'Entry') {
-                this.router.navigate(['/entry/create-order']);
-            } else if (this.roleName == 'Operator') {
-                this.router.navigate(['/admin/list-order']);
-            } else if (this.roleName == 'Accountant') {
-                this.router.navigate(['/admin/list-order']);
-            } else if (this.roleName == 'Approver') {
-                this.router.navigate(['/admin/list-order']);
-            }
+            this.auth_service.CheckToken(this.token).subscribe((data:any)=>{
+                if (data.data) {
+                    if (this.roleName == 'Admin') {
+                        this.router.navigate(['/admin/dashboard']);
+                    } else if (this.roleName == 'Entry') {
+                        this.router.navigate(['/entry/create-order']);
+                    } else if (this.roleName == 'Operator') {
+                        this.router.navigate(['/admin/list-order']);
+                    } else if (this.roleName == 'Accountant') {
+                        this.router.navigate(['/admin/list-order']);
+                    } else if (this.roleName == 'Approver') {
+                        this.router.navigate(['/admin/list-order']);
+                    }
+                }
+                else{
+                    this.router.navigate(['/login']);
+                }
+            })
+            
         }
     }
 
