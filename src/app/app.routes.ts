@@ -35,7 +35,6 @@ export const routes: Routes = [
         children : [
             {path: 'create-order', component: CreateOrderComponent},
             {path: 'update-order', component: UpdateOrderComponent},
-
         ]
     } ,
     {path : 'admin', component : HomeComponent ,canActivate : [authGuard],

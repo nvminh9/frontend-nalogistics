@@ -50,10 +50,15 @@ export interface OrderDTO {
   OrderLineList: OrderLineDTO[]
   Notes :string,
   PrePayFee :number,
-  EmployeeFee :number,
-  totalCost : number
+  totalCost : number,
+  transcostDTO : TranscostDTO | null
 }
-
+export interface TranscostDTO
+{
+  transcostID :number,
+  cost : number,
+  fuelPriceAtOrder:number,
+}
 // export enum OrderStatus {
 //   InProgress,
 //   PickedUp,
@@ -115,9 +120,9 @@ export class UpdateOrderComponent {
     Status: 0,
     CreatedDate: '',
     PrePayFee : 0,
-    EmployeeFee : 0,
     Notes : '',
-    totalCost : 0
+    totalCost : 0,
+    transcostDTO : null
   };
 
   currentOrderLine: OrderLineDTO = {
@@ -190,10 +195,9 @@ export class UpdateOrderComponent {
           Notes : data.data.notes,
           PrePayFee : data.data.prePayFee,
           totalCost : data.data.totalCost,
-          // EmployeeFee : data.data.employeeFee,
-          EmployeeFee : data.data.employeeFee,
+          transcostDTO : data.data.transcost,
         };
-        // console.log(this.currentOrderDTO);
+        console.log(this.currentOrderDTO);
         this.orderImages = data.data.orderImageList || []
       }
       else if (data.statusCode == 400) this.toastr.error(data.message)

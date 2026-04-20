@@ -24,7 +24,10 @@
                     <div class="form-group">
                         <label>Ngày/Giờ tạo đơn hàng</label>
                         <div class="form-input readonly">
-                             {{ (currentOrderDTO.CreatedDate + 'Z') | date:'dd/MM/yyyy HH:mm' }}
+                            {{ currentOrderDTO.CreatedDate
+                            ? (currentOrderDTO.CreatedDate | date:'dd/MM/yyyy HH:mm')
+                            : ''
+                            }}
                         </div>
                     </div>
                     <!-- Ngày giao hàng -->
@@ -397,20 +400,28 @@
                     <div class="fields-grid">
                         <div class="field-group">
                             <label>Tiền lương</label>
-                            <input type="text" class="form-input" placeholder="Nhập tiền lương..." 
-                                 name="EmployeeFee" 
-                                [value]="currentOrderDTO.EmployeeFee | number:'1.0-0':'en-US'" >
-                        </div>
-                        <!-- <div class="field-group">
-                            <label>Tiền lương</label>
-                            <input type="number" class="form-input" placeholder="Nhập tiền lương..." name="EmployeeFee"
-                                [(ngModel)]="currentOrderDTO.EmployeeFee" readonly/>
-                        </div> -->
 
+                            <input type="text" class="form-input" placeholder="Tiền lương..." name="cost"
+                                [value]="(currentOrderDTO.transcostDTO?.cost ?? 0) | number:'1.0-0':'en-US'" readonly>
+
+                            <input type="text" class="form-input" [value]="
+                                currentOrderDTO.transcostDTO
+                                ? 'Áp dụng giá bản ghi ID:' + currentOrderDTO.transcostDTO.transcostID
+                                : 'Chưa có thông tin giá áp dụng'
+                            " readonly>
+                        </div>
+                        <div class="field-group">
+                            <label>Giá xăng/dầu</label>
+                            <input type="text" class="form-input" [value]="
+                                currentOrderDTO.transcostDTO
+                                ?  (currentOrderDTO.transcostDTO.fuelPriceAtOrder | number:'1.0-3':'en-US')
+                                : 'Chưa có thông tin giá áp dụng'
+                            " readonly>
+                        </div>
                         <div class="field-group">
                             <label>Chi phí</label>
                             <input type="text" class="form-input" placeholder="Nhập chi phí..." name="totalCost"
-                                [value]="currentOrderDTO.totalCost | number: '1.0-0' : 'en-US'" readonly/>
+                                [value]="currentOrderDTO.totalCost | number: '1.0-0' : 'en-US'" readonly />
                         </div>
                         <div class="field-group">
                             <label>Tạm ứng</label>
@@ -419,9 +430,13 @@
                         </div>
                         <div class="field-group">
                             <label>Thanh toán còn lại</label>
+
                             <input type="text" class="form-input" [value]="
-                                    currentOrderDTO.EmployeeFee + currentOrderDTO.totalCost - currentOrderDTO.PrePayFee
-                                        | number: '1.0-0' : 'en-US'
+                                    (
+                                    (currentOrderDTO.transcostDTO?.cost ?? 0)
+                                    + (currentOrderDTO.totalCost ?? 0)
+                                    - (currentOrderDTO.PrePayFee ?? 0)
+                                    ) | number:'1.0-0':'en-US'
                                 " readonly />
                         </div>
                         <div class="field-group">

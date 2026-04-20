@@ -176,8 +176,13 @@
                             (input)="onCostInput($event, trans)" (blur)="onCostBlur($event, trans)" class="cost-input">
                     </td>
                     <td>{{ trans.fuelPriceAtOrderString | number:'1.2-2':'en-US' }} đ</td>
-                    <td>{{ (trans.createdDate + 'Z') | date:'dd/MM/yyyy HH:mm'}}</td>
-                    <td> {{ trans?.updatedDate ? ((trans.updatedDate + 'Z') | date:'dd/MM/yyyy HH:mm') : '' }}</td>
+                    <td>
+                        {{ trans.createdDate
+                            ? (trans.createdDate | date:'dd/MM/yyyy HH:mm')
+                            : ''
+                        }}
+                    </td>
+                    <td> {{ trans?.updatedDate ? (trans.updatedDate | date:'dd/MM/yyyy HH:mm') : '' }}</td>
                     <td>{{ trans.active ? 'Đang áp dụng' : 'Ngừng áp dụng' }}</td>
                     <td>{{trans.createdByName}}</td>
                     <td>
