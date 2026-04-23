@@ -59,7 +59,7 @@ export class UserService {
   }
 
   DetailUser(userID: number): Observable<any> {
-    let api = "Auth/detailUser";
+    let api = "Auth/DetailUserById";
     let header = new HttpHeaders({
       'Authorization': "Bearer " + this.token,
       "Content-Type": "application/json"

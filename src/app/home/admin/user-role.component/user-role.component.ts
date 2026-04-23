@@ -55,7 +55,7 @@ export class UserRoleComponent {
     this.getListRole()
   }
 
-  DetailUser(userID: number) {
+  DetailUser(userID: number) {    
     this.u_service.DetailUser(userID).subscribe((data: any) => {
       // console.log(data);
       this.currentUser = data.data.detailUser
@@ -70,7 +70,6 @@ export class UserRoleComponent {
   getListRole(){
     this.u_service.ListRole().subscribe( (data:any)=>{
       // console.log(data);
-      
       data.data = data.data.filter( (r :any) => r.roleName != "Driver" && r.roleName != "Customer")
         this.listRole = data.data
     })
