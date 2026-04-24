@@ -1,146 +1,151 @@
 <div class="customer-container">
-  <!-- Header -->
-  <div class="page-header">
-    <div class="page-title">
-      <div class="page-icon">👥</div>
-      <h1>Danh mục loại bảo dưỡng</h1>
+    <!-- Header -->
+    <div class="page-header">
+        <div class="page-title">
+            <!-- <div class="page-icon">👥</div> -->
+            <h1>Danh mục loại bảo dưỡng</h1>
+        </div>
+        <button class="btn-add" (click)="openAddModal()">
+            <!-- <span>➕</span> -->
+            Thêm mới <mat-icon>add</mat-icon>
+        </button>
     </div>
-    <button class="btn-add" (click)="openAddModal()">
-      <span>➕</span>
-      <span>Thêm mới</span>
-    </button>
-  </div>
 
-  <!-- Simple Filter -->
-  <div class="simple-filter">
-    <div class="search-box">
-      <input 
-        type="text" 
-        class="search-input" 
-        id="searchInput"
-        placeholder="🔍 Tìm kiếm theo tên, ID , mã ,..." (input)="searchObject($event)">
-    </div>                                              
-    <select class="sort-select" id="sortSelect" (change)="sortData($event)">
-      <option value="id-new">Ngày tạo (mới nhất)</option>
-      <option value="id-old">Ngày tạo (cũ nhất)</option>
-      <option value="name-az">Tên (A-Z)</option>
-      <option value="name-za">Tên (Z-A)</option>
-    </select>
-    <select class="sort-select" id="entriesSelect" (change)="showEntries($event)">
-      <option value="30">Số lượng hiển thị 30</option>
-      <option value="35">36</option>
-      <option value="40">40</option>
-      <option value="50">50</option>
-    </select>
-  </div>
+    <!-- Simple Filter -->
+    <div class="simple-filter">
+        <div class="search-box">
+            <input
+                type="text"
+                class="search-input"
+                id="searchInput"
+                placeholder="Tìm kiếm theo tên, ID , mã ,..."
+                (input)="searchObject($event)"
+            />
+        </div>
+        <select class="sort-select" id="sortSelect" (change)="sortData($event)">
+            <option value="id-new">Ngày tạo (mới nhất)</option>
+            <option value="id-old">Ngày tạo (cũ nhất)</option>
+            <option value="name-az">Tên (A-Z)</option>
+            <option value="name-za">Tên (Z-A)</option>
+        </select>
+        <select class="sort-select" id="entriesSelect" (change)="showEntries($event)">
+            <option value="30">Số lượng hiển thị 30</option>
+            <option value="35">36</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+        </select>
+    </div>
 
-  <!-- Table -->
-  <div class="table-container">
-    <table class="data-table">
-        <thead>
-            <tr>
-            <th>ID</th>
-            <th>Loại bảo dưỡng</th>
-            <th>Trạng thái<th>
-            <!-- <th>Thao tác</th> -->
-            </tr>
-        </thead>
-        <tbody id="customerTableBody" *ngIf="listMaintenanceTypeDTO.length > 0 ">
-            <tr *ngFor="let l of listMaintenanceTypeDTO">
-            <td>{{l.maintenanceTypeID}}</td>
-            <td>{{l.nameType}}</td>
-            <td>
-                <span class="status-badge" [class.active]="l.isActive" [class.inactive]="!l.isActive">
-                {{l.isActive}}
-                </span>
-            </td>
-            <td>
-                <div class="action-buttons">
-                    <button class="btn-action btn-delete" (click)="DeleteMaintenancetype(l.maintenanceTypeID)">Xóa</button>
-                </div>
-            </td>
-            </tr>
-        </tbody>
-    </table>
-  </div>
+    <!-- Table -->
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Loại bảo dưỡng</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="customerTableBody" *ngIf="listMaintenanceTypeDTO.length > 0">
+                <tr *ngFor="let l of listMaintenanceTypeDTO">
+                    <td>{{ l.maintenanceTypeID }}</td>
+                    <td>{{ l.nameType }}</td>
+                    <td>
+                        <span class="status-badge" [class.active]="l.isActive" [class.inactive]="!l.isActive">
+                            {{ l.isActive }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-action btn-delete" (click)="DeleteMaintenancetype(l.maintenanceTypeID)">
+                                Xóa
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- Modal Add -->
 <div class="modal-overlay" [class.show]="isAddModalOpen" (click)="onOverlayClick($event, 'add')">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 class="modal-title" id="modalTitle">{{modalTitle}}</h2>
-      <button class="modal-close" (click)="closeAddModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form id="customerForm" (ngSubmit)="save()" >
-        
-        <div class="form-group">
-          <label class="form-label">
-            Tên loại bảo dưỡng <span class="required">*</span>
-          </label>
-          <input type="text" class="form-input" id="nameType" [(ngModel)]="Form.nameType" name="nameType" required>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">{{ modalTitle }}</h2>
+            <button class="modal-close" (click)="closeAddModal()">&times;</button>
         </div>
-        <div class="form-actions">
-          <button type="button" class="btn-cancel" (click)="closeAddModal()">Hủy</button>
-          <button type="submit" class="btn-save">{{isEditMode ? 'Cập nhật' : 'Lưu'}}</button>
+        <div class="modal-body">
+            <form id="customerForm" (ngSubmit)="save()">
+                <div class="form-group">
+                    <label class="form-label"> Tên loại bảo dưỡng <span class="required">*</span> </label>
+                    <input
+                        type="text"
+                        class="form-input"
+                        id="nameType"
+                        [(ngModel)]="Form.nameType"
+                        name="nameType"
+                        required
+                    />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" (click)="closeAddModal()">Hủy</button>
+                    <button type="submit" class="btn-save">{{ isEditMode ? 'Cập nhật' : 'Lưu' }}</button>
+                </div>
+            </form>
         </div>
-      </form>
     </div>
-  </div>
 </div>
-
 
 <div class="pagination-container pagination-fade-in">
     <!-- Info Text -->
     <div class="pagination-info">
-    Hiển thị <strong>{{totalItems}} Items</strong> của trang <strong>{{totalPages}}</strong>
+        Hiển thị <strong>{{ totalItems }} Items</strong> của trang <strong>{{ totalPages }}</strong>
     </div>
 
     <!-- Pagination Controls -->
     <div class="pagination-controls">
         <!-- Previous Button -->
-        <button class="pagination-btn nav-btn prev" 
-                [disabled]="pageNumber === 1"
-                (click)="changePage(pageNumber - 1)">
+        <button class="pagination-btn nav-btn prev" [disabled]="pageNumber === 1" (click)="changePage(pageNumber - 1)">
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                <path
+                    fill-rule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                />
             </svg>
             Trước
         </button>
 
         <!-- Page Numbers -->
-        <button class="pagination-btn" 
-                [class.active]="pageNumber === 1"
-                (click)="changePage(1)">1</button>
-        <button class="pagination-btn" 
-                [class.active]="pageNumber === 2"
-                (click)="changePage(2)">2</button>
-        <button class="pagination-btn" 
-                [class.active]="pageNumber === 3"
-                (click)="changePage(3)">3</button>
-        <button class="pagination-btn mobile-hidden" 
-                [class.active]="pageNumber === 4"
-                (click)="changePage(4)">4</button>
-        <button class="pagination-btn mobile-hidden" 
-                [class.active]="pageNumber === 5"
-                (click)="changePage(5)">5</button>
+        <button class="pagination-btn" [class.active]="pageNumber === 1" (click)="changePage(1)">1</button>
+        <button class="pagination-btn" [class.active]="pageNumber === 2" (click)="changePage(2)">2</button>
+        <button class="pagination-btn" [class.active]="pageNumber === 3" (click)="changePage(3)">3</button>
+        <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 4" (click)="changePage(4)">
+            4
+        </button>
+        <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 5" (click)="changePage(5)">
+            5
+        </button>
 
         <!-- Ellipsis -->
         <span class="pagination-ellipsis mobile-hidden">...</span>
 
         <!-- Last Page -->
-        <button class="pagination-btn mobile-hidden" 
-                [class.active]="pageNumber === 16"
-                (click)="changePage(16)">16</button>
+        <button class="pagination-btn mobile-hidden" [class.active]="pageNumber === 16" (click)="changePage(16)">
+            16
+        </button>
 
         <!-- Next Button -->
-        <button class="pagination-btn nav-btn next"
-                [disabled]="pageNumber === 16"
-                (click)="changePage(pageNumber + 1)">
+        <button class="pagination-btn nav-btn next" [disabled]="pageNumber === 16" (click)="changePage(pageNumber + 1)">
             Sau
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                />
             </svg>
         </button>
     </div>
@@ -148,20 +153,20 @@
 
 <script>
     // Basic functionality for demonstration
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const paginationBtns = document.querySelectorAll('.pagination-btn:not(.nav-btn)');
         const prevBtn = document.querySelector('.pagination-btn.prev');
         const nextBtn = document.querySelector('.pagination-btn.next');
         const pageSizeSelect = document.getElementById('pageSize');
 
         // Page number click handling
-        paginationBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
+        paginationBtns.forEach((btn) => {
+            btn.addEventListener('click', function () {
                 // Remove active class from all buttons
-                paginationBtns.forEach(b => b.classList.remove('active'));
+                paginationBtns.forEach((b) => b.classList.remove('active'));
                 // Add active class to clicked button
                 this.classList.add('active');
-                
+
                 // Add animation
                 this.classList.add('pagination-slide-in');
                 setTimeout(() => {
@@ -171,18 +176,18 @@
         });
 
         // Page size change handling
-        pageSizeSelect.addEventListener('change', function() {
+        pageSizeSelect.addEventListener('change', function () {
             console.log('Page size changed to:', this.value);
             // Add your page size change logic here
         });
 
         // Navigation button handling
-        prevBtn.addEventListener('click', function() {
+        prevBtn.addEventListener('click', function () {
             console.log('Previous page clicked');
             // Add your previous page logic here
         });
 
-        nextBtn.addEventListener('click', function() {
+        nextBtn.addEventListener('click', function () {
             console.log('Next page clicked');
             // Add your next page logic here
         });

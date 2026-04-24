@@ -90,15 +90,6 @@
 .search-input,
 .filter-input,
 .sort-select {
-    /* width: 100%;
-    padding: 10px 14px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    background: white;
-    transition: all 0.2s;
-    font-weight: 400;
-    color: #333; */
     width: 100%;
     padding: 6px 12px;
     background-color: #ffffff;
