@@ -1,1 +1,24 @@
 Test for login Git.
+
+
+--------------------------------------------------
+Bảng tóm tắt : 
+🚚 Báo cáo xe: [Xe A]   [01/04 - 30/04]
+
+[Tổng Doanh thu]  ( [Tiền lương] + [Chi phí] ) = [Lợi nhuận] | [Số chuyến]
+
+.. sau đó có 
+[Tổng Lợi nhuận] - [Chi phí bảo dưỡng của tháng này ] =  [ Lợi nhuận cuối của 1 xe trên tháng này]
+
+📋 Danh sách chuyến
+--------------------------------------------------
+| Ngày | OrderID | Tuyến (3 địa chỉ) | Doanh thu | Tiền lương | Giá dầu | Tổng Chi phí ( tổng phí của mục kế toán Order - TOTALCOST) | Phí trả trước | Lợi nhuận | Status (đỏ / xanh)
+--------------------------------------------------
+..........
+--------------------------------------------------
+Tổng: 50tr | 35tr | 15tr
+
+--------------------------------------------------
+ LÀM SAU cho tôi
+📈 Biểu đồ lợi nhuận
+📊 Chi phí breakdown

@@ -138,7 +138,6 @@ export class OrderService {
   ListOrder(fromDateStr: Date, toDateStr: Date, order: string, sortBy: string, pageSize: number, pageNumber: number, keySearch: string, status: string) {
     let fromDateISO = new Date(fromDateStr).toISOString().split('T')[0];
     let toDateISO = new Date(toDateStr).toISOString().split('T')[0];
-
     let api = "Order/listOrder";
     let header = new HttpHeaders({
       'Authorization': "Bearer " + this.token,
@@ -284,6 +283,23 @@ export class OrderService {
       params: fromQuery
     }
     return this.http.put(this.url + api, null, requestOptions)
+  }
+
+
+  UpdateRevenueOrder(revenue : number ,orderId :number ): Observable<any>{
+    let api = "Order/updateRevenueOrder";
+    let header = new HttpHeaders({
+      'Authorization': "Bearer " + this.token,
+      "Content-Type": "application/json"
+    })
+    let fromQuery = new HttpParams()
+      .set('orderId', orderId)
+      .set('revenue', revenue)
+    const requestOptions = {
+      headers: header,
+      params: fromQuery
+    }
+    return this.http.put(this.url + api, requestOptions)
   }
 
 

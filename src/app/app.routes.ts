@@ -25,6 +25,7 @@ import { MaintenanceTypeComponent } from './home/admin/maintenance-type.componen
 import { TransportSalaryComponent } from './home/admin/transport-salary.component/transport-salary.component';
 import { DashboardMaintenanceComponent } from './home/admin/dashboard/maintenance/dashboard-maintenance.component';
 import { DashboardTruckStatisticsComponent } from './home/admin/dashboard/truck-statistics/dashboard-truck-statistics.component';
+import { TruckStatisticComponent } from './home/admin/truck-statistic.component/truck-statistic.component';
 
 export const routes: Routes = [
     {path : '', component : LoginComponent, } ,
@@ -39,10 +40,12 @@ export const routes: Routes = [
     } ,
     {path : 'admin', component : HomeComponent ,canActivate : [authGuard],
         children : [
-            {path: 'dashboard', component: DashboardComponent, children: [
-                {path: '', component: DashboardTruckStatisticsComponent},
-                {path: 'maintenance', component: DashboardMaintenanceComponent},
-            ]},
+            {path: 'dashboard', component: DashboardComponent,
+                children: [
+                    {path: '', component: DashboardTruckStatisticsComponent},
+                    {path: 'maintenance', component: DashboardMaintenanceComponent},
+                ]
+            },
             {path: 'list-order', component: ListOrderComponent},
             {path: 'list-customer', component: CustomerComponent},
             {path: 'list-driver', component: DriverComponent},
@@ -56,6 +59,11 @@ export const routes: Routes = [
             {path: 'list-transportSalary', component: TransportSalaryComponent},
         ]
     } ,
+    {path : 'reports' , component : HomeComponent , canActivate : [authGuard],
+        children : [
+            {path: 'truck-statistic' , component : TruckStatisticComponent}
+        ]
+    },
     {path: '**', component: PageNotFoundComponent} // route Not Found nên ở cuối cùng
 
 ];

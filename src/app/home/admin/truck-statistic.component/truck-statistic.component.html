@@ -1,0 +1,239 @@
+<div class="list-order">
+    <div class="main-content">
+        <!-- Filter Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2>📊 Báo cáo chi tiết xe</h2>
+            </div>
+            <div class="filter-controls">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>Từ ngày</label>
+                        <input type="date" class="filter-input" [(ngModel)]="fromDateStr" />
+                    </div>
+                    <div class="filter-group">
+                        <label>Đến ngày</label>
+                        <input type="date" class="filter-input" [(ngModel)]="toDateStr" />
+                    </div>
+                    <div class="filter-group">
+                        <label>Biển số xe</label>
+                        <div class="searchable-dropdown" id="truckDropdown">
+                            <div class="dropdown-toggle" (click)="showListObject('truckDropdown')">
+                                <span class="selected-text">{{ truckNo || 'Chọn biển số xe' }}</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <input type="text" class="dropdown-search"
+                                    placeholder="Tìm kiếm..." (input)="toggleDropdown('truckDropdown', $event)" />
+                                <ul *ngIf="listTruckDTO.length > 0" class="dropdown-list">
+                                    <li *ngFor="let t of listTruckDTO" class="dropdown-item"
+                                        (click)="onSelectTruck(t.truckNo, 'truckDropdown')">
+                                        {{ t.truckNo }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Trạng thái</label>
+                        <select class="filter-select" [(ngModel)]="status" (change)="sortStatus($event)">
+                            <option value="">Tất cả</option>
+                            <option value="Completed">Hoàn thành</option>
+                            <option value="Pending">Đang chờ</option>
+                            <option value="InProgress">Đang xử lí</option>
+                            <option value="Cancelled">Đã hủy</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <button (click)="searchObject()" class="btn-view-detail">🔍 Tìm kiếm</button>
+                    </div>
+                    <div class="filter-group">
+                        <button (click)="ExportOrders('csv')" class="btn-view-detail">📥 Xuất Excel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🚚 Bảng tóm tắt -->
+        <div class="summary-card">
+            <div class="summary-header">
+                <h3>🚚 Báo cáo xe: <span class="truck-badge">{{ truckNo }}</span></h3>
+                <span class="date-range">{{ fromDateStr | date:'dd/MM/yyyy' }} - {{ toDateStr | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box revenue">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Tổng Doanh thu</div>
+                        <div class="stat-value">{{ totalRevenue | number:'1.0-0':'en-US' }} đ</div>
+                    </div>
+                </div>
+
+                <div class="stat-box cost">
+                    <div class="stat-icon">💵</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Tiền lương + Chi phí</div>
+                        <div class="stat-value">{{ (totalSalary + totalOrderCost) | number:'1.0-0':'en-US' }} đ</div>
+                    </div>
+                </div>
+
+                <div class="stat-box profit">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Lợi nhuận gộp</div>
+                        <div class="stat-value">{{ totalProfit | number:'1.0-0':'en-US' }} đ</div>
+                    </div>
+                </div>
+
+                <div class="stat-box trips">
+                    <div class="stat-icon">🚛</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Số chuyến</div>
+                        <div class="stat-value">{{ ListOrderstatisticLength }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lợi nhuận cuối -->
+            <div class="final-profit-row">
+                <div class="formula">
+                    <span>Lợi nhuận gộp</span>
+                    <strong>{{ totalProfit | number:'1.0-0':'en-US' }}</strong>
+                    <span class="op">−</span>
+                    <span>Chi phí bảo dưỡng</span>
+                    <strong class="maintenance">{{ CostForListMaintenance | number:'1.0-0':'en-US' }}</strong>
+                    <span class="op">=</span>
+                </div>
+                <div class="final-profit" [class.profit-positive]="finalProfit >= 0" [class.profit-negative]="finalProfit < 0">
+                    <span class="label">Lợi nhuận cuối</span>
+                    <span class="value">{{ finalProfit | number:'1.0-0':'en-US' }} đ</span>
+                </div>
+            </div>
+        </div>
+        <!-- 📈 Biểu đồ lợi nhuận theo ngày -->
+<div class="content-card chart-card" *ngIf="profitByDate.length > 0">
+    <div class="card-header">
+        <h2>📈 Biểu đồ lợi nhuận theo ngày</h2>
+        <div class="chart-legend">
+            <span class="legend-item"><span class="dot profit"></span>Lời</span>
+            <span class="legend-item"><span class="dot loss"></span>Lỗ</span>
+        </div>
+    </div>
+    <div class="chart-container">
+        <svg viewBox="0 0 1000 250" preserveAspectRatio="xMidYMid meet" class="profit-chart">
+            <!-- Grid lines -->
+            <line x1="40" y1="40" x2="40" y2="210" stroke="#e2e8f0" stroke-width="1"/>
+            <line x1="40" y1="210" x2="960" y2="210" stroke="#e2e8f0" stroke-width="1"/>
+            
+            <!-- Zero line (đường lợi nhuận = 0) -->
+            <line [attr.x1]="40" [attr.y1]="zeroLineY" [attr.x2]="960" [attr.y2]="zeroLineY"
+                  stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 4"/>
+            <text [attr.x]="32" [attr.y]="zeroLineY + 4" text-anchor="end" 
+                  font-size="11" fill="#94a3b8">0</text>
+
+            <!-- Line path -->
+            <path [attr.d]="chartPath" fill="none" stroke="url(#lineGradient)" 
+                  stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+            <!-- Gradient cho line -->
+            <defs>
+                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#10b981"/>
+                    <stop offset="100%" stop-color="#3b82f6"/>
+                </linearGradient>
+            </defs>
+
+            <!-- Points -->
+            <g *ngFor="let p of chartPoints">
+                <circle [attr.cx]="p.x" [attr.cy]="p.y" r="5"
+                        [attr.fill]="p.isLoss ? '#ef4444' : '#10b981'"
+                        stroke="white" stroke-width="2">
+                    <title>{{ p.date }}: {{ p.profit | number:'1.0-0':'en-US' }} đ</title>
+                </circle>
+                
+                <!-- Date label dưới mỗi điểm -->
+                <text [attr.x]="p.x" y="230" text-anchor="middle" 
+                      font-size="10" fill="#718096">
+                    {{ p.date | date:'dd/MM' }}
+                </text>
+            </g>
+        </svg>
+    </div>
+</div>
+
+        <!-- 📋 Danh sách chuyến -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2>📋 Danh sách chuyến</h2>
+            </div>
+            <div class="table-container">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Ngày giao hàng</th>
+                            <th>Order ID</th>
+                            <th>Tuyến đường</th>
+                            <th>Doanh thu</th>
+                            <th>Tiền lương</th>
+                            <th>Giá dầu</th>
+                            <th>Tổng chi phí</th>
+                            <th>Phí trả trước</th>
+                            <th>Lợi nhuận</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let o of ListOrderstatistic">
+                            <td>{{ o.orderDate | date:'dd/MM/yyyy' }}</td>
+                            <td><strong>#{{ o.orderId }}</strong></td>
+                            <td>
+                                <div class="route">
+                                    <span>{{ o.fromLocationName }}</span>
+                                    <span class="arrow">→</span>
+                                    <span>{{ o.fromWhereName }}</span>
+                                    <span class="arrow">→</span>
+                                    <span>{{ o.toLocationName }}</span>
+                                </div>
+                            </td>
+                            <td class="text-success">{{ o.revenue | number:'1.0-0':'en-US' }}</td>
+                            <td>{{ o.transcostDTO?.cost | number:'1.0-0':'en-US' }}</td>
+                            <td>{{ o.transcostDTO?.fuelPriceAtOrder | number:'1.0-0':'en-US' }}</td>
+                            <td>{{ o.totalCost | number:'1.0-0':'en-US' }}</td>
+                            <td>{{ o.prePayFee | number:'1.0-0':'en-US' }}</td>
+                            <td class="profit-cell"
+                                [class.text-success]="(o.revenue - (o.transcostDTO?.cost || 0) - o.totalCost) >= 0"
+                                [class.text-danger]="(o.revenue - (o.transcostDTO?.cost || 0) - o.totalCost) < 0">
+                                {{ (o.revenue - (o.transcostDTO?.cost || 0) - o.totalCost) | number:'1.0-0':'en-US' }}
+                            </td>
+                            <td>
+                                <span class="status-badge" [ngClass]="{
+                                    'status-completed': o.status === 6,
+                                    'status-cancelled': o.status === 7,
+                                    'status-processing': o.status !== 6 && o.status !== 7
+                                }">
+                                    {{ orderStatusList[o.status] }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="3"><strong>TỔNG</strong></td>
+                            <td><strong>{{ totalRevenue | number:'1.0-0':'en-US' }}</strong></td>
+                            <td><strong>{{ totalSalary | number:'1.0-0':'en-US' }}</strong></td>
+                            <td>—</td>
+                            <td><strong>{{ totalOrderCost | number:'1.0-0':'en-US' }}</strong></td>
+                            <td><strong>{{ totalPrePay | number:'1.0-0':'en-US' }}</strong></td>
+                            <td><strong class="text-success">{{ totalProfit | number:'1.0-0':'en-US' }}</strong></td>
+                            <td>—</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div *ngIf="ListOrderstatistic.length === 0" class="orders-table-empty">
+                    Không có chuyến nào trong khoảng thời gian này
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

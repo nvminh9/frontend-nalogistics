@@ -37,10 +37,9 @@ export class ListOrderComponent {
 
   listOrder: OrderDTO[] = []
 
- fromDateStr: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  fromDateStr: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 0, 0, 0); // 00:00:00 ngày 1
 
-// Ngày cuối tháng hiện tại  
- toDateStr: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 2);
+  toDateStr: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59); // 23:59:59 ngày cuối tháng
 
   order = ''
   sortBy = ''
@@ -91,6 +90,7 @@ export class ListOrderComponent {
   loadOrders() {
     this.o_service.ListOrder(this.fromDateStr, this.toDateStr, this.order, this.sortBy, this.pageSize, this.pageNumber, this.keySearch, this.status).subscribe((data: any) => {
       if (data.statusCode == 200) {
+        
         this.listOrderLength = data.data.listOrder.length
 
         this.fromDateStr = data.data.fromDate.substring(0, 10)

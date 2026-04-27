@@ -248,10 +248,40 @@
             </div>
             <!-- Báo cáo thống kê -->
             <div class="menu-item-wrapper">
-                <a routerLink="/reports" routerLinkActive="active" class="menu-item" data-tooltip="Báo cáo thống kê">
+                <a
+                    class="menu-item has-submenu"
+                    [class.open]="submenus.reports"
+                    data-tooltip="Báo cáo thống kê"
+                    (click)="toggleSubmenu('reports')"
+                >
                     <div class="icon"><mat-icon>area_chart</mat-icon></div>
                     <span class="menu-item-text">Báo cáo thống kê</span>
                 </a>
+            </div>
+            <!-- Báo cáo thống kê Submenu -->
+            <div class="submenu" [class.open]="submenus.reports">
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/reports/truck-statistic"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Thống kê xe"
+                    >
+                        <div class="icon"><mat-icon>local_shipping</mat-icon></div>
+                        <span class="menu-item-text">Thống kê xe</span>
+                    </a>
+                </div>
+                <div class="submenu-item-wrapper">
+                    <a
+                        routerLink="/reports/maintenance"
+                        routerLinkActive="active"
+                        class="menu-item"
+                        data-tooltip="Chi phí bảo dưỡng"
+                    >
+                        <div class="icon"><mat-icon>build</mat-icon></div>
+                        <span class="menu-item-text">Chi phí bảo dưỡng</span>
+                    </a>
+                </div>
             </div>
             <!-- Settings -->
             <div class="settings">

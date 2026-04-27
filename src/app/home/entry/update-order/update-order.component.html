@@ -432,12 +432,12 @@
                             <label>Thanh toán còn lại</label>
 
                             <input type="text" class="form-input" [value]="
-                                    (
-                                    (currentOrderDTO.transcostDTO?.cost ?? 0)
-                                    + (currentOrderDTO.totalCost ?? 0)
-                                    - (currentOrderDTO.PrePayFee ?? 0)
-                                    ) | number:'1.0-0':'en-US'
-                                " readonly />
+                                (
+                                    (currentOrderDTO.transcostDTO?.cost || 0)
+                                    + (currentOrderDTO.totalCost || 0)
+                                    - (currentOrderDTO.PrePayFee || 0)
+                                ) | number:'1.0-0':'en-US'
+                            " readonly />          
                         </div>
                         <div class="field-group">
                             <label>Ghi chú</label>

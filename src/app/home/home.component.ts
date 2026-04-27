@@ -22,6 +22,7 @@ interface SubmenusState {
     categories: boolean;
     maintenance: boolean;
     user: boolean;
+    reports : boolean
 }
 @Component({
     selector: 'app-home',
@@ -59,6 +60,7 @@ export class HomeComponent {
         categories: false,
         maintenance: false,
         user: false,
+        reports : false
     };
 
     rolename = localStorage.getItem('roleName');
