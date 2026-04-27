@@ -1,18 +1,17 @@
 <div class="main-content">
     <div class="content-card update-form-section">
         <div class="card-header">
-            <h2>
-                <span class="icon">✏️</span>
-                Chỉnh sửa đơn hàng có mã Order ID : {{ orderID }}
-            </h2>
-            <div class="subtitle">Phân quyền theo vai trò - Cập nhật thông tin đơn hàng</div>
+            <div class="subtitle">Cập nhật thông tin đơn hàng</div>
+            <span>Mã đơn hàng: {{ orderID }}</span>
         </div>
-
+        <!--  -->
         <div class="form-container">
             <!-- PHẦN ENTRY - NGƯỜI NHẬP LIỆU -->
             <div class="role-section entry-role">
                 <div class="role-header">
-                    <div class="role-icon">📝</div>
+                    <div class="role-icon">
+                        <mat-icon>note_alt</mat-icon>
+                    </div>
                     <div>
                         <h3 class="role-title">Phần Entry - Người nhập liệu</h3>
                         <div class="role-description">Thông tin cơ bản về đơn hàng, khách hàng và logistics</div>
@@ -24,17 +23,23 @@
                     <div class="form-group">
                         <label>Ngày/Giờ tạo đơn hàng</label>
                         <div class="form-input readonly">
-                            {{ currentOrderDTO.CreatedDate
-                            ? (currentOrderDTO.CreatedDate | date:'dd/MM/yyyy HH:mm')
-                            : ''
+                            {{
+                                currentOrderDTO.CreatedDate
+                                    ? (currentOrderDTO.CreatedDate | date: 'dd/MM/yyyy HH:mm')
+                                    : ''
                             }}
                         </div>
                     </div>
                     <!-- Ngày giao hàng -->
                     <div class="form-group">
                         <label>Ngày giao hàng</label>
-                        <input type="date" id="datePicker" name="orderDate" class="form-input"
-                            [(ngModel)]="currentOrderDTO.OrderDate" />
+                        <input
+                            type="date"
+                            id="datePicker"
+                            name="orderDate"
+                            class="form-input"
+                            [(ngModel)]="currentOrderDTO.OrderDate"
+                        />
                     </div>
 
                     <!-- Khách hàng - Searchable Dropdown -->
@@ -44,18 +49,25 @@
                             <div class="dropdown-toggle" (click)="showListObject('customerDropdown')">
                                 <span class="selected-text">{{
                                     currentOrderDTO.CustomerName ||
-                                    'Chọn khách
+                                        'Chọn khách
                                     hàng'
-                                    }}</span>
+                                }}</span>
                                 <span class="dropdown-arrow">▼</span>
                             </div>
                             <div class="dropdown-menu">
-                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm khách hàng..."
-                                    (input)="toggleDropdown('customerDropdown', $event)" />
+                                <input
+                                    type="text"
+                                    class="dropdown-search"
+                                    placeholder="Tìm kiếm khách hàng..."
+                                    (input)="toggleDropdown('customerDropdown', $event)"
+                                />
 
                                 <ul *ngIf="listCustomerDTO.length > 0" class="dropdown-list">
-                                    <li *ngFor="let c of listCustomerDTO" class="dropdown-item"
-                                        (click)="onSelectCustomer(c.customerID)">
+                                    <li
+                                        *ngFor="let c of listCustomerDTO"
+                                        class="dropdown-item"
+                                        (click)="onSelectCustomer(c.customerID)"
+                                    >
                                         {{ c.customerName }}
                                     </li>
                                 </ul>
@@ -65,8 +77,13 @@
 
                     <div class="form-group">
                         <label>Số Container</label>
-                        <input type="text" class="form-input" placeholder="Số container" name="ContainerNo"
-                            [(ngModel)]="currentOrderDTO.ContainerNo" />
+                        <input
+                            type="text"
+                            class="form-input"
+                            placeholder="Số container"
+                            name="ContainerNo"
+                            [(ngModel)]="currentOrderDTO.ContainerNo"
+                        />
                     </div>
 
                     <div class="form-group">
@@ -81,8 +98,13 @@
 
                     <div class="form-group">
                         <label>Số Billing/Booking</label>
-                        <input type="text" class="form-input" placeholder="Số Billing/Booking" name="BillBookingNo"
-                            [(ngModel)]="currentOrderDTO.BillBookingNo" />
+                        <input
+                            type="text"
+                            class="form-input"
+                            placeholder="Số Billing/Booking"
+                            name="BillBookingNo"
+                            [(ngModel)]="currentOrderDTO.BillBookingNo"
+                        />
                     </div>
 
                     <!-- Cảng nhận Container - Searchable Dropdown -->
@@ -92,17 +114,24 @@
                             <div class="dropdown-toggle" (click)="showListObject('portReceiveDropdown')">
                                 <span class="selected-text">{{
                                     currentOrderDTO.FromLocationName ||
-                                    'Chọn cảng
+                                        'Chọn cảng
                                     nhận'
-                                    }}</span>
+                                }}</span>
                                 <span class="dropdown-arrow">▼</span>
                             </div>
                             <div class="dropdown-menu">
-                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm cảng nhận..."
-                                    (input)="toggleDropdown('portReceiveDropdown', $event)" />
+                                <input
+                                    type="text"
+                                    class="dropdown-search"
+                                    placeholder="Tìm kiếm cảng nhận..."
+                                    (input)="toggleDropdown('portReceiveDropdown', $event)"
+                                />
                                 <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
-                                    <li *ngFor="let l of listLocationDTO" class="dropdown-item"
-                                        (click)="onSelectLocation(l.locationId, 'FromLocationID')">
+                                    <li
+                                        *ngFor="let l of listLocationDTO"
+                                        class="dropdown-item"
+                                        (click)="onSelectLocation(l.locationId, 'FromLocationID')"
+                                    >
                                         {{ l.locationName }}
                                     </li>
                                 </ul>
@@ -119,11 +148,18 @@
                                 <span class="dropdown-arrow">▼</span>
                             </div>
                             <div class="dropdown-menu">
-                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm kho..."
-                                    (input)="toggleDropdown('warehouseDropdown', $event)" />
+                                <input
+                                    type="text"
+                                    class="dropdown-search"
+                                    placeholder="Tìm kiếm kho..."
+                                    (input)="toggleDropdown('warehouseDropdown', $event)"
+                                />
                                 <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
-                                    <li *ngFor="let l of listLocationDTO" class="dropdown-item"
-                                        (click)="onSelectLocation(l.locationId, 'FromWhereID')">
+                                    <li
+                                        *ngFor="let l of listLocationDTO"
+                                        class="dropdown-item"
+                                        (click)="onSelectLocation(l.locationId, 'FromWhereID')"
+                                    >
                                         {{ l.locationName }}
                                     </li>
                                 </ul>
@@ -138,16 +174,23 @@
                             <div class="dropdown-toggle" (click)="showListObject('portReturnDropdown')">
                                 <span class="selected-text">{{
                                     currentOrderDTO.ToLocationName || 'Chọn cảng hạ'
-                                    }}</span>
+                                }}</span>
                                 <span class="dropdown-arrow">▼</span>
                             </div>
                             <div class="dropdown-menu">
-                                <input type="search" class="dropdown-search" placeholder="Tìm kiếm cảng hạ..."
-                                    (input)="toggleDropdown('portReturnDropdown', $event)" />
+                                <input
+                                    type="search"
+                                    class="dropdown-search"
+                                    placeholder="Tìm kiếm cảng hạ..."
+                                    (input)="toggleDropdown('portReturnDropdown', $event)"
+                                />
 
                                 <ul *ngIf="listLocationDTO.length > 0" class="dropdown-list">
-                                    <li *ngFor="let l of listLocationDTO" class="dropdown-item"
-                                        (click)="onSelectLocation(l.locationId, 'ToLocationID')">
+                                    <li
+                                        *ngFor="let l of listLocationDTO"
+                                        class="dropdown-item"
+                                        (click)="onSelectLocation(l.locationId, 'ToLocationID')"
+                                    >
                                         {{ l.locationName }}
                                     </li>
                                 </ul>
@@ -160,7 +203,7 @@
             <!-- PHẦN OPERATIONS - NGƯỜI ĐIỀU HÀNH -->
             <div class="role-section operations-role" *ngIf="roleName != 'Entry'">
                 <div class="role-header">
-                    <div class="role-icon">🚛</div>
+                    <div class="role-icon"><mat-icon>local_shipping</mat-icon></div>
                     <div>
                         <h3 class="role-title">Phần Operations - Người điều hành</h3>
                         <div class="role-description">Phân bổ tài xế, xe tải và thiết bị vận chuyển</div>
@@ -177,11 +220,18 @@
                                 <span class="dropdown-arrow">▼</span>
                             </div>
                             <div class="dropdown-menu">
-                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm tài xế..."
-                                    (input)="toggleDropdown('driverDropdown', $event)" />
+                                <input
+                                    type="text"
+                                    class="dropdown-search"
+                                    placeholder="Tìm kiếm tài xế..."
+                                    (input)="toggleDropdown('driverDropdown', $event)"
+                                />
                                 <ul *ngIf="listDriverDTO.length > 0" class="dropdown-list">
-                                    <li *ngFor="let d of listDriverDTO" class="dropdown-item"
-                                        (click)="onSelectDriver(d.driverID)">
+                                    <li
+                                        *ngFor="let d of listDriverDTO"
+                                        class="dropdown-item"
+                                        (click)="onSelectDriver(d.driverID)"
+                                    >
                                         {{ d.driverName }}
                                     </li>
                                 </ul>
@@ -198,11 +248,18 @@
                                 <span class="dropdown-arrow">▼</span>
                             </div>
                             <div class="dropdown-menu">
-                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm số xe..."
-                                    (input)="toggleDropdown('vehicleDropdown', $event)" />
+                                <input
+                                    type="text"
+                                    class="dropdown-search"
+                                    placeholder="Tìm kiếm số xe..."
+                                    (input)="toggleDropdown('vehicleDropdown', $event)"
+                                />
                                 <ul *ngIf="listTruckDTO.length > 0" class="dropdown-list">
-                                    <li *ngFor="let t of listTruckDTO" class="dropdown-item"
-                                        (click)="onSelectTruck(t.truckID)">
+                                    <li
+                                        *ngFor="let t of listTruckDTO"
+                                        class="dropdown-item"
+                                        (click)="onSelectTruck(t.truckID)"
+                                    >
                                         {{ t.truckNo }}
                                     </li>
                                 </ul>
@@ -219,11 +276,18 @@
                                 <span class="dropdown-arrow">▼</span>
                             </div>
                             <div class="dropdown-menu">
-                                <input type="text" class="dropdown-search" placeholder="Tìm kiếm Rmooc..."
-                                    (input)="toggleDropdown('rmoorDropdown', $event)" />
+                                <input
+                                    type="text"
+                                    class="dropdown-search"
+                                    placeholder="Tìm kiếm Rmooc..."
+                                    (input)="toggleDropdown('rmoorDropdown', $event)"
+                                />
                                 <ul *ngIf="listRmoocDTO.length > 0" class="dropdown-list">
-                                    <li *ngFor="let r of listRmoocDTO" class="dropdown-item"
-                                        (click)="onSelectRmooc(r.truckID)">
+                                    <li
+                                        *ngFor="let r of listRmoocDTO"
+                                        class="dropdown-item"
+                                        (click)="onSelectRmooc(r.truckID)"
+                                    >
                                         {{ r.truckNo }}
                                     </li>
                                 </ul>
@@ -236,7 +300,7 @@
             <!-- PHẦN QUẢN LÝ HÌNH ẢNH - BẰNG CHỨNG ĐƠN HÀNG -->
             <div class="role-section image-role">
                 <div class="role-header">
-                    <div class="role-icon">📷</div>
+                    <div class="role-icon"><mat-icon>collections</mat-icon></div>
                     <div>
                         <h3 class="role-title">Quản lý hình ảnh đơn hàng</h3>
                         <div class="role-description">Upload và quản lý hình ảnh bằng chứng về đơn hàng</div>
@@ -253,19 +317,27 @@
 
                     <!-- Upload Area -->
                     <div class="upload-area" (click)="fileInput.click()" *ngIf="currentOrderDTO.Status < 6">
-                        <div class="upload-icon">📁</div>
+                        <div class="upload-icon"><mat-icon>upload</mat-icon></div>
                         <div class="upload-text">Nhấp để tải lên hình ảnh</div>
                         <div class="upload-subtext">Hỗ trợ JPG, PNG, GIF (tối đa 2MB) - Chọn từng ảnh một</div>
-                        <input #fileInput type="file" accept="image/*" style="display: none"
-                            (change)="onFileSelected($event)" />
+                        <input
+                            #fileInput
+                            type="file"
+                            accept="image/*"
+                            style="display: none"
+                            (change)="onFileSelected($event)"
+                        />
                     </div>
 
                     <!-- Existing Order Images -->
                     <div class="image-grid" *ngIf="orderImages.length > 0; else noExistingImages">
                         <div class="image-card" *ngFor="let image of orderImages; let i = index">
                             <div class="image-preview" (click)="viewImage(i, 'existing')">
-                                <img [src]="image.url" [alt]="image.fileName || 'Order image'"
-                                    (error)="onImageError($event)" />
+                                <img
+                                    [src]="image.url"
+                                    [alt]="image.fileName || 'Order image'"
+                                    (error)="onImageError($event)"
+                                />
                                 <div class="placeholder-icon" style="display: none">🖼️</div>
                             </div>
                             <div class="image-info">
@@ -282,7 +354,7 @@
 
                     <ng-template #noExistingImages>
                         <div class="empty-state">
-                            <div class="empty-state-icon">📷</div>
+                            <!-- <div class="empty-state-icon">📷</div> -->
                             <div>Chưa có hình ảnh nào</div>
                         </div>
                     </ng-template>
@@ -307,8 +379,12 @@
                                 <div class="image-date" *ngIf="image.created">
                                     {{ image.created | date: 'dd/MM/yyyy' }}
                                 </div>
-                                <textarea class="description-input" placeholder="Nhập chú thích cho hình ảnh..."
-                                    [(ngModel)]="image.descrip" (input)="onDescriptionChange(i, $event)">
+                                <textarea
+                                    class="description-input"
+                                    placeholder="Nhập chú thích cho hình ảnh..."
+                                    [(ngModel)]="image.descrip"
+                                    (input)="onDescriptionChange(i, $event)"
+                                >
                                 </textarea>
                                 <div class="image-actions">
                                     <button class="btn-view" (click)="viewImage(i, 'new')">Xem</button>
@@ -322,10 +398,12 @@
             </div>
 
             <!-- PHẦN ACCOUNTING - NGƯỜI KẾ TOÁN -->
-            <div class="role-section accounting-role"
-                *ngIf="currentOrderDTO.Status >= 4 && roleName != 'Entry' && roleName != 'Operator'">
+            <div
+                class="role-section accounting-role"
+                *ngIf="currentOrderDTO.Status >= 4 && roleName != 'Entry' && roleName != 'Operator'"
+            >
                 <div class="role-header">
-                    <div class="role-icon">💰</div>
+                    <div class="role-icon"><mat-icon>point_of_sale</mat-icon></div>
                     <div>
                         <h3 class="role-title">Phần Accounting - Người kế toán</h3>
                         <div class="role-description">Quản lý chi phí, hóa đơn và duyệt thanh toán</div>
@@ -354,36 +432,55 @@
                                 </td>
                                 <!-- Giá hiện tại -->
                                 <td>
-                                    <input type="number" placeholder="Nhập giá hiện tại..." [(ngModel)]="line.itemCost"
-                                        name="itemCost{{ idx }}" (ngModelChange)="updateTotalCost()"
-                                        [class]="line.itemCost && line.itemCost != 0 ? 'filled-field' : 'empty-field'" />
+                                    <input
+                                        type="number"
+                                        placeholder="Nhập giá hiện tại..."
+                                        [(ngModel)]="line.itemCost"
+                                        name="itemCost{{ idx }}"
+                                        (ngModelChange)="updateTotalCost()"
+                                        [class]="line.itemCost && line.itemCost != 0 ? 'filled-field' : 'empty-field'"
+                                    />
                                 </td>
 
                                 <!-- Có hóa đơn -->
                                 <td>
-                                    <input type="checkbox" id="invoice{{ idx }}" [(ngModel)]="line.hasInvoice"
-                                        name="hasInvoice{{ idx }}" />
+                                    <input
+                                        type="checkbox"
+                                        id="invoice{{ idx }}"
+                                        [(ngModel)]="line.hasInvoice"
+                                        name="hasInvoice{{ idx }}"
+                                    />
                                     <label for="invoice{{ idx }}" style="margin-left: 8px">Có</label>
                                 </td>
 
                                 <!-- Số hóa đơn -->
                                 <td>
-                                    <input type="text" placeholder="Nhập số hóa đơn..." [(ngModel)]="line.invoiceNo"
-                                        name="invoiceNo{{ idx }}" [class]="
+                                    <input
+                                        type="text"
+                                        placeholder="Nhập số hóa đơn..."
+                                        [(ngModel)]="line.invoiceNo"
+                                        name="invoiceNo{{ idx }}"
+                                        [class]="
                                             line.invoiceNo && line.invoiceNo.trim() != ''
                                                 ? 'filled-field'
                                                 : 'empty-field'
-                                        " />
+                                        "
+                                    />
                                 </td>
 
                                 <!-- Tên hóa đơn -->
                                 <td>
-                                    <input type="text" placeholder="Nhập tên hóa đơn..." [(ngModel)]="line.invoiceName"
-                                        name="invoiceName{{ idx }}" [class]="
+                                    <input
+                                        type="text"
+                                        placeholder="Nhập tên hóa đơn..."
+                                        [(ngModel)]="line.invoiceName"
+                                        name="invoiceName{{ idx }}"
+                                        [class]="
                                             line.invoiceName && line.invoiceName.trim() != ''
                                                 ? 'filled-field'
                                                 : 'empty-field'
-                                        " />
+                                        "
+                                    />
                                 </td>
                                 <td>
                                     <button type="button" (click)="DeleteItemInOrderLine(idx)">Xóa</button>
@@ -401,32 +498,59 @@
                         <div class="field-group">
                             <label>Tiền lương</label>
 
-                            <input type="text" class="form-input" placeholder="Tiền lương..." name="cost"
-                                [value]="(currentOrderDTO.transcostDTO?.cost ?? 0) | number:'1.0-0':'en-US'" readonly>
+                            <input
+                                type="text"
+                                class="form-input"
+                                placeholder="Tiền lương..."
+                                name="cost"
+                                [value]="currentOrderDTO.transcostDTO?.cost ?? 0 | number: '1.0-0' : 'en-US'"
+                                readonly
+                            />
 
-                            <input type="text" class="form-input" [value]="
-                                currentOrderDTO.transcostDTO
-                                ? 'Áp dụng giá bản ghi ID:' + currentOrderDTO.transcostDTO.transcostID
-                                : 'Chưa có thông tin giá áp dụng'
-                            " readonly>
+                            <input
+                                type="text"
+                                class="form-input"
+                                [value]="
+                                    currentOrderDTO.transcostDTO
+                                        ? 'Áp dụng giá bản ghi ID:' + currentOrderDTO.transcostDTO.transcostID
+                                        : 'Chưa có thông tin giá áp dụng'
+                                "
+                                readonly
+                            />
                         </div>
                         <div class="field-group">
                             <label>Giá xăng/dầu</label>
-                            <input type="text" class="form-input" [value]="
-                                currentOrderDTO.transcostDTO
-                                ?  (currentOrderDTO.transcostDTO.fuelPriceAtOrder | number:'1.0-3':'en-US')
-                                : 'Chưa có thông tin giá áp dụng'
-                            " readonly>
+                            <input
+                                type="text"
+                                class="form-input"
+                                [value]="
+                                    currentOrderDTO.transcostDTO
+                                        ? (currentOrderDTO.transcostDTO.fuelPriceAtOrder | number: '1.0-3' : 'en-US')
+                                        : 'Chưa có thông tin giá áp dụng'
+                                "
+                                readonly
+                            />
                         </div>
                         <div class="field-group">
                             <label>Chi phí</label>
-                            <input type="text" class="form-input" placeholder="Nhập chi phí..." name="totalCost"
-                                [value]="currentOrderDTO.totalCost | number: '1.0-0' : 'en-US'" readonly />
+                            <input
+                                type="text"
+                                class="form-input"
+                                placeholder="Nhập chi phí..."
+                                name="totalCost"
+                                [value]="currentOrderDTO.totalCost | number: '1.0-0' : 'en-US'"
+                                readonly
+                            />
                         </div>
                         <div class="field-group">
                             <label>Tạm ứng</label>
-                            <input type="number" class="form-input" placeholder="Nhập tạm ứng..."
-                                [(ngModel)]="currentOrderDTO.PrePayFee" name="PrePayFee" />
+                            <input
+                                type="number"
+                                class="form-input"
+                                placeholder="Nhập tạm ứng..."
+                                [(ngModel)]="currentOrderDTO.PrePayFee"
+                                name="PrePayFee"
+                            />
                         </div>
                         <div class="field-group">
                             <label>Thanh toán còn lại</label>
@@ -441,8 +565,13 @@
                         </div>
                         <div class="field-group">
                             <label>Ghi chú</label>
-                            <textarea class="form-input" placeholder="Nhập ghi chú..."
-                                [(ngModel)]="currentOrderDTO.Notes" name="notes" rows="4">
+                            <textarea
+                                class="form-input"
+                                placeholder="Nhập ghi chú..."
+                                [(ngModel)]="currentOrderDTO.Notes"
+                                name="notes"
+                                rows="4"
+                            >
                             </textarea>
                         </div>
                     </div>
@@ -452,7 +581,7 @@
             <!-- PHẦN TRACKING TRẠNG THÁI ĐỢN HÀNG -->
             <div class="role-section status-role">
                 <div class="role-header">
-                    <div class="role-icon">📋</div>
+                    <div class="role-icon"><mat-icon>timeline</mat-icon></div>
                     <div>
                         <h3 class="role-title">Theo dõi trạng thái đơn hàng</h3>
 
@@ -466,8 +595,11 @@
 
                 <div class="status-tracking">
                     <div class="status-timeline">
-                        <div class="status-step" *ngFor="let status of statusList"
-                            [ngClass]="getStatusClass(status.key)">
+                        <div
+                            class="status-step"
+                            *ngFor="let status of statusList"
+                            [ngClass]="getStatusClass(status.key)"
+                        >
                             <div class="status-circle">
                                 <span class="status-icon">{{ status.key }}</span>
                             </div>
@@ -489,24 +621,39 @@
                 </div>
             </div>
 
-            <!-- Notion-like Image Viewer Modal -->
-
+            <!--  -->
             <div class="form-actions">
                 <button type="button" (click)="back()" class="btn-cancel">Về trang trước</button>
-                <button type="button" *ngIf="roleName == 'Operator' && currentOrderDTO.Status == 0" class="btn-save"
-                    (click)="updateStatusInprogress()">
+                <button
+                    type="button"
+                    *ngIf="roleName == 'Operator' && currentOrderDTO.Status == 0"
+                    class="btn-save"
+                    (click)="updateStatusInprogress()"
+                >
                     Duyệt tới trạng thái Đang Xử lí
                 </button>
-                <button type="button" *ngIf="roleName == 'Accountant' && currentOrderDTO.Status == 4" class="btn-save"
-                    (click)="updateStatusAwaitingApproval()">
+                <button
+                    type="button"
+                    *ngIf="roleName == 'Accountant' && currentOrderDTO.Status == 4"
+                    class="btn-save"
+                    (click)="updateStatusAwaitingApproval()"
+                >
                     Duyệt tới trạng thái Chờ phê duyệt
                 </button>
-                <button type="button" *ngIf="roleName == 'Approver' && currentOrderDTO.Status == 5" class="btn-save"
-                    (click)="updateStatusSuccess()">
+                <button
+                    type="button"
+                    *ngIf="roleName == 'Approver' && currentOrderDTO.Status == 5"
+                    class="btn-save"
+                    (click)="updateStatusSuccess()"
+                >
                     Duyệt tới trạng thái Hoàn thành
                 </button>
-                <button type="button" *ngIf="currentOrderDTO.Status < 6 || roleName == 'Admin'" class="btn-save"
-                    (click)="saveOrder()">
+                <button
+                    type="button"
+                    *ngIf="currentOrderDTO.Status < 6 || roleName == 'Admin'"
+                    class="btn-save"
+                    (click)="saveOrder()"
+                >
                     Cập nhật đơn hàng
                 </button>
                 <button type="button" class="btn-save" (click)="ExportOrderDetail('csv')">Xuất Excel</button>
@@ -514,6 +661,10 @@
         </div>
     </div>
     <!-- Image Viewer Component -->
-    <app-image-viewer [images]="currentImages" [selectedIndex]="selectedImageIndex" [show]="showImageModal"
-        (closed)="closeImageModal()"></app-image-viewer>
+    <app-image-viewer
+        [images]="currentImages"
+        [selectedIndex]="selectedImageIndex"
+        [show]="showImageModal"
+        (closed)="closeImageModal()"
+    ></app-image-viewer>
 </div>
